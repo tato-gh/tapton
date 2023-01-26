@@ -23,7 +23,6 @@
     "baseUrl": "src"
   },
   "include": [
-    "src",
-    "App.tsx"
+    "src"
   ]
 }
