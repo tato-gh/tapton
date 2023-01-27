@@ -23,7 +23,8 @@
     "baseUrl": "src",
     "paths": {
       "@assets/*": ["../assets/*"],
-      "@screens/*": ["./screens/*"]
+      "@screens/*": ["./screens/*"],
+      "@templates/*": ["./components/templates/*"]
     }
   },
   "include": [
