@@ -24,7 +24,8 @@
     "paths": {
       "@assets/*": ["../assets/*"],
       "@screens/*": ["./screens/*"],
-      "@templates/*": ["./components/templates/*"]
+      "@templates/*": ["./components/templates/*"],
+      "@features/*": ["./features/*"]
     }
   },
   "include": [

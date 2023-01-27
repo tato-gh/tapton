@@ -1,26 +1,17 @@
 import type { FC } from 'react';
-import { View, Text, ImageBackground, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+
+import TapboardBackgroundImage from '@features/tapboard/components/organisms/BackgroundImage';
 
 const Home: FC = () => {
-  const image = require("@assets/sample_background.jpg");
-
   return (
-    <View style={styles.container}>
-      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-        <Text style={styles.text}>Inside</Text>
-      </ImageBackground>
-    </View>
+    <TapboardBackgroundImage>
+      <Text style={styles.text}>Inside</Text>
+    </TapboardBackgroundImage>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  image: {
-    flex: 1,
-    justifyContent: 'center',
-  },
   text: {
     color: 'white',
     fontSize: 42,
