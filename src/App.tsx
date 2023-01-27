@@ -2,6 +2,7 @@ import { registerRootComponent } from "expo";
 import type { FC } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
+import { NativeBaseProvider } from 'native-base';
 
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
@@ -16,8 +17,10 @@ const App: FC = () => {
   } else {
     return(
       <SafeAreaProvider>
-        <Navigation colorScheme={colorScheme} />
-        <StatusBar />
+        <NativeBaseProvider>
+          <Navigation colorScheme={colorScheme} />
+          <StatusBar />
+        </NativeBaseProvider>
       </SafeAreaProvider>
     )
   }
