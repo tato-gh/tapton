@@ -16,6 +16,7 @@ const BackgroundImage: FC<PropsWithChildren> = ({ children }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    overflow: 'hidden'
   },
   image: {
     flex: 1,
