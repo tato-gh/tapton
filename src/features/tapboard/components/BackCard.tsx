@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import {StyleSheet, View} from 'react-native';
+import { View } from 'react-native';
 import { Box, Text } from 'native-base';
 
 type Props = {
