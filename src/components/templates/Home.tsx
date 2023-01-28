@@ -6,7 +6,7 @@ import TapboardBackCards from '@features/tapboard/components/BackCards';
 const Home: FC = () => {
   return (
     <TapboardBackgroundImage>
-      <TapboardBackCards cards={[]} />
+      <TapboardBackCards />
     </TapboardBackgroundImage>
   );
 };

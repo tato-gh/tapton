@@ -1,28 +1,33 @@
 import type { FC } from 'react';
 import { View } from 'react-native';
-import { Box, Text } from 'native-base';
+import { Stack, Box, Heading, Text } from 'native-base';
 
 type Props = {
+  lead: string,
+  body: string,
   top: number,
   left: number,
-  fontSize?: string,
-  rotate?: number
+  rotate: string,
+  fontSize?: string
 };
 
-const BackCard: FC<Props> = ({ top, left, fontSize = '2xl', rotate = 10 }) => {
+const BackCard: FC<Props> = ({ lead, body, top, left, rotate, fontSize = '2xl' }) => {
   return (
-    <View style={{ position: 'absolute', top: top, left: left, transform: [{rotate: `${rotate}deg`}] }}>
+    <View style={{ position: 'absolute', top: top, left: left, transform: [{rotate: rotate}] }}>
       <Box
         bg='#FFF'
         borderRadius='5'
         rounded='md'
         py='4'
-        px='3'
+        px='5'
       >
+        <Heading size="md" ml="-1">
+          {lead}
+        </Heading>
         <Text
           fontSize={fontSize}
         >
-          Hello world
+          {body}
         </Text>
       </Box>
     </View>
