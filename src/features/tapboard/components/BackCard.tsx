@@ -8,16 +8,20 @@ type Props = {
   top: number,
   left: number,
   rotate: string,
-  fontSize?: string
+  zIndex: number,
+  fontSize?: string,
+  focus?: boolean
 };
 
-const BackCard: FC<Props> = ({ lead, body, top, left, rotate, fontSize = '2xl' }) => {
+const BackCard: FC<Props> = ({ lead, body, top, left, rotate, zIndex, fontSize = '2xl', focus = false }) => {
   return (
-    <View style={{ position: 'absolute', top: top, left: left, transform: [{rotate: rotate}] }}>
+    <View style={{ position: 'absolute', top: top, left: left, transform: [{rotate: rotate}], zIndex: zIndex }}>
       <Box
         bg='#FFF'
         borderRadius='5'
         rounded='md'
+        borderWidth={focus ? '6' : '0'}
+        borderColor={focus ? 'blue.400' : ''}
         py='4'
         px='5'
       >

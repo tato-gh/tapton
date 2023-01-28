@@ -25,7 +25,8 @@
       "@assets/*": ["../assets/*"],
       "@screens/*": ["./screens/*"],
       "@templates/*": ["./components/templates/*"],
-      "@features/*": ["./features/*"]
+      "@features/*": ["./features/*"],
+      "@utils/*": ["./utils/*"]
     }
   },
   "include": [

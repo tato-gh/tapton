@@ -1,7 +1,8 @@
 import type { FC } from 'react';
 
 import BackCard from './BackCard';
-import {randTop, randLeft, randRotate} from '../utils/position';
+import { getRandomInt, randTop, randLeft, randRotate } from '../utils/position';
+import { randomPick } from '@utils/array';
 
 const BackCards: FC = () => {
   // tmp data
@@ -17,18 +18,25 @@ const BackCards: FC = () => {
     {lead: 'カード9', body: 'Hello world'},
     {lead: 'カード10', body: 'Hello world'}
   ];
+  const numCards = cards.length;
+  const backCards = randomPick(cards, numCards);
 
   return (
     <>
-      {cards.map((card) => (
-        <BackCard
-          top={randTop(600)}
-          left={randLeft(400)}
-          rotate={randRotate()}
-          lead={card.lead}
-          body={card.body}
-        />
-      ))}
+      {backCards.map((card, ind) => {
+        return (
+          <BackCard
+            key={ind}
+            lead={card.lead}
+            body={card.body}
+            top={randTop(600)}
+            left={randLeft(400)}
+            zIndex={numCards - ind}
+            rotate={randRotate()}
+            focus={ind == 0 ? true : false}
+          />
+        );
+      })}
     </>
   )
 };
