@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { View, Pressable, StyleSheet } from 'react-native';
+import { Box, Pressable } from 'native-base';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 type Props = {
@@ -7,38 +7,39 @@ type Props = {
   icon: any,
   onPress: any,
   size?: number
+}
+
+const themeCircleColor: {[parameter: string]: string} = {
+  'primary': 'primary.500'
 };
 
-const themeColor: {[parameter: string]: string} = {
-  'primary': '#ffd33d'
+const themeButtonColor: {[parameter: string]: string} = {
+  'primary': 'white'
 };
 
 const CircleButton: FC<Props> = ({ theme, icon, onPress, size = 38 }) => {
   return (
-    <View style={[styles.container, { borderColor: themeColor[theme] }]}>
-      <Pressable style={styles.button} onPress={onPress}>
+    <Box
+      width='84'
+      height='84'
+      borderColor={themeCircleColor[theme]}
+      borderWidth='3'
+      borderRadius='42'
+      p='1'
+    >
+      <Pressable
+        flex='1'
+        justifyContent='center'
+        alignItems='center'
+        borderRadius='42'
+        backgroundColor={themeButtonColor[theme]}
+        onPress={onPress}
+      >
         <MaterialIcons name={icon} size={size} color='#25292e' />
       </Pressable>
-    </View>
+    </Box>
   );
 };
 
 export default CircleButton;
 
-const styles = StyleSheet.create({
-  container: {
-    width: 84,
-    height: 84,
-    marginHorizontal: 60,
-    borderWidth: 4,
-    borderRadius: 42,
-    padding: 3,
-  },
-  button: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 42,
-    backgroundColor: '#fff',
-  },
-});

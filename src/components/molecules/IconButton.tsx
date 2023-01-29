@@ -8,6 +8,8 @@ type Props = {
   onPress: any
 };
 
+// TODO: 使う際には、native-base デザインに変更検討
+
 const IconButton: FC<Props> = ({ icon, label, onPress }) => {
   return (
     <Pressable style={styles.button} onPress={onPress}>
