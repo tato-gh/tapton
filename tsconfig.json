@@ -25,6 +25,10 @@
       "@assets/*": ["../assets/*"],
       "@screens/*": ["./screens/*"],
       "@templates/*": ["./components/templates/*"],
+      "@organisms/*": ["./components/organisms/*"],
+      "@molecules/*": ["./components/molecules/*"],
+      "@atoms/*": ["./components/atoms/*"],
+      "@ecosystems/*": ["./components/ecosystems/*"],
       "@features/*": ["./features/*"],
       "@utils/*": ["./utils/*"]
     }

@@ -1,4 +1,4 @@
-export const getRandomInt = (max: number): number => {
+const getRandomInt = (max: number): number => {
   return Math.floor(Math.random() * max);
 };
 
@@ -11,6 +11,6 @@ export const randLeft = (max: number): number => {
 };
 
 export const randRotate = (): string => {
-  const value = getRandomInt(140) - 70;
+  const value = getRandomInt(120) - 60;
   return `${value}deg`;
 };
