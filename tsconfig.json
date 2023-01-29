@@ -30,7 +30,8 @@
       "@atoms/*": ["./components/atoms/*"],
       "@ecosystems/*": ["./components/ecosystems/*"],
       "@features/*": ["./features/*"],
-      "@utils/*": ["./utils/*"]
+      "@utils/*": ["./utils/*"],
+      "@domains/*": ["./domains/*"],
     }
   },
   "include": [

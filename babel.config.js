@@ -16,7 +16,8 @@ module.exports = function(api) {
             "@atoms": "./src/components/atoms",
             "@ecosystems": "./src/components/ecosystems",
             "@features": "./src/features",
-            "@utils": "./src/utils"
+            "@utils": "./src/utils",
+            "@domains": "./src/domains"
           }
         },
       ],

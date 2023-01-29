@@ -2,13 +2,13 @@ import type { FC } from 'react';
 import { Box, Heading, Text } from 'native-base';
 
 type Props = {
-  lead: string,
-  body: string,
+  title: string,
+  content: string,
   fontSize?: string,
   focus?: boolean
 };
 
-const BackCard: FC<Props> = ({ lead, body, fontSize = '2xl', focus = false }) => {
+const BackCard: FC<Props> = ({ title, content, fontSize = '2xl', focus = false }) => {
   return (
     <Box
       bg={focus ? '#FEFEFE' : '#888'}
@@ -20,12 +20,12 @@ const BackCard: FC<Props> = ({ lead, body, fontSize = '2xl', focus = false }) =>
       px='5'
     >
       <Heading size="md" ml="-1">
-        {lead}
+        {title}
       </Heading>
       <Text
         fontSize={fontSize}
       >
-        {body}
+        {content}
       </Text>
     </Box>
   )

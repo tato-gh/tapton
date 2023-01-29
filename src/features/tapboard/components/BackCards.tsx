@@ -1,11 +1,11 @@
 import type { FC } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
-import IconButton from '@molecules/IconButton';
 import CircleButton from '@molecules/CircleButton';
 
 import BackCard from './BackCard';
 import { randTop, randLeft, randRotate } from '../utils/position';
 import { randomPick } from '@utils/array';
+import getCards from '@domains/tapboard/sql/getCards';
 
 const bottomSize = 40;
 const cardWidth = 200;
@@ -15,18 +15,7 @@ const maxLeft = Dimensions.get('window').width - cardWidth;
 
 const BackCards: FC = () => {
   // tmp data
-  const cards = [
-    {lead: 'カード1', body: 'Hello world'},
-    {lead: 'カード2', body: 'Hello world'},
-    {lead: 'カード3', body: 'Hello world'},
-    {lead: 'カード4', body: 'Hello world'},
-    {lead: 'カード5', body: 'Hello world'},
-    {lead: 'カード6', body: 'Hello world'},
-    {lead: 'カード7', body: 'Hello world'},
-    {lead: 'カード8', body: 'Hello world, Hello wrld, Hello world'},
-    {lead: 'カード9', body: 'Hello world'},
-    {lead: 'カード10', body: 'Hello world'}
-  ];
+  const cards = getCards();
   const numCards = cards.length;
   const backCards = randomPick(cards, numCards);
 
@@ -40,8 +29,8 @@ const BackCards: FC = () => {
           >
             <BackCard
               key={ind}
-              lead={card.lead}
-              body={card.body}
+              title={card.title}
+              content={card.content}
               focus={ind == 0 ? true : false}
             />
           </View>
