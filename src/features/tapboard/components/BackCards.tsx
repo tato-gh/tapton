@@ -3,15 +3,15 @@ import { View, StyleSheet, Dimensions } from 'react-native';
 import CircleButton from '@molecules/CircleButton';
 
 import BackCard from './BackCard';
-import { randTop, randLeft, randRotate } from '../utils/position';
+import { getPosition } from '../utils/position';
 import { randomPick } from '@utils/array';
 import getCards from '@domains/tapboard/sql/getCards';
 
 const bottomSize = 40;
 const cardWidth = 200;
 // maxTop: フットのメニューと被らないこと。カード回転（ただし直角にはならない）も考慮してcardWidthを引いている
-const maxTop = Dimensions.get('window').height - bottomSize - 0.9 * cardWidth;
-const maxLeft = Dimensions.get('window').width - cardWidth;
+const maxHeight = Dimensions.get('window').height - bottomSize - 0.9 * cardWidth;
+const maxWidth = Dimensions.get('window').width - cardWidth;
 
 const BackCards: FC = () => {
   // tmp data
@@ -22,10 +22,12 @@ const BackCards: FC = () => {
   return (
     <>
       {backCards.map((card, ind) => {
+        const position = getPosition(maxHeight, maxWidth);
+
         return (
           <View
             key={ind}
-            style={{ position: 'absolute', top: randTop(maxTop), left: randLeft(maxLeft), transform: [{rotate: randRotate()}], zIndex: numCards - ind }}
+            style={{ position: 'absolute', top: position.top, left: position.left, transform: [{rotate: `${position.rotate}deg`}], zIndex: numCards - ind }}
           >
             <BackCard
               key={ind}
