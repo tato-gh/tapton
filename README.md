@@ -33,6 +33,7 @@ src/
   features/
     awesome-feature/
       components/
+        ... 大きな機能以外は並列でおく。organisms/ecosystems が主なため
       hooks/
       utils/
       assets/
@@ -44,7 +45,8 @@ src/
       api/
       types/
       constants.ts
-    constants.ts
+  constants/
+    ... ファイル分けしてみている
 ```
 
 
