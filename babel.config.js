@@ -17,7 +17,8 @@ module.exports = function(api) {
             "@ecosystems": "./src/components/ecosystems",
             "@features": "./src/features",
             "@utils": "./src/utils",
-            "@domains": "./src/domains"
+            "@domains": "./src/domains",
+            "@constants": "./src/constants"
           }
         },
       ],

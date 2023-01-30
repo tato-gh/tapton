@@ -32,6 +32,7 @@
       "@features/*": ["./features/*"],
       "@utils/*": ["./utils/*"],
       "@domains/*": ["./domains/*"],
+      "@constants/*": ["./constants/*"]
     }
   },
   "include": [
