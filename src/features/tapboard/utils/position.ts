@@ -1,4 +1,4 @@
-type Position = {
+export type Position = {
   top: number,
   left: number,
   rotate: number
