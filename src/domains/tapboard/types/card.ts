@@ -1,4 +1,5 @@
 export type Card = {
+  id: number,
   title: string,
   content: string
 };
@@ -7,7 +8,8 @@ export const isCard = (arg: unknown): arg is Card => {
   const c = arg as Card;
 
   return (
-    typeof c?.title === 'string' &&
+    typeof c?.id === 'number' &&
+      typeof c?.title === 'string' &&
       typeof c?.content === 'string'
   )
 };

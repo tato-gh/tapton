@@ -1,35 +1,36 @@
 import type { FC } from 'react';
-import { Dimensions } from 'react-native';
+import { useState, useEffect } from 'react';
 
 import BackCard from './BackCard';
+import type { Card } from '@domains/tapboard/types/card';
 import { randomPick } from '@utils/array';
-import { getPosition } from '../utils/position';
 import getCards from '@domains/tapboard/sql/getCards';
-import { OPE_BOTTOM_POSITION, CARD_WIDTH } from '../constants';
-
-// maxTop: フットのメニューと被らないこと。カード回転（ただし直角にはならない）も考慮してcardWidthを引いている
-const maxHeight = Dimensions.get('window').height - OPE_BOTTOM_POSITION - 0.9 * CARD_WIDTH;
-const maxWidth = Dimensions.get('window').width - CARD_WIDTH;
 
 const BackCards: FC = () => {
-  // tmp data
-  const cards = getCards();
-  const numCards = cards.length;
-  const backCards = randomPick(cards, numCards);
+  const [queue, setQueue] = useState<Card[]>([]);
+
+  useEffect(() => {
+    // tmp data
+    const cards = getCards();
+    const numCards = cards.length;
+    setQueue(randomPick(cards, numCards));
+  }, []);
+
+  const onPress = () => {
+    setQueue(([_card, ...rest]) => rest);
+  };
 
   return (
     <>
-      {backCards.map((card, ind) => {
-        const position = getPosition(maxHeight, maxWidth);
-
+      {queue.map((card, ind) => {
         return (
           <BackCard
-            key={ind}
+            key={card.id}
             title={card.title}
             content={card.content}
-            position={position}
-            zIndex={numCards - ind}
-            focus={ind == 0 ? true : false}
+            zIndex={999 - ind}
+            focus={card.id == queue[0].id ? true : false}
+            onPress={onPress}
           />
         );
       })}

@@ -1,24 +1,33 @@
 import type { FC } from 'react';
+import { useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Box, Heading, Text } from 'native-base';
+import { Dimensions } from 'react-native';
 
 import CircleButton from '@molecules/CircleButton';
-import type { Position } from '../utils/position';
-import { OPE_BOTTOM_POSITION } from '../constants';
+import { getPosition } from '../utils/position';
+import { OPE_BOTTOM_POSITION, CARD_WIDTH } from '../constants';
 
 type Props = {
   title: string,
   content: string,
-  position: Position,
   zIndex: number,
-  focus?: boolean
+  focus: boolean,
+  onPress: Function
 };
 
-const BackCard: FC<Props> = ({ title, content, position, zIndex, focus = false }) => {
+// maxTop: フットのメニューと被らないこと。カード回転（ただし直角にはならない）も考慮してcardWidthを引いている
+const maxHeight = Dimensions.get('window').height - OPE_BOTTOM_POSITION - 0.9 * CARD_WIDTH;
+const maxWidth = Dimensions.get('window').width - CARD_WIDTH;
+
+const BackCard: FC<Props> = ({ title, content, zIndex, focus, onPress }) => {
+  const position = useMemo(() => getPosition(maxHeight, maxWidth), []);
+  const zIndexMemo = useMemo(() => zIndex, []);
+
   return (
     <>
       <View
-        style={{ position: 'absolute', top: position.top, left: position.left, zIndex: zIndex, transform: [{rotate: `${position.rotate}deg`}]}}
+        style={{ position: 'absolute', top: position.top, left: position.left, zIndex: (focus ? 1000 : zIndexMemo), transform: [{rotate: `${position.rotate}deg`}]}}
       >
         <Box
           bg={focus ? '#FEFEFE' : '#888'}
@@ -41,9 +50,9 @@ const BackCard: FC<Props> = ({ title, content, position, zIndex, focus = false }
       </View>
 
       {focus && (
-        <View style={[styles.opeContainer, {zIndex: 999}]}>
+        <View style={[styles.opeContainer, {zIndex: 1000}]}>
           <View style={styles.opeRow}>
-            <CircleButton theme='primary' icon='check' onPress={() => {}} />
+            <CircleButton theme='primary' icon='check' onPress={onPress} />
           </View>
         </View>
       )}
