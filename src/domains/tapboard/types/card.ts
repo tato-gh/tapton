@@ -1,7 +1,9 @@
 export type Card = {
   id: number,
   title: string,
-  content: string
+  content: string,
+  reborn: boolean,
+  intervalMin?: number
 };
 
 export const isCard = (arg: unknown): arg is Card => {

@@ -9,7 +9,6 @@ type Props = {
 };
 
 const CheckCardForm: FC<Props> = ({ onPress }) => {
-
   return (
     <View style={[styles.opeContainer, {zIndex: MAX_Z_INDEX}]}>
       <View style={styles.opeRow}>

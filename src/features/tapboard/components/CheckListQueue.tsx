@@ -21,8 +21,13 @@ const CheckListQueue: FC = () => {
     })
   }, []);
 
-  const onPress = () => {
+  const onPress = (queueCard: QueueCard) => {
     setQueue(([_card, ...rest]) => rest);
+    if(queueCard.reborn) {
+      setTimeout(() => {
+        setQueue((queue) => [queueCard, ...queue])
+      }, queueCard.intervalMin * 60 * 1000);
+    }
   };
 
   return <CheckList queue={queue} onPress={onPress} />

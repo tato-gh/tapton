@@ -18,7 +18,7 @@ const CheckList: FC<Props> = ({ queue, onPress }) => {
             key={queueCard.no}
             queueCard={queueCard}
             focus={ind == 0 ? true : false}
-            onPress={onPress}
+            onPress={() => onPress(queueCard)}
           />
         );
       })}
