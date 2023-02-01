@@ -1,12 +1,12 @@
 import type { FC } from 'react';
 import { useState, useEffect } from 'react';
 
-import type { QueueCard } from '../types/queue_card';
-import BackCard from './BackCard';
-import { randomPick } from '@utils/array';
 import getCards from '@domains/tapboard/sql/getCards';
+import type { QueueCard } from '../types/queue_card';
+import CheckList from './CheckList';
+import { randomPick } from '@utils/array';
 
-const BackCards: FC = () => {
+const CheckListQueue: FC = () => {
   const [queue, setQueue] = useState<QueueCard[]>([]);
 
   useEffect(() => {
@@ -25,20 +25,7 @@ const BackCards: FC = () => {
     setQueue(([_card, ...rest]) => rest);
   };
 
-  return (
-    <>
-      {queue.map((queueCard, ind) => {
-        return (
-          <BackCard
-            key={queueCard.no}
-            queueCard={queueCard}
-            focus={ind == 0 ? true : false}
-            onPress={onPress}
-          />
-        );
-      })}
-    </>
-  )
+  return <CheckList queue={queue} onPress={onPress} />
 };
 
-export default BackCards;
+export default CheckListQueue;
