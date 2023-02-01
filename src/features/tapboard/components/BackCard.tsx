@@ -6,12 +6,11 @@ import { Dimensions } from 'react-native';
 
 import CircleButton from '@molecules/CircleButton';
 import { getPosition } from '../utils/position';
-import { OPE_BOTTOM_POSITION, CARD_WIDTH } from '../constants';
+import { OPE_BOTTOM_POSITION, CARD_WIDTH, MAX_Z_INDEX } from '../constants';
+import type { QueueCard } from '../types/queue_card';
 
 type Props = {
-  title: string,
-  content: string,
-  zIndex: number,
+  queueCard: QueueCard,
   focus: boolean,
   onPress: Function
 };
@@ -20,14 +19,13 @@ type Props = {
 const maxHeight = Dimensions.get('window').height - OPE_BOTTOM_POSITION - 0.9 * CARD_WIDTH;
 const maxWidth = Dimensions.get('window').width - CARD_WIDTH;
 
-const BackCard: FC<Props> = ({ title, content, zIndex, focus, onPress }) => {
+const BackCard: FC<Props> = ({ queueCard, focus, onPress }) => {
   const position = useMemo(() => getPosition(maxHeight, maxWidth), []);
-  const zIndexMemo = useMemo(() => zIndex, []);
 
   return (
     <>
       <View
-        style={{ position: 'absolute', top: position.top, left: position.left, zIndex: (focus ? 1000 : zIndexMemo), transform: [{rotate: `${position.rotate}deg`}]}}
+        style={{ position: 'absolute', top: position.top, left: position.left, zIndex: (focus ? MAX_Z_INDEX : MAX_Z_INDEX - queueCard.no), transform: [{rotate: `${position.rotate}deg`}]}}
       >
         <Box
           bg={focus ? '#FEFEFE' : '#888'}
@@ -39,12 +37,12 @@ const BackCard: FC<Props> = ({ title, content, zIndex, focus, onPress }) => {
           px='5'
         >
           <Heading size="sm" ml="-1">
-            {title}
+            {queueCard.title}
           </Heading>
           <Text
             fontSize='2xl'
           >
-            {content}
+            {queueCard.content}
           </Text>
         </Box>
       </View>

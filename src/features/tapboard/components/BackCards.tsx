@@ -1,19 +1,24 @@
 import type { FC } from 'react';
 import { useState, useEffect } from 'react';
 
+import type { QueueCard } from '../types/queue_card';
 import BackCard from './BackCard';
-import type { Card } from '@domains/tapboard/types/card';
 import { randomPick } from '@utils/array';
 import getCards from '@domains/tapboard/sql/getCards';
 
 const BackCards: FC = () => {
-  const [queue, setQueue] = useState<Card[]>([]);
+  const [queue, setQueue] = useState<QueueCard[]>([]);
 
   useEffect(() => {
     // tmp data
     const cards = getCards();
     const numCards = cards.length;
-    setQueue(randomPick(cards, numCards));
+    setQueue(() => {
+      return (
+        randomPick(cards, numCards)
+          .map((queueCard, ind) => Object.assign(queueCard, {no: ind}))
+      );
+    })
   }, []);
 
   const onPress = () => {
@@ -22,14 +27,12 @@ const BackCards: FC = () => {
 
   return (
     <>
-      {queue.map((card, ind) => {
+      {queue.map((queueCard, ind) => {
         return (
           <BackCard
-            key={card.id}
-            title={card.title}
-            content={card.content}
-            zIndex={999 - ind}
-            focus={card.id == queue[0].id ? true : false}
+            key={queueCard.no}
+            queueCard={queueCard}
+            focus={ind == 0 ? true : false}
             onPress={onPress}
           />
         );
