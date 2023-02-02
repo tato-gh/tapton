@@ -1,13 +1,23 @@
 import type { FC, PropsWithChildren } from 'react';
 import { View, ImageBackground, StyleSheet } from 'react-native';
 
-const BackgroundImage: FC<PropsWithChildren> = ({ children }) => {
-  const image = require("@assets/sample_background.jpg");
+import IconButton from '@molecules/IconButton';
+
+type Props = PropsWithChildren & {
+  image: any,
+  pickImageAsync: Function
+};
+
+const BackgroundImage: FC<Props> = ({ image, pickImageAsync, children }) => {
+  const placeholderImageSource = require("@assets/sample_background.jpg");
 
   return (
     <View style={styles.container}>
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
         { children }
+        <View style={styles.pickImage}>
+          <IconButton theme='muted' icon='image' label='' onPress={pickImageAsync} />
+        </View>
       </ImageBackground>
     </View>
   );
@@ -21,6 +31,11 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     justifyContent: 'center',
+  },
+  pickImage: {
+    position: 'absolute',
+    bottom: 10,
+    left: 10
   },
 });
 

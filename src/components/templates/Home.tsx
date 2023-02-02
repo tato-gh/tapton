@@ -1,13 +1,13 @@
 import type { FC } from 'react';
 
-import TapboardBackgroundImage from '@features/tapboard/components/BackgroundImage';
+import TapboardBackgroundImager from '@features/tapboard/components/BackgroundImager';
 import TapboardCheckListQueue from '@features/tapboard/components/CheckListQueue';
 
 const Home: FC = () => {
   return (
-    <TapboardBackgroundImage>
+    <TapboardBackgroundImager>
       <TapboardCheckListQueue />
-    </TapboardBackgroundImage>
+    </TapboardBackgroundImager>
   );
 };
 

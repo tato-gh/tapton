@@ -1,33 +1,40 @@
 import type { FC } from 'react';
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { Box, Pressable, Icon, Text } from 'native-base';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
+import colors, { ThemeName } from '@constants/colors';
+
 type Props = {
+  theme: ThemeName,
   icon: any,
   label: string,
-  onPress: any
+  onPress: any,
+  size?: number
 };
 
-// TODO: 使う際には、native-base デザインに変更検討
-
-const IconButton: FC<Props> = ({ icon, label, onPress }) => {
+const IconButton: FC<Props> = ({ theme, icon, label, onPress, size = 10 }) => {
   return (
-    <Pressable style={styles.button} onPress={onPress}>
-      <MaterialIcons name={icon} size={24} color="#fff" />
-      <Text style={styles.label}>{label}</Text>
+    <Pressable
+      justifyContent='center'
+      alignItems='center'
+      onPress={onPress}
+    >
+      <Icon
+        as={MaterialIcons}
+        name={icon}
+        size={size}
+        color={colors[theme]['icon']}
+        backgroundColor={colors[theme]['iconBackground']}
+        padding='0'
+      />
+      <Text
+        color={colors[theme]['iconLabel']}
+        fontSize={size}
+      >
+        { label }
+      </Text>
     </Pressable>
   );
 };
 
 export default IconButton;
-
-const styles = StyleSheet.create({
-  button: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  label: {
-    color: '#fff',
-    marginTop: 12,
-  },
-});
