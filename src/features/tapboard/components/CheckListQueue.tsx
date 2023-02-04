@@ -10,10 +10,8 @@ const CheckListQueue: FC = () => {
   const [queue, setQueue] = useState<QueueCard[]>([]);
 
   useLayoutEffect(() => {
-    // tmp data
     (async () => {
       const cards = await getCards();
-      console.log(cards)
       if(cards) {
         const numCards = cards.length;
         setQueue(() => {

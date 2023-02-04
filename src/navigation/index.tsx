@@ -16,10 +16,11 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
 const Stack = createNativeStackNavigator();
 
 function RootNavigator() {
+  // TODO: 実装中につき、Cardsをデフォルトにしている
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Cards" component={CardsScreen} options={{ headerTitle: '管理ページ' }} />
+      <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
