@@ -9,8 +9,6 @@ type Props = PropsWithChildren & {
 };
 
 const BackgroundImage: FC<Props> = ({ image, pickImageAsync, children }) => {
-  const placeholderImageSource = require("@assets/sample_background.jpg");
-
   return (
     <View style={styles.container}>
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>

@@ -1,15 +1,20 @@
 import type { FC, PropsWithChildren } from 'react';
 import { useState, useLayoutEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import BackgroundImage from './BackgroundImage';
+import { storeImage, getImage } from '@domains/tapboard/storage/backgroundImage';
 
 const BackgroundImager: FC<PropsWithChildren> = ({ children }) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useLayoutEffect(() => {
-    getImage()
+    (async () => {
+      const uri = await getImage();
+      if(uri) {
+        setSelectedImage(uri);
+      }
+    })
   }, [selectedImage])
 
   const placeholderImageSource = require("@assets/sample_background.jpg");
@@ -28,25 +33,6 @@ const BackgroundImager: FC<PropsWithChildren> = ({ children }) => {
       }
     } else {
       alert('You did not select any image.');
-    }
-  };
-
-  const storeImage = (uri: any) => {
-    try {
-      AsyncStorage.setItem('@backgroundImage', uri);
-    } catch (e) {
-      // saving error
-    }
-  };
-
-  const getImage = async () => {
-    try {
-      const uri = await AsyncStorage.getItem('@backgroundImage')
-      if(uri !== null) {
-        setSelectedImage(uri)
-      }
-    } catch(e) {
-      // error reading value
     }
   };
 

@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { useState, useEffect } from 'react';
 
-import getCards from '@domains/tapboard/sql/getCards';
+import getCards from '@domains/tapboard/storage/getCards';
 import type { QueueCard } from '../types/queue_card';
 import CheckList from './CheckList';
 import { randomPick } from '@utils/array';
