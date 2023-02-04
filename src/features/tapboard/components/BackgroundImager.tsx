@@ -14,7 +14,7 @@ const BackgroundImager: FC<PropsWithChildren> = ({ children }) => {
       if(uri) {
         setSelectedImage(uri);
       }
-    })
+    })();
   }, [selectedImage])
 
   const placeholderImageSource = require("@assets/sample_background.jpg");

@@ -1,7 +1,7 @@
 import type { FC } from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useLayoutEffect } from 'react';
 
-import getCards from '@domains/tapboard/storage/getCards';
+import { getCards } from '@domains/tapboard/storage/cards';
 import type { QueueCard } from '../types/queue_card';
 import CheckList from './CheckList';
 import { randomPick } from '@utils/array';
@@ -9,16 +9,21 @@ import { randomPick } from '@utils/array';
 const CheckListQueue: FC = () => {
   const [queue, setQueue] = useState<QueueCard[]>([]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // tmp data
-    const cards = getCards();
-    const numCards = cards.length;
-    setQueue(() => {
-      return (
-        randomPick(cards, numCards)
-          .map((queueCard, ind) => Object.assign(queueCard, {no: ind}))
-      );
-    })
+    (async () => {
+      const cards = await getCards();
+      console.log(cards)
+      if(cards) {
+        const numCards = cards.length;
+        setQueue(() => {
+          return (
+            randomPick(cards, numCards)
+              .map((queueCard, ind) => Object.assign(queueCard, {no: ind}))
+          );
+        })
+      }
+    })();
   }, []);
 
   const onPress = (queueCard: QueueCard) => {
