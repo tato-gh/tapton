@@ -8,7 +8,6 @@ type Props = {
 };
 
 const CardList: FC<Props> = ({ cards }) => {
-
   return (
     <ScrollView>
       <Heading fontSize="md" fontWeight="bold" mx="4" mt="8" mb="4">

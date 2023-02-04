@@ -11,23 +11,33 @@ export const storeCards = (cards: Card[]) => {
   }
 };
 
+
+// tmp
+const cards: Card[] = [
+  {id: 1},
+  {id: 2},
+  {id: 3},
+  {id: 4},
+];
+
+const contents: {[parameter: number]: any} = {
+  1: { title: 'カード1', content: 'Hello world 1' },
+  2: { title: 'カード2', content: 'Hello world 2' },
+  3: { title: 'カード3', content: 'Hello world 3' },
+  4: { title: 'カード4', content: 'Hello world 4' }
+};
+
+const plans: {[parameter: number]: any} = {
+  1: { reborn: false },
+  2: { reborn: false },
+  3: { reborn: false },
+  4: { reborn: false }
+};
+
 export const getCards = async () => {
   try {
     // const jsonValue = await AsyncStorage.getItem('@cards');
     // return (jsonValue) ? JSON.parse(jsonValue) : null;
-
-    const cards: Card[] = [
-      {id: 1, title: 'カード1', content: 'Hello world', reborn: false},
-      {id: 2, title: 'カード2', content: 'Hello world', reborn: false},
-      {id: 3, title: 'カード3', content: 'Hello world', reborn: false},
-      {id: 4, title: 'カード4', content: 'Hello world', reborn: false},
-      {id: 5, title: 'カード5', content: 'Hello world', reborn: false},
-      {id: 6, title: 'カード6', content: 'Hello world', reborn: false},
-      {id: 7, title: 'カード7', content: 'Hello world', reborn: false},
-      {id: 8, title: 'カード8', content: 'Hello world, Hello wrld, Hello world', reborn: true, intervalMin: 1},
-      {id: 9, title: 'カード9', content: 'Hello world', reborn: false},
-      {id: 10, title: 'カード10', content: 'Hello world', reborn: false}
-    ];
 
     return cards;
   } catch(e) {
@@ -35,3 +45,20 @@ export const getCards = async () => {
     return null;
   }
 };
+
+export const getCardsFullLoaded = async () => {
+  try {
+    // const jsonValue = await AsyncStorage.getItem('@cards');
+    // return (jsonValue) ? JSON.parse(jsonValue) : null;
+    const cardsFull = cards.map((card) => {
+      const content = contents[card.id];
+      const plan = plans[card.id];
+      return Object.assign({}, card, content, plan);
+    });
+
+    return cardsFull;
+  } catch(e) {
+    // error reading value
+    return null;
+  }
+}
