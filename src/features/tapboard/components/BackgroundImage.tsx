@@ -10,27 +10,21 @@ type Props = PropsWithChildren & {
 
 const BackgroundImage: FC<Props> = ({ image, pickImageAsync, children }) => {
   return (
-    <View style={styles.container}>
-      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-        { children }
-        <View style={styles.pickImage}>
-          <IconButton theme='muted' icon='image' label='' onPress={pickImageAsync} />
-        </View>
-      </ImageBackground>
-    </View>
+    <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+      { children }
+      <View style={styles.btnPickImage}>
+        <IconButton theme='muted' icon='image' label='' onPress={pickImageAsync} />
+      </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    overflow: 'hidden'
-  },
   image: {
     flex: 1,
     justifyContent: 'center',
   },
-  pickImage: {
+  btnPickImage: {
     position: 'absolute',
     bottom: 10,
     left: 10

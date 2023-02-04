@@ -2,6 +2,7 @@ import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ColorSchemeName } from 'react-native';
 import HomeScreen from "@screens/HomeScreen";
+import CardsScreen from "@screens/CardsScreen";
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -18,6 +19,7 @@ function RootNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="Cards" component={CardsScreen} options={{ headerTitle: '管理ページ' }} />
     </Stack.Navigator>
   );
 }

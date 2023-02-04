@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { Box, Pressable, Icon, Text } from 'native-base';
+import { Pressable, Icon, Text } from 'native-base';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 import colors, { ThemeName } from '@constants/colors';
