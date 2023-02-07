@@ -1,34 +1,42 @@
 import type { FC } from 'react';
 import { Box, ScrollView, Text, Spacer, Heading, FlatList, HStack, VStack } from 'native-base';
+import { useNavigation } from '@react-navigation/native';
 
 import type { Card } from '@domains/tapboard/types/card';
+import IconButton from '@molecules/IconButton';
 
 type Props = {
   cards: Card[],
 };
 
 const CardList: FC<Props> = ({ cards }) => {
+  const navigation = useNavigation();
+
   return (
     <ScrollView>
-      <Heading fontSize="md" fontWeight="bold" mx="4" mt="8" mb="4">
-        カード一覧
-      </Heading>
+      <HStack mx='4' mt='8' mb='4' alignItems='center'>
+        <Heading fontSize='md' fontWeight='bold'>
+          カード一覧
+        </Heading>
+        <Spacer />
+        <IconButton theme='tertiary' icon='add' label='' size='8' onPress={() => { navigation.navigate('NewCard', {}) }} />
+      </HStack>
       <FlatList
         data={cards}
-        mx="4"
+        mx='4'
         renderItem={({ item }) =>
-          <Box borderBottomWidth="1" borderColor="muted.300" pb="2" mb="2">
-            <HStack justifyContent="space-between">
+          <Box borderBottomWidth='1' borderColor='muted.300' pb='2' mb='2'>
+            <HStack justifyContent='space-between'>
               <VStack>
-                <Text fontSize="xs" color="coolGray.800" bold>
+                <Text fontSize='xs' color='coolGray.800' bold>
                   {item.title}
                 </Text>
-                <Text fontSize="md" color="coolGray.600">
+                <Text fontSize='md' color='coolGray.600'>
                   {item.content}
                 </Text>
               </VStack>
               <Spacer />
-              <Text fontSize="xs" color="coolGray.800" alignSelf="flex-start">
+              <Text fontSize='xs' color='coolGray.800' alignSelf='flex-start'>
                 menu
               </Text>
             </HStack>

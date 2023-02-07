@@ -62,3 +62,16 @@ export const getCardsFullLoaded = async () => {
     return null;
   }
 }
+
+export const createCard = async (attrs) => {
+  try {
+    // TODO cards 更新
+    // TODO card_content_*/card_plan_* 作成
+    // const jsonValue = await AsyncStorage.getItem('@cards');
+    // return (jsonValue) ? JSON.parse(jsonValue) : null;
+    return null;
+  } catch(e) {
+    // error reading value
+    return null;
+  }
+};
