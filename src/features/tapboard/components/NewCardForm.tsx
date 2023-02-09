@@ -16,12 +16,12 @@ const NewCardForm: FC<Props> = ({ control, handleSubmit, errors, onSubmit }) => 
   return (
     <View style={styles.formContainer}>
       <VStack w='100%' maxWidth='600px' p='12' space={5}>
-        <FormControl isRequired>
+        <FormControl isRequired isInvalid={errors.title}>
           <Stack space={1}>
             <FormControl.Label>見出し</FormControl.Label>
-            {errors.title && (
-              <Text style={{color: 'red'}}> {errors.title.message} </Text>
-            )}
+            <FormControl.ErrorMessage>
+              {errors.title?.message}
+            </FormControl.ErrorMessage>
             <Controller
               control={control}
               render={({field: { onChange, value }}) => (
@@ -36,12 +36,12 @@ const NewCardForm: FC<Props> = ({ control, handleSubmit, errors, onSubmit }) => 
           </Stack>
         </FormControl>
 
-        <FormControl isRequired>
+        <FormControl isRequired isInvalid={errors.content}>
           <Stack space={1}>
             <FormControl.Label>表示内容</FormControl.Label>
-            {errors.content && (
-              <Text style={{color: 'red'}}> {errors.content.message} </Text>
-            )}
+            <FormControl.ErrorMessage>
+              {errors.content?.message}
+            </FormControl.ErrorMessage>
             <Controller
               control={control}
               render={({field: { onChange, value }}) => (
