@@ -1,32 +1,37 @@
 import type { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form'
+import * as yup from 'yup';
+import type { InferType } from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import NewCardForm from './NewCardForm';
 // import { createCard } from '@domains/tapboard/storage/cards';
 // import type { Card } from '@domains/tapboard/types/card';
 
-interface FormData {
-  title: string,
-  content: string,
+const newCardFormSchema = yup.object({
+  title: yup.string().required('必須項目です'),
+  content: yup.string().required('必須項目です'),
   // https://docs.expo.dev/versions/latest/sdk/date-time-picker/
-  startTime: any,
-  limitTime: any,
-  daily: boolean,
-  dates: number[],
-  days: number[],
-  reborn: boolean,
-  intervalMin: number,
-  notification: boolean
-}
+  startTime: yup.string().required('必須項目です'),
+  limitTime: yup.string().required('必須項目です'),
+  daily: yup.boolean(),
+  dates: yup.array(),
+  days: yup.array(),
+  reborn: yup.boolean(),
+  intervalMin: yup.number(),
+  notification: yup.boolean()
+});
+
+type newCardFormSchema = InferType<typeof newCardFormSchema>;
 
 const NewCardFormer: FC = () => {
-  const { control, handleSubmit, formState: { errors } } = useForm<FormData>({
+  const { control, handleSubmit, formState: { errors } } = useForm<newCardFormSchema>({
     defaultValues: {
       title: '',
       content: '',
-      startTime: null,
-      limitTime: null,
+      startTime: '',
+      limitTime: '',
       daily: true,
       dates: [],
       days: [],
@@ -34,6 +39,7 @@ const NewCardFormer: FC = () => {
       intervalMin: 60,
       notification: false
     },
+    resolver: yupResolver(newCardFormSchema)
   });
 
   const onSubmit: SubmitHandler<FormData> = (data: any) => console.log(data);
