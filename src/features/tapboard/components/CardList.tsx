@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import { Box, ScrollView, Text, Spacer, Heading, FlatList, HStack, VStack } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
+import RNPickerSelect from 'react-native-picker-select';
 
 import type { Card } from '@domains/tapboard/types/card';
 import IconButton from '@molecules/IconButton';

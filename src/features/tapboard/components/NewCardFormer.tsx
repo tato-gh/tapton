@@ -13,8 +13,8 @@ const newCardFormSchema = yup.object({
   title: yup.string().required('必須項目です'),
   content: yup.string().required('必須項目です'),
   // https://docs.expo.dev/versions/latest/sdk/date-time-picker/
-  startTime: yup.string().required('必須項目です'),
-  limitTime: yup.string().required('必須項目です'),
+  startHM: yup.array(),
+  limitHM: yup.array(),
   daily: yup.boolean(),
   dates: yup.array(),
   days: yup.array(),
@@ -30,8 +30,8 @@ const NewCardFormer: FC = () => {
     defaultValues: {
       title: '',
       content: '',
-      startTime: '',
-      limitTime: '',
+      startHM: [0, 0],
+      limitHM: [23, 55],
       daily: true,
       dates: [],
       days: [],

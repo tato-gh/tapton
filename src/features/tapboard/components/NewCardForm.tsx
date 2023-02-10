@@ -1,7 +1,9 @@
 import type { FC } from 'react';
 import { Controller } from 'react-hook-form';
-import { Button, Text, View, StyleSheet } from 'react-native';
+import { Button, View, StyleSheet } from 'react-native';
 import { Input, TextArea, Stack, VStack, FormControl } from 'native-base';
+
+import HourMinuteSelect from '@molecules/HourMinuteSelect';
 
 type Props = {
   control: any,
@@ -11,7 +13,6 @@ type Props = {
 }
 
 const NewCardForm: FC<Props> = ({ control, handleSubmit, errors, onSubmit }) => {
-  console.log(errors)
 
   return (
     <View style={styles.formContainer}>
@@ -54,6 +55,25 @@ const NewCardForm: FC<Props> = ({ control, handleSubmit, errors, onSubmit }) => 
                   value={value} />
               )}
               name='content'
+            />
+          </Stack>
+        </FormControl>
+
+        <FormControl isRequired isInvalid={errors.content}>
+          <Stack space={1}>
+            <FormControl.Label>表示開始時刻</FormControl.Label>
+            <FormControl.ErrorMessage>
+              {errors.startHM?.message}
+            </FormControl.ErrorMessage>
+            <Controller
+              control={control}
+              render={({field: { onChange, value }}) => (
+                <HourMinuteSelect
+                  value={value}
+                  onValueChange={(val: any) => onChange(val)}
+                />
+              )}
+              name='startHM'
             />
           </Stack>
         </FormControl>

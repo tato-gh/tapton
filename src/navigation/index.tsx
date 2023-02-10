@@ -5,6 +5,7 @@ import HomeScreen from "@screens/HomeScreen";
 import CardsScreen from "@screens/CardsScreen";
 import NewCardScreen from "@screens/NewCardScreen";
 
+
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
     <NavigationContainer
