@@ -16,8 +16,8 @@ const NewCardForm: FC<Props> = ({ control, handleSubmit, errors, onSubmit }) => 
 
   return (
     <View style={styles.formContainer}>
-      <VStack w='100%' maxWidth='600px' p='12' space={5}>
-        <FormControl isRequired isInvalid={errors.title}>
+      <VStack w='100%' maxWidth='600px' p='12' space={2}>
+        <FormControl isRequired isInvalid={errors.title} mb='2'>
           <Stack space={1}>
             <FormControl.Label>見出し</FormControl.Label>
             <FormControl.ErrorMessage>
@@ -30,14 +30,16 @@ const NewCardForm: FC<Props> = ({ control, handleSubmit, errors, onSubmit }) => 
                   p={2}
                   placeholder='見出し'
                   onChangeText={(val) => onChange(val)}
-                  value={value} />
+                  value={value}
+                  backgroundColor={errors.title?.message ? 'error.300' : 'white'}
+                />
               )}
               name='title'
             />
           </Stack>
         </FormControl>
 
-        <FormControl isRequired isInvalid={errors.content}>
+        <FormControl isRequired isInvalid={errors.content} mb='2'>
           <Stack space={1}>
             <FormControl.Label>表示内容</FormControl.Label>
             <FormControl.ErrorMessage>
@@ -52,14 +54,16 @@ const NewCardForm: FC<Props> = ({ control, handleSubmit, errors, onSubmit }) => 
                   autoCompleteType={undefined}
                   placeholder='表示内容'
                   onChangeText={(val) => onChange(val)}
-                  value={value} />
+                  value={value}
+                  backgroundColor={errors.content?.message ? 'error.300' : 'white'}
+                />
               )}
               name='content'
             />
           </Stack>
         </FormControl>
 
-        <FormControl isRequired isInvalid={errors.content}>
+        <FormControl mb='2'>
           <Stack space={1}>
             <FormControl.Label>表示開始時刻</FormControl.Label>
             <FormControl.ErrorMessage>
@@ -78,7 +82,29 @@ const NewCardForm: FC<Props> = ({ control, handleSubmit, errors, onSubmit }) => 
           </Stack>
         </FormControl>
 
-        <Button title='新規作成' onPress={handleSubmit(onSubmit)} />
+        <FormControl mb='5'>
+          <Stack space={1}>
+            <FormControl.Label>表示終了時刻</FormControl.Label>
+            <FormControl.ErrorMessage>
+              {errors.limitHM?.message}
+            </FormControl.ErrorMessage>
+            <Controller
+              control={control}
+              render={({field: { onChange, value }}) => (
+                <HourMinuteSelect
+                  value={value}
+                  onValueChange={(val: any) => onChange(val)}
+                />
+              )}
+              name='limitHM'
+            />
+          </Stack>
+        </FormControl>
+
+        <Button
+          title='新規作成'
+          onPress={handleSubmit(onSubmit)}
+        />
       </VStack>
     </View>
   );

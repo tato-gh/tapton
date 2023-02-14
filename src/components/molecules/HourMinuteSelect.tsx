@@ -1,4 +1,5 @@
 import type { FC } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 
 const HOURS = [
@@ -24,7 +25,7 @@ const HourMinuteSelect: FC<Props> = ({ value, onValueChange }) => {
   const minute = value[1];
 
   return(
-    <>
+    <View style={styles.container}>
       <RNPickerSelect
         onValueChange={(value) => {
           if(value != hour) {
@@ -35,6 +36,7 @@ const HourMinuteSelect: FC<Props> = ({ value, onValueChange }) => {
         value={hour}
         placeholder={{}}
       />
+      <Text>時</Text>
       <RNPickerSelect
         onValueChange={(value) => {
           if(value != minute) {
@@ -45,8 +47,19 @@ const HourMinuteSelect: FC<Props> = ({ value, onValueChange }) => {
         value={minute}
         placeholder={{}}
       />
-    </>
+      <Text>分</Text>
+    </View>
   );
 };
 
 export default HourMinuteSelect;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    columnGap: 4,
+    paddingHorizontal: 4
+  }
+});
