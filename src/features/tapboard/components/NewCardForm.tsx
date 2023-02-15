@@ -45,11 +45,11 @@ const NewCardForm: FC<Props> = ({ control, handleSubmit, watch, errors, onSubmit
           </Stack>
         </FormControl>
 
-        <FormControl isRequired isInvalid={errors.content} mb='2'>
+        <FormControl isRequired isInvalid={errors.body} mb='2'>
           <Stack space={1}>
             <FormControl.Label>内容</FormControl.Label>
             <FormControl.ErrorMessage>
-              {errors.content?.message}
+              {errors.body?.message}
             </FormControl.ErrorMessage>
             <Controller
               control={control}
@@ -61,10 +61,10 @@ const NewCardForm: FC<Props> = ({ control, handleSubmit, watch, errors, onSubmit
                   placeholder='表示内容'
                   onChangeText={(val) => onChange(val)}
                   value={value}
-                  backgroundColor={errors.content?.message ? 'error.300' : 'white'}
+                  backgroundColor={errors.body?.message ? 'error.300' : 'white'}
                 />
               )}
-              name='content'
+              name='body'
             />
           </Stack>
         </FormControl>

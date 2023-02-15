@@ -1,12 +1,14 @@
 export type Card = {
-  id: number,
+  id: string,
+  nextShowTime: string
 };
 
 export const isCard = (arg: unknown): arg is Card => {
   const c = arg as Card;
 
   return (
-    typeof c?.id === 'number'
+    typeof c?.id === 'string' &&
+      typeof c?.nextShowTime === 'string'
   )
 };
 

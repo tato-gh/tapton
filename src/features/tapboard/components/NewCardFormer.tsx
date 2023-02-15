@@ -11,13 +11,12 @@ import NewCardForm from './NewCardForm';
 
 const newCardFormSchema = yup.object({
   title: yup.string().required('必須項目です'),
-  content: yup.string().required('必須項目です'),
+  body: yup.string().required('必須項目です'),
   daily: yup.array(),
   useDates: yup.array(),
   dates: yup.array(),
   useDays: yup.array(),
   days: yup.array(),
-  // https://docs.expo.dev/versions/latest/sdk/date-time-picker/
   startHM: yup.array(),
   limitHM: yup.array(),
   reborn: yup.array(),
@@ -31,7 +30,7 @@ const NewCardFormer: FC = () => {
   const { control, handleSubmit, watch, formState: { errors } } = useForm<newCardFormSchema>({
     defaultValues: {
       title: '',
-      content: '',
+      body: '',
       daily: ['true'],
       useDates: [],
       dates: [],

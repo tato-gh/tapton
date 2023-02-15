@@ -1,6 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import type { Card } from './../types/card';
+import type { CardContent } from './../types/cardContent';
+import type { CardPlan } from './../types/cardPlan';
 
 export const storeCards = (cards: Card[]) => {
   try {
@@ -14,25 +16,25 @@ export const storeCards = (cards: Card[]) => {
 
 // tmp
 const cards: Card[] = [
-  {id: 1},
-  {id: 2},
-  {id: 3},
-  {id: 4},
+  { id: '1', nextShowTime: '2023-02-15T12:30:30.002Z' },
+  { id: '2', nextShowTime: '2023-02-15T12:30:30.002Z' },
+  { id: '3', nextShowTime: '2023-02-15T12:30:30.002Z' },
+  { id: '4', nextShowTime: '2023-02-15T12:30:30.002Z' },
 ];
 
-const contents: {[parameter: number]: any} = {
-  1: { title: 'カード1', content: 'Hello world 1' },
-  2: { title: 'カード2', content: 'Hello world 2' },
-  3: { title: 'カード3', content: 'Hello world 3' },
-  4: { title: 'カード4', content: 'Hello world 4' }
-};
+const contents: CardContent[] = [
+  { card_id: '1', title: 'カード1', body: 'Hello world 1' },
+  { card_id: '2', title: 'カード2', body: 'Hello world 2' },
+  { card_id: '3', title: 'カード3', body: 'Hello world 3' },
+  { card_id: '4', title: 'カード4', body: 'Hello world 4' }
+];
 
-const plans: {[parameter: number]: any} = {
-  1: { reborn: false },
-  2: { reborn: false },
-  3: { reborn: false },
-  4: { reborn: false }
-};
+const plans: CardPlan[] = [
+  { card_id: '1', daily: true, startHour: 0, startMinute: 20, limitHour: 22, limitMinute: 30 },
+  { card_id: '2', daily: true, startHour: 1, startMinute: 30, limitHour: 23, limitMinute: 30 },
+  { card_id: '3', daily: true, startHour: 2, startMinute: 40, limitHour: 5, limitMinute: 30 },
+  { card_id: '4', daily: true, startHour: 3, startMinute: 50, limitHour: 6, limitMinute: 30 },
+];
 
 export const getCards = async () => {
   try {
@@ -50,9 +52,13 @@ export const getCardsFullLoaded = async () => {
   try {
     // const jsonValue = await AsyncStorage.getItem('@cards');
     // return (jsonValue) ? JSON.parse(jsonValue) : null;
+    // tmp
+    const dictContent: {[parameter: string]: CardContent} = contents.reduce((acc, c) => Object.assign(acc, { [c.card_id]: c }), {});
+    const dictPlan: {[parameter: string]: CardPlan} = plans.reduce((acc, c) => Object.assign(acc, { [c.card_id]: c }), {});
+
     const cardsFull = cards.map((card) => {
-      const content = contents[card.id];
-      const plan = plans[card.id];
+      const content = dictContent[card.id];
+      const plan = dictPlan[card.id];
       return Object.assign({}, card, content, plan);
     });
 
