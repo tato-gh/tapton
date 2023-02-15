@@ -36,12 +36,21 @@ const plans: CardPlan[] = [
   { card_id: '4', daily: true, startHour: 3, startMinute: 50, limitHour: 6, limitMinute: 30 },
 ];
 
+const dictContent: {[parameter: string]: CardContent} = contents.reduce((acc, c) => Object.assign(acc, { [c.card_id]: c }), {});
+const dictPlan: {[parameter: string]: CardPlan} = plans.reduce((acc, c) => Object.assign(acc, { [c.card_id]: c }), {});
+
 export const getCards = async () => {
   try {
     // const jsonValue = await AsyncStorage.getItem('@cards');
     // return (jsonValue) ? JSON.parse(jsonValue) : null;
 
-    return cards;
+    // tmp
+    const cardsFull = cards.map((card) => {
+      const content = dictContent[card.id];
+      const plan = dictPlan[card.id];
+      return Object.assign({}, card, content, plan);
+    });
+    return cardsFull;
   } catch(e) {
     // error reading value
     return null;
@@ -53,14 +62,12 @@ export const getCardsFullLoaded = async () => {
     // const jsonValue = await AsyncStorage.getItem('@cards');
     // return (jsonValue) ? JSON.parse(jsonValue) : null;
     // tmp
-    const dictContent: {[parameter: string]: CardContent} = contents.reduce((acc, c) => Object.assign(acc, { [c.card_id]: c }), {});
-    const dictPlan: {[parameter: string]: CardPlan} = plans.reduce((acc, c) => Object.assign(acc, { [c.card_id]: c }), {});
-
     const cardsFull = cards.map((card) => {
       const content = dictContent[card.id];
       const plan = dictPlan[card.id];
       return Object.assign({}, card, content, plan);
     });
+    console.log(cardsFull);
 
     return cardsFull;
   } catch(e) {

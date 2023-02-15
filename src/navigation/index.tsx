@@ -21,9 +21,9 @@ function RootNavigator() {
   // TODO: 実装中につき、Cardsをデフォルトにしている
   return (
     <Stack.Navigator>
+      <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Cards" component={CardsScreen} options={{ headerTitle: '管理ページ' }} />
       <Stack.Screen name="NewCard" component={NewCardScreen} options={{ headerTitle: '新規カード作成' }} />
-      <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }

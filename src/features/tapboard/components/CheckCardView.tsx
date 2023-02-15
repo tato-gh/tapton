@@ -4,7 +4,7 @@ import { Box, Heading, Text } from 'native-base';
 
 import type { Position } from '../utils/position';
 import { MAX_Z_INDEX } from '../constants';
-import type { QueueCard } from '../types/queue_card';
+import type { QueueCard } from '../types/queueCard';
 
 type Props = {
   queueCard: QueueCard,
@@ -32,7 +32,7 @@ const CheckCardView: FC<Props> = ({ queueCard, position, focus }) => {
         <Text
           fontSize='2xl'
         >
-          {queueCard.content}
+          {queueCard.body}
         </Text>
       </Box>
     </View>

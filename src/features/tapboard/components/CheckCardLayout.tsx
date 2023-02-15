@@ -4,7 +4,7 @@ import { Dimensions } from 'react-native';
 
 import { getPosition } from '../utils/position';
 import { OPE_BOTTOM_POSITION, CARD_WIDTH } from '../constants';
-import type { QueueCard } from '../types/queue_card';
+import type { QueueCard } from '../types/queueCard';
 import CheckCardView from './CheckCardView';
 import CheckCardForm from './CheckCardForm';
 

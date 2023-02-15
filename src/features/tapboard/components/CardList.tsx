@@ -1,7 +1,6 @@
 import type { FC } from 'react';
 import { Box, ScrollView, Text, Spacer, Heading, FlatList, HStack, VStack } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
-import RNPickerSelect from 'react-native-picker-select';
 
 import type { Card } from '@domains/tapboard/types/card';
 import IconButton from '@molecules/IconButton';
@@ -20,7 +19,7 @@ const CardList: FC<Props> = ({ cards }) => {
           カード一覧
         </Heading>
         <Spacer />
-        <IconButton theme='tertiary' icon='add' label='' size='8' onPress={() => { navigation.navigate('NewCard', {}) }} />
+        <IconButton theme='tertiary' icon='add' label='' size={8} onPress={() => { navigation.navigate('NewCard', {}) }} />
       </HStack>
       <FlatList
         data={cards}

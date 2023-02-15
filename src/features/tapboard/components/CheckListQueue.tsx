@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { useState, useLayoutEffect } from 'react';
 
 import { getCards } from '@domains/tapboard/storage/cards';
-import type { QueueCard } from '../types/queue_card';
+import type { QueueCard } from '../types/queueCard';
 import CheckList from './CheckList';
 import { randomPick } from '@utils/array';
 
