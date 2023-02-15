@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { Controller } from 'react-hook-form';
 import { Button, View, StyleSheet } from 'react-native';
-import { Input, TextArea, Stack, VStack, FormControl } from 'native-base';
+import { Input, TextArea, Checkbox, Stack, HStack, VStack, FormControl } from 'native-base';
 
 import HourMinuteSelect from '@molecules/HourMinuteSelect';
 
@@ -41,7 +41,7 @@ const NewCardForm: FC<Props> = ({ control, handleSubmit, errors, onSubmit }) => 
 
         <FormControl isRequired isInvalid={errors.content} mb='2'>
           <Stack space={1}>
-            <FormControl.Label>表示内容</FormControl.Label>
+            <FormControl.Label>内容</FormControl.Label>
             <FormControl.ErrorMessage>
               {errors.content?.message}
             </FormControl.ErrorMessage>
@@ -65,10 +65,46 @@ const NewCardForm: FC<Props> = ({ control, handleSubmit, errors, onSubmit }) => 
 
         <FormControl mb='2'>
           <Stack space={1}>
+            <FormControl.Label>日付設定</FormControl.Label>
+            <Controller
+              control={control}
+              render={({field: { onChange, value }}) => (
+                <Checkbox.Group onChange={(val) => onChange(val)} value={value} accessibilityLabel="choose daily if want">
+                  <Checkbox value={'true'}>毎日</Checkbox>
+                </Checkbox.Group>
+              )}
+              name='daily'
+            />
+
+            <HStack space={2}>
+              <Controller
+                control={control}
+                render={({field: { onChange, value }}) => (
+                  <Checkbox.Group onChange={(val) => onChange(val)} value={value} accessibilityLabel="choose daily if want">
+                    <Checkbox value={'true'}>日付で指定</Checkbox>
+                  </Checkbox.Group>
+                )}
+                name='use_dates'
+              />
+            </HStack>
+
+            <HStack space={2}>
+              <Controller
+                control={control}
+                render={({field: { onChange, value }}) => (
+                  <Checkbox.Group onChange={(val) => onChange(val)} value={value} accessibilityLabel="choose daily if want">
+                    <Checkbox value={'true'}>曜日で指定</Checkbox>
+                  </Checkbox.Group>
+                )}
+                name='use_days'
+              />
+            </HStack>
+          </Stack>
+        </FormControl>
+
+        <FormControl mb='2'>
+          <Stack space={1}>
             <FormControl.Label>表示開始時刻</FormControl.Label>
-            <FormControl.ErrorMessage>
-              {errors.startHM?.message}
-            </FormControl.ErrorMessage>
             <Controller
               control={control}
               render={({field: { onChange, value }}) => (
@@ -85,9 +121,6 @@ const NewCardForm: FC<Props> = ({ control, handleSubmit, errors, onSubmit }) => 
         <FormControl mb='5'>
           <Stack space={1}>
             <FormControl.Label>表示終了時刻</FormControl.Label>
-            <FormControl.ErrorMessage>
-              {errors.limitHM?.message}
-            </FormControl.ErrorMessage>
             <Controller
               control={control}
               render={({field: { onChange, value }}) => (
