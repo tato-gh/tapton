@@ -20,15 +20,15 @@ const newCardFormSchema = yup.object({
   // https://docs.expo.dev/versions/latest/sdk/date-time-picker/
   startHM: yup.array(),
   limitHM: yup.array(),
-  reborn: yup.boolean(),
+  reborn: yup.array(),
   intervalMin: yup.number(),
-  notification: yup.boolean()
+  notification: yup.array()
 });
 
 type newCardFormSchema = InferType<typeof newCardFormSchema>;
 
 const NewCardFormer: FC = () => {
-  const { control, handleSubmit, formState: { errors } } = useForm<newCardFormSchema>({
+  const { control, handleSubmit, watch, formState: { errors } } = useForm<newCardFormSchema>({
     defaultValues: {
       title: '',
       content: '',
@@ -39,9 +39,9 @@ const NewCardFormer: FC = () => {
       days: [],
       startHM: [0, 0],
       limitHM: [23, 55],
-      reborn: false,
+      reborn: [],
       intervalMin: 60,
-      notification: false
+      notification: []
     },
     resolver: yupResolver(newCardFormSchema)
   });
@@ -51,6 +51,7 @@ const NewCardFormer: FC = () => {
   return <NewCardForm
     control={control}
     handleSubmit={handleSubmit}
+    watch={watch}
     errors={errors}
     onSubmit={onSubmit}
   />
