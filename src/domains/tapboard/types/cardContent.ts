@@ -1,5 +1,5 @@
 export type CardContent = {
-  card_id: string,
+  cardId: string,
   title: string,
   body: string
 };

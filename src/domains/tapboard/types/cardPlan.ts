@@ -1,5 +1,5 @@
 export type CardPlan = {
-  card_id: string,
+  cardId: string,
   daily: boolean,
   useDates?: boolean,
   dates?: Array<number>,
