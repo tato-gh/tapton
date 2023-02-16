@@ -3,6 +3,7 @@ type Colors = {
   secondary: { [key: string]: string },
   tertiary: { [key: string]: string },
   muted: { [key: string]: string }
+  warning: { [key: string]: string },
 };
 
 export type ThemeName = keyof Colors;
@@ -35,6 +36,13 @@ const colors: Colors = {
     icon: 'muted.500',
     iconBackground: 'muted.50',
     iconLabel: 'muted.500',
+  },
+  warning: {
+    circle: 'warning.500',
+    circleBackground: 'warning.50',
+    icon: 'warning.500',
+    iconBackground: 'warning.50',
+    iconLabel: 'warning.500',
   }
 };
 

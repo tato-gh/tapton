@@ -46,10 +46,10 @@ const CardList: FC<Props> = ({ cards }) => {
                   )}
                 </HStack>
               </VStack>
-              <Spacer />
-              <Text fontSize='xs' color='coolGray.800' alignSelf='flex-start'>
-                menu
-              </Text>
+              <HStack space={2}>
+                <IconFlat theme='tertiary' icon='edit' size={6} onPress={() => { navigation.navigate('EditCard', {}) }} />
+                <IconFlat theme='warning' icon='delete' size={6} onPress={() => { console.log('delete') }} />
+              </HStack>
             </HStack>
           </Box>}
         keyExtractor={ item => item.id }
