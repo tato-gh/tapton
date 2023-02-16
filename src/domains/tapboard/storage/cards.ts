@@ -4,9 +4,8 @@ import { UUID } from "uuidjs";
 import type { Card } from './../types/card';
 import type { CardContent } from './../types/cardContent';
 import type { CardPlan } from './../types/cardPlan';
-import { getCardContents, getStoreKey as getContentStoreKey } from './cardContents';
-import { getCardPlans, getStoreKey as getPlanStoreKey } from './cardPlans';
-
+import { getStoreKey as getContentStoreKey } from './cardContents';
+import { getStoreKey as getPlanStoreKey } from './cardPlans';
 
 export const getCards = async () => {
   try {
