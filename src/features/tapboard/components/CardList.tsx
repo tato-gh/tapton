@@ -32,7 +32,7 @@ const CardList: FC<Props> = ({ cards }) => {
                   {item.title}
                 </Text>
                 <Text fontSize='md' color='coolGray.600'>
-                  {item.content}
+                  {item.body}
                 </Text>
               </VStack>
               <Spacer />

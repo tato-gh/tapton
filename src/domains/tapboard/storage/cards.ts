@@ -4,82 +4,67 @@ import { UUID } from "uuidjs";
 import type { Card } from './../types/card';
 import type { CardContent } from './../types/cardContent';
 import type { CardPlan } from './../types/cardPlan';
+import { getCardContents, getStoreKey as getContentStoreKey } from './cardContents';
+import { getCardPlans, getStoreKey as getPlanStoreKey } from './cardPlans';
 
-export const storeCards = (cards: Card[]) => {
-  try {
-    const jsonValue = JSON.stringify(cards)
-    AsyncStorage.setItem('@cards', jsonValue);
-  } catch (e) {
-    // saving error
-  }
-};
-
-
-// tmp
-const cards: Card[] = [
-  { id: '1', nextShowTime: '2023-02-15T12:30:30.002Z' },
-  { id: '2', nextShowTime: '2023-02-15T12:30:30.002Z' },
-  { id: '3', nextShowTime: '2023-02-15T12:30:30.002Z' },
-  { id: '4', nextShowTime: '2023-02-15T12:30:30.002Z' },
-];
-
-const contents: CardContent[] = [
-  { cardId: '1', title: 'カード1', body: 'Hello world 1' },
-  { cardId: '2', title: 'カード2', body: 'Hello world 2' },
-  { cardId: '3', title: 'カード3', body: 'Hello world 3' },
-  { cardId: '4', title: 'カード4', body: 'Hello world 4' }
-];
-
-const plans: CardPlan[] = [
-  { cardId: '1', daily: true, startHour: 0, startMinute: 20, limitHour: 22, limitMinute: 30 },
-  { cardId: '2', daily: true, startHour: 1, startMinute: 30, limitHour: 23, limitMinute: 30 },
-  { cardId: '3', daily: true, startHour: 2, startMinute: 40, limitHour: 5, limitMinute: 30 },
-  { cardId: '4', daily: true, startHour: 3, startMinute: 50, limitHour: 6, limitMinute: 30 },
-];
-
-const dictContent: {[parameter: string]: CardContent} = contents.reduce((acc, c) => Object.assign(acc, { [c.cardId]: c }), {});
-const dictPlan: {[parameter: string]: CardPlan} = plans.reduce((acc, c) => Object.assign(acc, { [c.cardId]: c }), {});
 
 export const getCards = async () => {
   try {
-    // const jsonValue = await AsyncStorage.getItem('@cards');
-    // return (jsonValue) ? JSON.parse(jsonValue) : null;
-
-    // tmp
-    const cardsFull = cards.map((card) => {
-      const content = dictContent[card.id];
-      const plan = dictPlan[card.id];
-      return Object.assign({}, card, content, plan);
-    });
-    return cardsFull;
+    const jsonValue = await AsyncStorage.getItem('@cards');
+    return (jsonValue) ? JSON.parse(jsonValue) : [];
   } catch(e) {
     // error reading value
-    return null;
+    return [];
   }
 };
 
 export const getCardsFullLoaded = async () => {
   try {
-    // const jsonValue = await AsyncStorage.getItem('@cards');
-    // return (jsonValue) ? JSON.parse(jsonValue) : null;
-    // tmp
+    const cards: Card[] = await getCards();
+    const [contentKeys, planKeys] = cards.reduce(
+      (keys: Array<Array<string>>, card) => {
+        const [cKeys, pKeys] = keys;
+        const contentKey:string = getContentStoreKey(card.id);
+        const planKey:string = getPlanStoreKey(card.id);
+        return [[...cKeys, contentKey], [...pKeys, planKey]];
+      },
+      [[], []]
+    );
+    const dictContent = await buildDict<CardContent>(contentKeys);
+    const dictPlan = await buildDict<CardPlan>(planKeys);
+
     const cardsFull = cards.map((card) => {
       const content = dictContent[card.id];
       const plan = dictPlan[card.id];
       return Object.assign({}, card, content, plan);
     });
-    console.log(cardsFull);
 
     return cardsFull;
   } catch(e) {
-    // error reading value
-    return null;
+    return [];
   }
 }
 
+const buildDict = async <T>(keys: Array<string>) => {
+  try {
+    const responses = await AsyncStorage.multiGet(keys);
+    return responses.reduce(
+      (dict: {[parameter: string]: T}, response) => {
+        const [_key, jsonValue] = response;
+        const attrs = JSON.parse(jsonValue || '{}');
+        return Object.assign(dict, { [attrs.cardId]: attrs });
+      },
+      {}
+    )
+  } catch(e) {
+    return {};
+  }
+};
+
 export const createCard = async (attrs: any) => {
   const cardId:string = UUID.generate();
-  // TODO
+  const contentKey:string = getContentStoreKey(cardId);
+  const planKey:string = getPlanStoreKey(cardId);
   const nextShowTime = '2023-02-15T12:30:30.002Z';
 
   try {
@@ -100,7 +85,7 @@ export const createCard = async (attrs: any) => {
       title: attrs.title,
       body: attrs.body
     };
-    AsyncStorage.setItem(`@cardContent-${cardId}`, JSON.stringify(cardContent));
+    AsyncStorage.setItem(contentKey, JSON.stringify(cardContent));
 
     // new @cardPlan
     const cardPlan: CardPlan = {
@@ -118,7 +103,7 @@ export const createCard = async (attrs: any) => {
       intervalMin: attrs.intervalMin,
       notification: attrs.notification
     };
-    AsyncStorage.setItem(`@cardPlan-${cardId}`, JSON.stringify(cardPlan));
+    AsyncStorage.setItem(planKey, JSON.stringify(cardPlan));
 
     return [card, cardContent, cardPlan];
   } catch(e) {
