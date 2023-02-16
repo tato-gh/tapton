@@ -14,7 +14,7 @@ const CardList: FC<Props> = ({ cards }) => {
 
   return (
     <ScrollView>
-      <HStack mx='4' mt='8' mb='6' alignItems='center'>
+      <HStack mx='4' mt='6' mb='4' alignItems='center'>
         <Heading fontSize='md' fontWeight='bold'>
           カード一覧
         </Heading>
@@ -28,7 +28,7 @@ const CardList: FC<Props> = ({ cards }) => {
           <Box borderBottomWidth='1' borderColor='muted.300' pb='2' mb='2'>
             <HStack justifyContent='space-between'>
               <VStack space={2}>
-                <Text fontSize='xs' color='coolGray.800' bold>
+                <Text fontSize='xs' color='coolGray.800' bold mt='2'>
                   {item.title}
                 </Text>
                 <Text fontSize='md' color='coolGray.600'>
@@ -47,7 +47,7 @@ const CardList: FC<Props> = ({ cards }) => {
                 </HStack>
               </VStack>
               <HStack space={2}>
-                <IconFlat theme='tertiary' icon='edit' size={6} onPress={() => { navigation.navigate('EditCard', {}) }} />
+                <IconFlat theme='tertiary' icon='edit' size={6} onPress={() => { navigation.navigate('EditCard', {cardId: item.id}) }} />
                 <IconFlat theme='warning' icon='delete' size={6} onPress={() => { console.log('delete') }} />
               </HStack>
             </HStack>

@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { useRef } from 'react';
+import { useRef, useState, useLayoutEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native';
@@ -8,10 +8,11 @@ import * as yup from 'yup';
 import type { InferType } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import NewCardForm from './NewCardForm';
-import { createCard } from '@domains/tapboard/storage/cards';
+import { getCardFullLoaded } from '@domains/tapboard/storage/cards';
+import EditCardForm from './EditCardForm';
+import { updateCard } from '@domains/tapboard/storage/cards';
 
-const newCardFormSchema = yup.object({
+const editCardFormSchema = yup.object({
   title: yup.string().required('必須項目です'),
   body: yup.string().required('必須項目です'),
   daily: yup.array(),
@@ -26,10 +27,14 @@ const newCardFormSchema = yup.object({
   notification: yup.array()
 });
 
-type newCardFormSchema = InferType<typeof newCardFormSchema>;
+type editCardFormSchema = InferType<typeof editCardFormSchema>;
 
-const NewCardFormer: FC = () => {
-  const { control, handleSubmit, watch, reset, formState: { errors } } = useForm<newCardFormSchema>({
+type Props = {
+  cardId: string
+};
+
+const EditCardFormer: FC<Props> = ({cardId}) => {
+  const { control, handleSubmit, watch, reset, formState: { errors }, setValue } = useForm<editCardFormSchema>({
     defaultValues: {
       title: '',
       body: '',
@@ -44,13 +49,36 @@ const NewCardFormer: FC = () => {
       intervalMin: 60,
       notification: []
     },
-    resolver: yupResolver(newCardFormSchema)
+    resolver: yupResolver(editCardFormSchema)
   });
   const navigation = useNavigation();
   const ref = useRef(null);
 
-  const onSubmit: SubmitHandler<newCardFormSchema> = (data: any) => {
-    createCard({
+  useLayoutEffect(() => {
+    (async () => {
+      const card = await getCardFullLoaded(cardId);
+      console.log(card);
+      if(card) {
+        setValue('title', card.title);
+        setValue('body', card.body);
+        setValue('daily', boolToCheckValues(card.daily));
+        setValue('useDates', boolToCheckValues(card.useDates));
+        setValue('dates', card.dates);
+        setValue('useDays', boolToCheckValues(card.useDays));
+        setValue('days', card.days);
+        setValue('startHM', [card.startHour, card.startMinute]);
+        setValue('limitHM', [card.limitHour, card.limitMinute]);
+        setValue('reborn', boolToCheckValues(card.reborn));
+        setValue('intervalMin', card.intervalMin);
+        setValue('notification', boolToCheckValues(card.notification));
+      }
+    })();
+  }, [cardId])
+
+  const boolToCheckValues = (tf: boolean | undefined) => ( tf ? ['true'] : [] );
+
+  const onSubmit: SubmitHandler<editCardFormSchema> = (data: any) => {
+    updateCard(cardId, {
       title: data.title,
       body: data.body,
       daily: !!data.daily[0],
@@ -67,7 +95,6 @@ const NewCardFormer: FC = () => {
       notification: !!data.notification[0]
     });
 
-    reset();
     ref.current?.scrollTo({ y: 0 })
     navigation.navigate('Cards', {});
   };
@@ -79,7 +106,7 @@ const NewCardFormer: FC = () => {
 
   return (
     <ScrollView ref={ref}>
-      <NewCardForm
+      <EditCardForm
         control={control}
         handleSubmit={handleSubmit}
         watch={watch}
@@ -91,4 +118,4 @@ const NewCardFormer: FC = () => {
   )
 };
 
-export default NewCardFormer;
+export default EditCardFormer;

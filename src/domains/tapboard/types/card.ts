@@ -6,7 +6,7 @@ export type Card = {
   nextShowTime: string
 };
 
-export type CardFull = Card | CardContent | CardPlan;
+export type CardFull = Card & CardContent & CardPlan;
 
 export const isCard = (arg: unknown): arg is Card => {
   const c = arg as Card;
