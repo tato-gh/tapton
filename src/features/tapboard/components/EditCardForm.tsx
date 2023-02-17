@@ -87,6 +87,45 @@ const EditCardForm: FC<Props> = ({ control, handleSubmit, watch, errors, onSubmi
               control={control}
               render={({field: { onChange, value }}) => (
                 <Checkbox.Group onChange={(val) => onChange(val)} value={value} accessibilityLabel="choose">
+                  <Checkbox size='sm' value={'true'}>曜日で指定</Checkbox>
+                </Checkbox.Group>
+              )}
+              name='useDays'
+            />
+
+            {watchUseDays[0] && (
+              <View style={{marginLeft: 16, marginBottom: 8}}>
+                <Controller
+                  control={control}
+                  render={({field: { onChange, value }}) => (
+                    <Checkbox.Group onChange={(val) => onChange(val)} value={value} accessibilityLabel="choose">
+                      <HStack space={3}>
+                        {
+                          buildItems<string>(['月', '火', '水', '木', '金'], 1).map(({label, value}) => (
+                            <Checkbox key={`day-${value}`} size='sm' value={`${value}`}><Text fontSize='sm'>{label}</Text></Checkbox>
+                          ))
+                        }
+                      </HStack>
+                      <HStack space={3}>
+                        {
+                          buildItems<string>(['土', '日'], 6).map(({label, value}) => (
+                            <Checkbox key={`day-${value}`} size='sm' value={`${value}`}><Text fontSize='sm'>{label}</Text></Checkbox>
+                          ))
+                        }
+                      </HStack>
+                    </Checkbox.Group>
+                  )}
+                  name='days'
+                />
+              </View>
+            )}
+          </VStack>
+
+          <VStack space={2}>
+            <Controller
+              control={control}
+              render={({field: { onChange, value }}) => (
+                <Checkbox.Group onChange={(val) => onChange(val)} value={value} accessibilityLabel="choose">
                   <Checkbox size='sm' value={'true'}>日付で指定</Checkbox>
                 </Checkbox.Group>
               )}
@@ -104,10 +143,9 @@ const EditCardForm: FC<Props> = ({ control, handleSubmit, watch, errors, onSubmi
                           const num = (base == 26 ? 6 : 5);
                           return (
                             <HStack key={`base-${base}`} space={3}>
-                              {[...Array(num).keys()].map((ind) => {
-                                const date = ind + base;
+                              {buildItems<number>([...Array(num).keys()], base).map(({value}) => {
                                 return (
-                                  <Checkbox key={`date-${date}`} size='sm' value={`${date}`}><Text fontSize='sm'>{date}</Text></Checkbox>
+                                  <Checkbox key={`date-${value}`} size='sm' value={`${value}`}><Text fontSize='sm'>{value}</Text></Checkbox>
                                 )
                               })}
                             </HStack>
@@ -117,45 +155,6 @@ const EditCardForm: FC<Props> = ({ control, handleSubmit, watch, errors, onSubmi
                     </Checkbox.Group>
                   )}
                   name='dates'
-                />
-              </View>
-            )}
-          </VStack>
-
-          <VStack space={2}>
-            <Controller
-              control={control}
-              render={({field: { onChange, value }}) => (
-                <Checkbox.Group onChange={(val) => onChange(val)} value={value} accessibilityLabel="choose">
-                  <Checkbox size='sm' value={'true'}>曜日で指定</Checkbox>
-                </Checkbox.Group>
-              )}
-              name='useDays'
-            />
-
-            {watchUseDays[0] && (
-              <View style={{marginLeft: 16, marginBottom: 8}}>
-                <Controller
-                  control={control}
-                  render={({field: { onChange, value }}) => (
-                    <Checkbox.Group onChange={(val) => onChange(val)} value={value} accessibilityLabel="choose">
-                      <HStack space={3}>
-                        {
-                          ['月', '火', '水', '木', '金'].map((day) => (
-                            <Checkbox key={`day-${day}`} size='sm' value={day}><Text fontSize='sm'>{day}</Text></Checkbox>
-                          ))
-                        }
-                      </HStack>
-                      <HStack space={3}>
-                        {
-                          ['土', '日'].map((day) => (
-                            <Checkbox key={`day-${day}`} size='sm' value={day}><Text fontSize='sm'>{day}</Text></Checkbox>
-                          ))
-                        }
-                      </HStack>
-                    </Checkbox.Group>
-                  )}
-                  name='days'
                 />
               </View>
             )}

@@ -116,10 +116,10 @@ export const createCard = async (attrs: any) => {
     const cardPlan: CardPlan = {
       cardId: cardId,
       daily: attrs.daily,
-      useDates: attrs.useDates,
-      dates: attrs.dates,
       useDays: attrs.useDays,
       days: attrs.days,
+      useDates: attrs.useDates,
+      dates: attrs.dates,
       startHour: attrs.startHour,
       startMinute: attrs.startMinute,
       limitHour: attrs.limitHour,
@@ -161,15 +161,18 @@ export const updateCard = async (cardId: string, attrs: any) => {
       title: attrs.title,
       body: attrs.body
     };
-    AsyncStorage.mergeItem(contentKey, JSON.stringify(cardContentAttrs));
+    await AsyncStorage.mergeItem(contentKey, JSON.stringify(cardContentAttrs));
 
     // update @cardPlan
+    // AsyncStorage.mergeItemは配列要素でうまくいかず、setItemで対応（そのために一度削除実施）
+    const cardPlan = await getCardPlan(planKey) || {};
     const cardPlanAttrs = {
+      cardId: cardId,
       daily: attrs.daily,
-      useDates: attrs.useDates,
-      dates: attrs.dates,
       useDays: attrs.useDays,
       days: attrs.days,
+      useDates: attrs.useDates,
+      dates: attrs.dates,
       startHour: attrs.startHour,
       startMinute: attrs.startMinute,
       limitHour: attrs.limitHour,
@@ -178,7 +181,11 @@ export const updateCard = async (cardId: string, attrs: any) => {
       intervalMin: attrs.intervalMin,
       notification: attrs.notification
     };
-    AsyncStorage.mergeItem(planKey, JSON.stringify(cardPlanAttrs));
+
+    if(cardPlan){
+      await AsyncStorage.removeItem(planKey);
+    }
+    await AsyncStorage.setItem(planKey, JSON.stringify(Object.assign(cardPlan, cardPlanAttrs)));
 
     return [];
   } catch(e) {

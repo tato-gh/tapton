@@ -16,10 +16,10 @@ const editCardFormSchema = yup.object({
   title: yup.string().required('必須項目です'),
   body: yup.string().required('必須項目です'),
   daily: yup.array(),
-  useDates: yup.array(),
-  dates: yup.array(),
   useDays: yup.array(),
   days: yup.array(),
+  useDates: yup.array(),
+  dates: yup.array(),
   startHM: yup.array(),
   limitHM: yup.array(),
   reborn: yup.array(),
@@ -39,10 +39,10 @@ const EditCardFormer: FC<Props> = ({cardId}) => {
       title: '',
       body: '',
       daily: ['true'],
-      useDates: [],
-      dates: [],
       useDays: [],
       days: [],
+      useDates: [],
+      dates: [],
       startHM: [0, 0],
       limitHM: [23, 55],
       reborn: [],
@@ -62,10 +62,10 @@ const EditCardFormer: FC<Props> = ({cardId}) => {
         setValue('title', card.title);
         setValue('body', card.body);
         setValue('daily', boolToCheckValues(card.daily));
-        setValue('useDates', boolToCheckValues(card.useDates));
-        setValue('dates', card.dates);
         setValue('useDays', boolToCheckValues(card.useDays));
         setValue('days', card.days);
+        setValue('useDates', boolToCheckValues(card.useDates));
+        setValue('dates', card.dates);
         setValue('startHM', [card.startHour, card.startMinute]);
         setValue('limitHM', [card.limitHour, card.limitMinute]);
         setValue('reborn', boolToCheckValues(card.reborn));
@@ -82,10 +82,10 @@ const EditCardFormer: FC<Props> = ({cardId}) => {
       title: data.title,
       body: data.body,
       daily: !!data.daily[0],
-      useDates: !!data.useDates[0],
-      dates: data.dates,
       useDays: !!data.useDays[0],
-      days: data.days,
+      days: [...new Set(data.days)].sort(),
+      useDates: !!data.useDates[0],
+      dates: [...new Set(data.dates)].sort(),
       startHour: data.startHM[0],
       startMinute: data.startHM[1],
       limitHour: data.limitHM[0],

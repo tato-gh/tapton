@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import type { CardFull } from '@domains/tapboard/types/card';
 import IconFlat from '@molecules/IconFlat';
+import { daysToS, sortByNumber } from '@utils/array';
 
 type Props = {
   cards: CardFull[],
@@ -38,11 +39,11 @@ const CardList: FC<Props> = ({ cards }) => {
                   {item.daily && (
                     <Badge colorScheme='coolGray' variant='subtle'>毎日</Badge>
                   )}
-                  {!item.daily && item.useDates && (
-                    <Badge colorScheme='coolGray'>日付指定</Badge>
-                  )}
                   {!item.daily && item.useDays && (
-                    <Badge colorScheme='coolGray'>曜日指定</Badge>
+                    <Badge colorScheme='coolGray'>{daysToS(item.days).join('')}</Badge>
+                  )}
+                  {!item.daily && item.useDates && (
+                    <Badge colorScheme='coolGray'>{sortByNumber(item.dates).join()}</Badge>
                   )}
                 </HStack>
               </VStack>

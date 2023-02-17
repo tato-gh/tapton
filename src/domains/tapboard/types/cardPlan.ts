@@ -1,10 +1,10 @@
 export type CardPlan = {
   cardId: string,
   daily: boolean,
-  useDates?: boolean,
-  dates?: Array<number>,
   useDays?: boolean,
   days?: Array<number>,
+  useDates?: boolean,
+  dates?: Array<number>,
   startHour: number,
   startMinute: number,
   limitHour: number,

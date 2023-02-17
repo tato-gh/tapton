@@ -9,10 +9,12 @@ const CardLister: FC = () => {
   const [cards, setCards] = useState<CardFull[]>([]);
 
   const sorter = (a: CardFull, b: CardFull) => {
-    return (
-      [a.daily, a.useDates, a.Days, a.title, a.body] >
-      [b.daily, b.useDates, b.Days, b.title, b.body]
-    )
+    const aKey = [a.daily, a.useDays, a.useDates, a.title, a.body];
+    const bKey = [b.daily, b.useDays, b.useDates, b.title, b.body];
+
+    if(aKey > bKey) { return 1; }
+    if(aKey < bKey) { return 1; }
+    return 0;
   };
 
   useLayoutEffect(() => {

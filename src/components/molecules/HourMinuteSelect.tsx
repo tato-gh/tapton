@@ -30,7 +30,7 @@ const HourMinuteSelect: FC<Props> = ({ value, onValueChange }) => {
             onValueChange([Number(value), minute]);
           }
         }}
-        items={buildItems(HOURS)}
+        items={buildItems<number>(HOURS)}
         value={hour}
         placeholder={{}}
       />
@@ -41,7 +41,7 @@ const HourMinuteSelect: FC<Props> = ({ value, onValueChange }) => {
             onValueChange([hour, Number(value)]);
           }
         }}
-        items={buildItems(MINUTES)}
+        items={buildItems<number>(MINUTES)}
         value={minute}
         placeholder={{}}
       />
