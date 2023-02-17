@@ -9,6 +9,10 @@ export const buildItems = <T>(list: Array<T>, initValue = 1): Array<{ label: str
   return list.map((v, ind) => { return { label: `${v}`, value: initValue + ind } });
 };
 
+export const buildItemsSelf = (list: Array<number>): Array<{ label: string, value: number }> => {
+  return list.map((v) => { return { label: `${v}`, value: v } });
+};
+
 export const daysToS = (days: Array<string>) => {
   return daysNumToS(days.map(v => parseInt(v)));
 };

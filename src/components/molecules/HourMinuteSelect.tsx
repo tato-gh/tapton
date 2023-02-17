@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 
-import { buildItems } from '@utils/array';
+import { buildItemsSelf } from '@utils/array';
 
 const HOURS = [
   0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
@@ -30,7 +30,7 @@ const HourMinuteSelect: FC<Props> = ({ value, onValueChange }) => {
             onValueChange([Number(value), minute]);
           }
         }}
-        items={buildItems<number>(HOURS)}
+        items={buildItemsSelf(HOURS)}
         value={hour}
         placeholder={{}}
       />
@@ -41,7 +41,7 @@ const HourMinuteSelect: FC<Props> = ({ value, onValueChange }) => {
             onValueChange([hour, Number(value)]);
           }
         }}
-        items={buildItems<number>(MINUTES)}
+        items={buildItemsSelf(MINUTES)}
         value={minute}
         placeholder={{}}
       />

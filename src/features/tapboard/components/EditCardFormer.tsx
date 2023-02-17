@@ -13,7 +13,7 @@ type Props = {
 };
 
 const EditCardFormer: FC<Props> = ({cardId}) => {
-  const { control, handleSubmit, watch, formState: { errors }, setValue, onSubmitBase } = useCardFormer();
+  const { control, handleSubmit, formState: { errors }, setValue, onSubmitBase } = useCardFormer();
   const navigation = useNavigation();
   const ref = useRef(null);
 
@@ -56,7 +56,6 @@ const EditCardFormer: FC<Props> = ({cardId}) => {
       <EditCardForm
         control={control}
         handleSubmit={handleSubmit}
-        watch={watch}
         errors={errors}
         onSubmit={onSubmit}
         onCancel={onCancel}

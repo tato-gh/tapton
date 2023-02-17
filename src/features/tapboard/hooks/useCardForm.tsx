@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { Controller } from 'react-hook-form';
+import { Controller, useWatch } from 'react-hook-form';
 import { View } from 'react-native';
 import { Input, TextArea, Text, Checkbox, Button, Stack, HStack, VStack, FormControl } from 'native-base';
 import RNPickerSelect from 'react-native-picker-select';
@@ -7,15 +7,8 @@ import RNPickerSelect from 'react-native-picker-select';
 import HourMinuteSelect from '@molecules/HourMinuteSelect';
 import { buildItems } from '@utils/array';
 
-const useCardForm = (watch: any) => {
-  const watchUseDays = watch('useDays');
-  const watchUseDates = watch('useDates');
-  const watchReborn = watch('reborn');
-
+const useCardForm = () => {
   return {
-    watchUseDays: !!watchUseDays[0],
-    watchUseDates: !!watchUseDates[0],
-    watchReborn: !!watchReborn[0],
     TitleControl,
     BodyControl,
     ShowPlanControl,
@@ -31,15 +24,6 @@ export default useCardForm;
 type FormProps = {
   control: any,
   errors?: any
-};
-
-type ShowPlanProps = {
-  watchUseDays: boolean,
-  watchUseDates: boolean
-};
-
-type RebornProps = {
-  watchReborn: boolean
 };
 
 const TitleControl: FC<FormProps> = ({control, errors}) => {
@@ -96,7 +80,10 @@ const BodyControl: FC<FormProps> = ({control, errors}) => {
   );
 };
 
-const ShowPlanControl: FC<FormProps & ShowPlanProps> = ({control, watchUseDays, watchUseDates}) => {
+const ShowPlanControl: FC<FormProps> = ({control}) => {
+  const watchUseDays = useWatch({control, name: 'useDays'});
+  const watchUseDates = useWatch({control, name: 'useDates'});
+
   return (
     <FormControl mb='2'>
       <Stack space={1}>
@@ -122,7 +109,7 @@ const ShowPlanControl: FC<FormProps & ShowPlanProps> = ({control, watchUseDays, 
             name='useDays'
           />
 
-          {watchUseDays && (
+          {watchUseDays[0] && (
             <View style={{marginLeft: 16, marginBottom: 8}}>
               <Controller
                 control={control}
@@ -161,7 +148,7 @@ const ShowPlanControl: FC<FormProps & ShowPlanProps> = ({control, watchUseDays, 
             name='useDates'
           />
 
-          {watchUseDates && (
+          {watchUseDates[0] && (
             <View style={{marginLeft: 16, marginBottom: 8}}>
               <Controller
                 control={control}
@@ -228,7 +215,9 @@ const ShowTimeControl: FC<FormProps> = ({control}) => {
   );
 };
 
-const RebornControl: FC<FormProps & RebornProps> = ({control, watchReborn}) => {
+const RebornControl: FC<FormProps> = ({control}) => {
+  const watchReborn = useWatch({control, name: 'reborn'});
+
   return (
     <FormControl mb='2'>
       <Stack space={1}>
@@ -244,7 +233,7 @@ const RebornControl: FC<FormProps & RebornProps> = ({control, watchReborn}) => {
             name='reborn'
           />
 
-          {watchReborn && (
+          {watchReborn[0] && (
             <HStack space={2} alignItems='center' marginLeft={4}>
               <Controller
                 control={control}
