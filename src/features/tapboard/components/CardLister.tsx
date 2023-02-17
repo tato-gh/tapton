@@ -16,7 +16,7 @@ const CardLister: FC = () => {
     const aKey = [a.daily, a.useDays, a.useDates, a.title, a.body];
     const bKey = [b.daily, b.useDays, b.useDates, b.title, b.body];
 
-    if(aKey > bKey) { return 1; }
+    if(aKey > bKey) { return -1; }
     if(aKey < bKey) { return 1; }
     return 0;
   };
