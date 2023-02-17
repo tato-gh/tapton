@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { Controller, useWatch } from 'react-hook-form';
 import { View } from 'react-native';
-import { Input, TextArea, Text, Checkbox, Button, Stack, HStack, VStack, FormControl } from 'native-base';
+import { Input, TextArea, Text, Checkbox, Stack, HStack, VStack, FormControl } from 'native-base';
 import RNPickerSelect from 'react-native-picker-select';
 
 import HourMinuteSelect from '@molecules/HourMinuteSelect';
@@ -244,9 +244,10 @@ const RebornControl: FC<FormProps> = ({control}) => {
                         onChange(value);
                       }
                     }}
-                    items={buildItems([10, 20, 30, 60, 90, 120, 180, 240, 300, 360])}
+                    items={buildItems([10, 20, 30, 40, 50, 60, 90, 120, 180, 240, 300, 360])}
                     value={value}
                     placeholder={{}}
+                    useNativeAndroidPickerStyle={false}
                   />
                 )}
                 name='intervalMin'
