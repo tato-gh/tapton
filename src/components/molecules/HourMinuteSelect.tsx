@@ -1,5 +1,6 @@
 import type { FC } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { HStack } from 'native-base';
 import RNPickerSelect from 'react-native-picker-select';
 
 import { buildItemsSelf } from '@utils/array';
@@ -24,28 +25,32 @@ const HourMinuteSelect: FC<Props> = ({ value, onValueChange }) => {
 
   return(
     <View style={styles.container}>
-      <RNPickerSelect
-        onValueChange={(value) => {
-          if(value != hour) {
-            onValueChange([Number(value), minute]);
-          }
-        }}
-        items={buildItemsSelf(HOURS)}
-        value={hour}
-        placeholder={{}}
-      />
-      <Text>時</Text>
-      <RNPickerSelect
-        onValueChange={(value) => {
-          if(value != minute) {
-            onValueChange([hour, Number(value)]);
-          }
-        }}
-        items={buildItemsSelf(MINUTES)}
-        value={minute}
-        placeholder={{}}
-      />
-      <Text>分</Text>
+      <HStack space={1} alignItems='center'>
+        <RNPickerSelect
+          onValueChange={(value) => {
+            if(value != hour) {
+              onValueChange([Number(value), minute]);
+            }
+          }}
+          items={buildItemsSelf(HOURS)}
+          value={hour}
+          placeholder={{}}
+          useNativeAndroidPickerStyle={false}
+        />
+        <Text>時</Text>
+        <RNPickerSelect
+          onValueChange={(value) => {
+            if(value != minute) {
+              onValueChange([hour, Number(value)]);
+            }
+          }}
+          items={buildItemsSelf(MINUTES)}
+          value={minute}
+          placeholder={{}}
+          useNativeAndroidPickerStyle={false}
+        />
+        <Text>分</Text>
+      </HStack>
     </View>
   );
 };
