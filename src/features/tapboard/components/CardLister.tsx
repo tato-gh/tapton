@@ -1,12 +1,16 @@
 import type { FC } from 'react';
 import { useState, useLayoutEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
-import { getCardsFullLoaded } from '@domains/tapboard/storage/cards';
+import { getCardsFullLoaded, deleteCard } from '@domains/tapboard/storage/cards';
 import type { CardFull } from '@domains/tapboard/types/card';
 import CardList from './CardList';
+import useConfirm from '@hooks/useConfirm';
 
 const CardLister: FC = () => {
   const [cards, setCards] = useState<CardFull[]>([]);
+  const navigation = useNavigation();
+  const showDeleteConfirm = useConfirm('削除しますか？');
 
   const sorter = (a: CardFull, b: CardFull) => {
     const aKey = [a.daily, a.useDays, a.useDates, a.title, a.body];
@@ -15,6 +19,17 @@ const CardLister: FC = () => {
     if(aKey > bKey) { return 1; }
     if(aKey < bKey) { return 1; }
     return 0;
+  };
+
+  const onNew = () => ( navigation.navigate('NewCard', {}) );
+
+  const onEdit = (cardId: string) => ( navigation.navigate('EditCard', { cardId: cardId }) );
+
+  const onDelete = (cardId: string) => {
+    showDeleteConfirm(async () => {
+      await deleteCard(cardId);
+      navigation.replace('Cards');
+    });
   };
 
   useLayoutEffect(() => {
@@ -26,7 +41,12 @@ const CardLister: FC = () => {
     })();
   }, []);
 
-  return <CardList cards={cards} />
+  return <CardList
+    cards={cards}
+    onNew={onNew}
+    onEdit={onEdit}
+    onDelete={onDelete}
+  />
 };
 
 export default CardLister;

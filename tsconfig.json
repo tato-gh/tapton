@@ -31,6 +31,7 @@
       "@ecosystems/*": ["./components/ecosystems/*"],
       "@features/*": ["./features/*"],
       "@utils/*": ["./utils/*"],
+      "@hooks/*": ["./hooks/*"],
       "@domains/*": ["./domains/*"],
       "@constants/*": ["./constants/*"]
     }

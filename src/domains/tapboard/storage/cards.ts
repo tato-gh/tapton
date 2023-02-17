@@ -93,10 +93,8 @@ export const createCard = async (attrs: any) => {
   const nextShowTime = '2023-02-15T12:30:30.002Z';
 
   try {
-    const jsonValue = await AsyncStorage.getItem('@cards') || '';
-
     // update @cards
-    let cards: Card[] = (jsonValue) ? JSON.parse(jsonValue) : [];
+    let cards: Card[] = await getCards();
     const card: Card = {
       id: cardId,
       nextShowTime: nextShowTime
@@ -191,5 +189,23 @@ export const updateCard = async (cardId: string, attrs: any) => {
   } catch(e) {
     // error reading value
     return null;
+  }
+};
+
+export const deleteCard = async (cardId: string) => {
+  const contentKey:string = getContentStoreKey(cardId);
+  const planKey:string = getPlanStoreKey(cardId);
+
+  try {
+    let cards: Card[] = await getCards();
+    cards = cards.filter(h => h.id != cardId);
+    AsyncStorage.setItem('@cards', JSON.stringify(cards));
+    AsyncStorage.removeItem(contentKey);
+    AsyncStorage.removeItem(planKey);
+
+    console.log(await AsyncStorage.getAllKeys());
+
+    return [];
+  } catch(e) {
   }
 };

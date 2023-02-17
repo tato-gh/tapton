@@ -1,6 +1,5 @@
 import type { FC } from 'react';
 import { Box, ScrollView, Text, Badge, Spacer, Heading, FlatList, HStack, VStack } from 'native-base';
-import { useNavigation } from '@react-navigation/native';
 
 import type { CardFull } from '@domains/tapboard/types/card';
 import IconFlat from '@molecules/IconFlat';
@@ -8,11 +7,12 @@ import { daysToS, sortByNumber } from '@utils/array';
 
 type Props = {
   cards: CardFull[],
+  onNew: Function,
+  onEdit: Function,
+  onDelete: Function
 };
 
-const CardList: FC<Props> = ({ cards }) => {
-  const navigation = useNavigation();
-
+const CardList: FC<Props> = ({ cards, onNew, onEdit, onDelete }) => {
   return (
     <ScrollView>
       <HStack mx='4' mt='6' mb='4' alignItems='center'>
@@ -20,7 +20,7 @@ const CardList: FC<Props> = ({ cards }) => {
           カード一覧
         </Heading>
         <Spacer />
-        <IconFlat theme='tertiary' icon='add' size={8} onPress={() => { navigation.navigate('NewCard', {}) }} />
+        <IconFlat theme='tertiary' icon='add' size={8} onPress={onNew} />
       </HStack>
       <FlatList
         data={cards}
@@ -48,8 +48,8 @@ const CardList: FC<Props> = ({ cards }) => {
                 </HStack>
               </VStack>
               <HStack space={2}>
-                <IconFlat theme='tertiary' icon='edit' size={6} onPress={() => { navigation.navigate('EditCard', {cardId: item.id}) }} />
-                <IconFlat theme='warning' icon='delete' size={6} onPress={() => { console.log('delete') }} />
+                <IconFlat theme='tertiary' icon='edit' size={6} onPress={() => onEdit(item.id)} />
+                <IconFlat theme='warning' icon='delete' size={6} onPress={() => onDelete(item.id)} />
               </HStack>
             </HStack>
           </Box>}
