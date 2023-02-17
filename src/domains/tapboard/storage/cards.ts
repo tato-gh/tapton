@@ -130,7 +130,7 @@ export const createCard = async (attrs: any) => {
     };
     AsyncStorage.setItem(planKey, JSON.stringify(cardPlan));
 
-    return [card, cardContent, cardPlan];
+    return { card, cardContent, cardPlan };
   } catch(e) {
     // error reading value
     return null;

@@ -12,12 +12,12 @@ const NewCardFormer: FC = () => {
   const navigation = useNavigation();
   const ref = useRef(null);
 
-  const onSubmit: typeof onSubmitBase = (data: any) => {
+  const onSubmit: typeof onSubmitBase = async (data: any) => {
     const attrs = onSubmitBase(data);
-    createCard(attrs);
+    await createCard(attrs);
     reset();
     ref.current?.scrollTo({ y: 0 })
-    navigation.navigate('Cards', {});
+    navigation.replace('Cards');
   };
 
   const onCancel = () => {

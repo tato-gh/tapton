@@ -39,16 +39,16 @@ const EditCardFormer: FC<Props> = ({cardId}) => {
 
   const boolToCheckValues = (tf: boolean | undefined) => ( tf ? ['true'] : [] );
 
-  const onSubmit: typeof onSubmitBase = (data: any) => {
+  const onSubmit: typeof onSubmitBase = async (data: any) => {
     const attrs = onSubmitBase(data);
-    updateCard(cardId, attrs);
-    ref.current?.scrollTo({ y: 0 })
-    navigation.navigate('Cards', {});
+    await updateCard(cardId, attrs);
+    ref.current?.scrollTo({ y: 0 });
+    navigation.replace('Cards');
   };
 
   const onCancel = () => {
-    ref.current?.scrollTo({ y: 0 })
-    navigation.navigate('Cards', {})
+    ref.current?.scrollTo({ y: 0 });
+    navigation.navigate('Cards');
   };
 
   return (
