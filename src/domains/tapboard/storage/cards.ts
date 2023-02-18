@@ -6,206 +6,234 @@ import type { CardContent } from './../types/cardContent';
 import type { CardPlan } from './../types/cardPlan';
 import { getCardContent, getStoreKey as getContentStoreKey } from './cardContents';
 import { getCardPlan, getStoreKey as getPlanStoreKey } from './cardPlans';
+import { getIsToday, addDate, getNextDayDate, getNextDateDate } from '@utils/date';
 
 export const getCard = async (cardId: string) => {
-  try {
-    const jsonValue = await AsyncStorage.getItem('@cards');
-    const cards: Card[] = (jsonValue) ? JSON.parse(jsonValue) : [];
-    return cards.find((card) => card.id == cardId);
-  } catch(e) {
-    // error reading value
-    return null;
-  }
+  const jsonValue = await AsyncStorage.getItem('@cards');
+  const cards: Card[] = (jsonValue) ? JSON.parse(jsonValue) : [];
+  return cards.find((card) => card.id == cardId);
 };
 
 export const getCardFullLoaded = async (cardId: string) => {
-  try {
-    const card = await getCard(cardId);
-    const content = await getCardContent(cardId);
-    const plan = await getCardPlan(cardId);
-    const cardFull: CardFull = Object.assign({}, card, content, plan);
+  const card = await getCard(cardId);
+  const content = await getCardContent(cardId);
+  const plan = await getCardPlan(cardId);
+  const cardFull: CardFull = Object.assign({}, card, content, plan);
 
-    return cardFull;
-  } catch(e) {
-    // error reading value
-    return null;
-  }
+  return cardFull;
 };
 
 export const getCards = async () => {
-  try {
-    const jsonValue = await AsyncStorage.getItem('@cards');
-    return (jsonValue) ? JSON.parse(jsonValue) : [];
-  } catch(e) {
-    // error reading value
-    return [];
-  }
+  const jsonValue = await AsyncStorage.getItem('@cards');
+  return (jsonValue) ? JSON.parse(jsonValue) : [];
 };
 
 export const getCardsFullLoaded = async () => {
-  try {
-    const cards: Card[] = await getCards();
-    const [contentKeys, planKeys] = cards.reduce(
-      (keys: Array<Array<string>>, card) => {
-        const [cKeys, pKeys] = keys;
-        const contentKey:string = getContentStoreKey(card.id);
-        const planKey:string = getPlanStoreKey(card.id);
-        return [[...cKeys, contentKey], [...pKeys, planKey]];
-      },
-      [[], []]
-    );
-    const dictContent = await buildDict<CardContent>(contentKeys);
-    const dictPlan = await buildDict<CardPlan>(planKeys);
+  const cards: Card[] = await getCards();
+  const [contentKeys, planKeys] = cards.reduce(
+    (keys: Array<Array<string>>, card) => {
+      const [cKeys, pKeys] = keys;
+      const contentKey:string = getContentStoreKey(card.id);
+      const planKey:string = getPlanStoreKey(card.id);
+      return [[...cKeys, contentKey], [...pKeys, planKey]];
+    },
+    [[], []]
+  );
+  const dictContent = await buildDict<CardContent>(contentKeys);
+  const dictPlan = await buildDict<CardPlan>(planKeys);
 
-    const cardsFull = cards.map((card) => {
-      const content = dictContent[card.id];
-      const plan = dictPlan[card.id];
-      return Object.assign({}, card, content, plan);
-    });
+  const cardsFull = cards.map((card) => {
+    const content = dictContent[card.id];
+    const plan = dictPlan[card.id];
+    return Object.assign({}, card, content, plan);
+  });
 
-    return cardsFull;
-  } catch(e) {
-    return [];
-  }
+  return cardsFull;
 }
 
 const buildDict = async <T>(keys: Array<string>) => {
-  try {
-    const responses = await AsyncStorage.multiGet(keys);
-    return responses.reduce(
-      (dict: {[parameter: string]: T}, response) => {
-        const [_key, jsonValue] = response;
-        const attrs = JSON.parse(jsonValue || '{}');
-        return Object.assign(dict, { [attrs.cardId]: attrs });
-      },
-      {}
-    )
-  } catch(e) {
-    return {};
-  }
+  const responses = await AsyncStorage.multiGet(keys);
+  return responses.reduce(
+    (dict: {[parameter: string]: T}, response) => {
+      const [_key, jsonValue] = response;
+      const attrs = JSON.parse(jsonValue || '{}');
+      return Object.assign(dict, { [attrs.cardId]: attrs });
+    },
+    {}
+  )
 };
 
 export const createCard = async (attrs: any) => {
   const cardId:string = UUID.generate();
   const contentKey:string = getContentStoreKey(cardId);
   const planKey:string = getPlanStoreKey(cardId);
-  // TODO
-  const nextShowTime = '2023-02-15T12:30:30.002Z';
 
-  try {
-    // update @cards
-    let cards: Card[] = await getCards();
-    const card: Card = {
-      id: cardId,
-      nextShowTime: nextShowTime
-    };
-    cards.push(card);
-    AsyncStorage.setItem('@cards', JSON.stringify(cards));
+  const cardContent: CardContent = {
+    cardId: cardId,
+    title: attrs.title,
+    body: attrs.body
+  };
 
-    // new @cardContent
-    const cardContent: CardContent = {
-      cardId: cardId,
-      title: attrs.title,
-      body: attrs.body
-    };
-    AsyncStorage.setItem(contentKey, JSON.stringify(cardContent));
+  const cardPlan: CardPlan = {
+    cardId: cardId,
+    daily: attrs.daily,
+    useDays: attrs.useDays,
+    days: attrs.days,
+    useDates: attrs.useDates,
+    dates: attrs.dates,
+    startHour: attrs.startHour,
+    startMinute: attrs.startMinute,
+    limitHour: attrs.limitHour,
+    limitMinute: attrs.limitMinute,
+    reborn: attrs.reborn,
+    intervalMin: attrs.intervalMin,
+    notification: attrs.notification
+  };
 
-    // new @cardPlan
-    const cardPlan: CardPlan = {
-      cardId: cardId,
-      daily: attrs.daily,
-      useDays: attrs.useDays,
-      days: attrs.days,
-      useDates: attrs.useDates,
-      dates: attrs.dates,
-      startHour: attrs.startHour,
-      startMinute: attrs.startMinute,
-      limitHour: attrs.limitHour,
-      limitMinute: attrs.limitMinute,
-      reborn: attrs.reborn,
-      intervalMin: attrs.intervalMin,
-      notification: attrs.notification
-    };
-    AsyncStorage.setItem(planKey, JSON.stringify(cardPlan));
+  const nextShowTime = planNextShowTime(cardPlan, true);
+  const card: Card = {
+    id: cardId,
+    nextShowTime: nextShowTime ? nextShowTime.toString() : ''
+  };
 
-    return { card, cardContent, cardPlan };
-  } catch(e) {
-    // error reading value
-    return null;
-  }
+  // update @cards
+  let cards: Card[] = await getCards();
+  cards.push(card);
+  await AsyncStorage.setItem('@cards', JSON.stringify(cards));
+
+  // new @cardContent
+  await AsyncStorage.setItem(contentKey, JSON.stringify(cardContent));
+
+  // new @cardPlan
+  await AsyncStorage.setItem(planKey, JSON.stringify(cardPlan));
+
+  return { card, cardContent, cardPlan };
 };
 
 export const updateCard = async (cardId: string, attrs: any) => {
   const contentKey:string = getContentStoreKey(cardId);
   const planKey:string = getPlanStoreKey(cardId);
-  // TODO
-  const nextShowTime = '2023-02-15T12:30:30.002Z';
 
-  try {
-    const jsonValue = await AsyncStorage.getItem('@cards') || '';
+  const cardContent: CardContent = {
+    cardId: cardId,
+    title: attrs.title,
+    body: attrs.body
+  };
 
-    // update @cards
-    // TODO: ひょっとすると文字列変換でいける？
-    // let cards: Card[] = (jsonValue) ? JSON.parse(jsonValue) : [];
-    // const card: Card = {
-    //   id: cardId,
-    //   nextShowTime: nextShowTime
-    // };
-    // cards.push(card);
-    // AsyncStorage.setItem('@cards', JSON.stringify(cards));
+  const cardPlan: CardPlan = {
+    cardId: cardId,
+    daily: attrs.daily,
+    useDays: attrs.useDays,
+    days: attrs.days,
+    useDates: attrs.useDates,
+    dates: attrs.dates,
+    startHour: attrs.startHour,
+    startMinute: attrs.startMinute,
+    limitHour: attrs.limitHour,
+    limitMinute: attrs.limitMinute,
+    reborn: attrs.reborn,
+    intervalMin: attrs.intervalMin,
+    notification: attrs.notification
+  };
 
-    // update @cardContent
-    const cardContentAttrs = {
-      title: attrs.title,
-      body: attrs.body
-    };
-    await AsyncStorage.mergeItem(contentKey, JSON.stringify(cardContentAttrs));
+  const nextShowTime = planNextShowTime(cardPlan, true);
+  const nextShowTimeS = nextShowTime ? nextShowTime.toString() : '';
 
-    // update @cardPlan
-    // AsyncStorage.mergeItemは配列要素でうまくいかず、setItemで対応（そのために一度削除実施）
-    const cardPlan = await getCardPlan(planKey) || {};
-    const cardPlanAttrs = {
-      cardId: cardId,
-      daily: attrs.daily,
-      useDays: attrs.useDays,
-      days: attrs.days,
-      useDates: attrs.useDates,
-      dates: attrs.dates,
-      startHour: attrs.startHour,
-      startMinute: attrs.startMinute,
-      limitHour: attrs.limitHour,
-      limitMinute: attrs.limitMinute,
-      reborn: attrs.reborn,
-      intervalMin: attrs.intervalMin,
-      notification: attrs.notification
-    };
-
-    if(cardPlan){
-      await AsyncStorage.removeItem(planKey);
+  // update @cards
+  let cards: Card[] = await getCards();
+  cards = cards.map((card) => {
+    if(card.id == cardId) {
+      Object.assign(card, {nextShowTime: nextShowTimeS});
     }
-    await AsyncStorage.setItem(planKey, JSON.stringify(Object.assign(cardPlan, cardPlanAttrs)));
+    return card;
+  });
+  AsyncStorage.setItem('@cards', JSON.stringify(cards));
 
-    return [];
-  } catch(e) {
-    // error reading value
-    return null;
+  // update @cardContent
+  await AsyncStorage.mergeItem(contentKey, JSON.stringify(cardContent));
+
+  // update @cardPlan
+  // AsyncStorage.mergeItemは配列要素でうまくいかず、setItemで対応（そのために一度削除実施）
+  const currentCardPlan = await getCardPlan(planKey) || {};
+
+  if(currentCardPlan){
+    await AsyncStorage.removeItem(planKey);
   }
+  await AsyncStorage.setItem(planKey, JSON.stringify(Object.assign(cardPlan, cardPlan)));
+
+  return { cardId, cardContent, cardPlan };
 };
 
 export const deleteCard = async (cardId: string) => {
   const contentKey:string = getContentStoreKey(cardId);
   const planKey:string = getPlanStoreKey(cardId);
 
-  try {
-    let cards: Card[] = await getCards();
-    cards = cards.filter(h => h.id != cardId);
-    AsyncStorage.setItem('@cards', JSON.stringify(cards));
-    AsyncStorage.removeItem(contentKey);
-    AsyncStorage.removeItem(planKey);
+  let cards: Card[] = await getCards();
+  cards = cards.filter(h => h.id != cardId);
+  await AsyncStorage.setItem('@cards', JSON.stringify(cards));
+  await AsyncStorage.removeItem(contentKey);
+  await AsyncStorage.removeItem(planKey);
+};
 
-    console.log(await AsyncStorage.getAllKeys());
+const planNextShowTime = (plan: CardPlan, includeToday = true): Date | null => {
+  // 次回表示時間を決定する
+  // - includeToday: true => カード自体の初期化や更新時
+  // - includeToday: false => 運用中の次回を決める
+  //
+  // 1. 日付を決める
+  // 2. 時間を決める
+  // 3. 日付が本日で終了時間も過ぎている => includeToday: false で再実行
+  //
+  const nextDate = decidePlanDate(plan, includeToday);
+  if(!nextDate) { return null; }
 
-    return [];
-  } catch(e) {
+  const nextShowTime = new Date(
+    nextDate.getFullYear(),
+    nextDate.getMonth(),
+    nextDate.getDate(),
+    plan.startHour,
+    plan.startMinute
+  );
+  const isToday = getIsToday(nextShowTime);
+
+  if(isToday) {
+    const today = new Date();
+    const limitTime = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+      plan.limitHour,
+      plan.limitMinute
+    );
+    if(today > limitTime && includeToday) {
+      // 本日を除外して再決定する
+      return planNextShowTime(plan, false);
+    }
   }
+
+  return nextShowTime;
+};
+
+const decidePlanDate = (plan: CardPlan, includeToday: boolean) : Date => {
+  const today = new Date();
+  const tomorrow = addDate(today, 1);
+
+  // 毎日が設定されている
+  if(plan.daily) {
+    return (includeToday) ? today : tomorrow;
+  }
+  // 曜日と日付それぞれから決まる日付の早い方
+  const baseDate = includeToday ? today : tomorrow;
+  const dateByDays = decidePlanDateByDays(baseDate, plan?.days || []);
+  const dateByDates = decidePlanDateByDates(baseDate, plan?.dates || []);
+
+  return [...dateByDays, ...dateByDates].sort((a, b) => (a.getTime() - b.getTime()))[0];
+};
+
+const decidePlanDateByDays = (baseDate: Date, days: Array<number>) : Array<Date> => {
+  return days.map(day => getNextDayDate(baseDate, day));
+};
+
+const decidePlanDateByDates = (baseDate: Date, dates: Array<number>) : Array<Date> => {
+  return dates.map(date => getNextDateDate(baseDate, date));
 };
