@@ -5,12 +5,7 @@ export const getStoreKey = (cardId: string) => {
 };
 
 export const getCardContent = async (cardId: string) => {
-  try {
-    const key = getStoreKey(cardId);
-    const jsonValue = await AsyncStorage.getItem(key);
-    return (jsonValue) ? JSON.parse(jsonValue) : null;
-  } catch(e) {
-    // error reading value
-    return null;
-  }
+  const key = getStoreKey(cardId);
+  const jsonValue = await AsyncStorage.getItem(key);
+  return (jsonValue) ? JSON.parse(jsonValue) : null;
 };

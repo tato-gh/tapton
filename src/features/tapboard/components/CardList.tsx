@@ -10,10 +10,11 @@ type Props = {
   cards: CardFull[],
   onNew: Function,
   onEdit: Function,
-  onDelete: Function
+  onDelete: Function,
+  onInit: Function
 };
 
-const CardList: FC<Props> = ({ cards, onNew, onEdit, onDelete }) => {
+const CardList: FC<Props> = ({ cards, onNew, onEdit, onDelete, onInit }) => {
   return (
     <ScrollView>
       <HStack mx='4' mt='6' mb='4' alignItems='center'>
@@ -21,6 +22,7 @@ const CardList: FC<Props> = ({ cards, onNew, onEdit, onDelete }) => {
           カード一覧
         </Heading>
         <Spacer />
+        <IconFlat theme='warning' icon='refresh' size={8} onPress={onInit} />
         <IconFlat theme='tertiary' icon='add' size={8} onPress={onNew} />
       </HStack>
       <FlatList

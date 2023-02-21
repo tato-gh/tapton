@@ -8,7 +8,7 @@ export const cutSec = (time: string) => {
 export const getToday = (): Date => ( new Date() );
 
 // 昨日の日付を返す
-export const getYesterday = (): Date => ( addDate(getToday(), 1) );
+export const getYesterday = (): Date => ( addDate(getToday(), -1) );
 
 // 日付の開始時刻(00:00)を返す
 export const getStartOfDate = (date: Date): Date => {

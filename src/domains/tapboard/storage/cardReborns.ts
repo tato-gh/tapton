@@ -9,6 +9,18 @@ export const getCardReborns = async () => {
   return (jsonValue) ? JSON.parse(jsonValue) : [];
 };
 
+export const getWaitingCardReborns = async () => {
+  const reborns: CardReborn[] = await getCardReborns();
+  const cTime = (new Date().getTime());
+
+  return reborns.filter((reborn) => {
+    const showTime = (new Date(reborn.nextShowTime)).getTime();
+    const limitTime = (new Date(reborn.limitShowTime)).getTime();
+
+    return cTime >= showTime && cTime <= limitTime;
+  });
+};
+
 export const upsertCardReborns = async (card: CardFull) => {
   if(!card.reborn || !card.intervalMin) { return null; }
 
@@ -31,9 +43,9 @@ export const upsertCardReborns = async (card: CardFull) => {
     limitShowTime: limitShowTime.toString()
   };
 
-  let reborns = await getCardReborns();
+  let reborns: CardReborn[] = await getCardReborns();
   reborns = reborns.reduce(
-    (acc: CardReborn[], reborn: CardReborn) => (reborn.cardId == card.id ? acc : reborn),
+    (acc, reborn) => { return (reborn.cardId == card.id ? acc : [reborn, ...acc]) },
     [attrs]
   );
   await AsyncStorage.setItem('@cardReborns', JSON.stringify(reborns));
@@ -42,13 +54,13 @@ export const upsertCardReborns = async (card: CardFull) => {
 };
 
 export const removePrevCardReborns = async () => {
-  let reborns = await getCardReborns();
-  const today = getStartOfDate(getToday());
+  let reborns: CardReborn[] = await getCardReborns();
+  const todayStartTime = getStartOfDate(getToday());
 
   reborns = reborns.filter((reborn) => {
     const nextShowTime = new Date(reborn.nextShowTime);
 
-    return nextShowTime.getTime() > today.getTime();
+    return nextShowTime.getTime() > todayStartTime.getTime();
   });
   await AsyncStorage.setItem('@cardReborns', JSON.stringify(reborns));
 

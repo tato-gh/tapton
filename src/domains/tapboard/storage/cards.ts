@@ -7,12 +7,12 @@ import type { CardPlan } from './../types/cardPlan';
 import type { CardReborn } from './../types/cardReborn';
 import { getCardContent, getStoreKey as getContentStoreKey } from './cardContents';
 import { getCardPlan, getStoreKey as getPlanStoreKey } from './cardPlans';
-import { removePrevCardReborns, getCardReborns } from './cardReborns';
+import { removePrevCardReborns, getWaitingCardReborns } from './cardReborns';
 import { getIsToday, getToday, getYesterday, getEndOfDate, addDate, getNextDayDate, getNextDateDate } from '@utils/date';
 
 export const getCard = async (cardId: string) => {
-  const jsonValue = await AsyncStorage.getItem('@cards');
-  const cards: Card[] = (jsonValue) ? JSON.parse(jsonValue) : [];
+  const cards: Card[] = await getCards();
+
   return cards.find((card) => card.id == cardId);
 };
 
@@ -26,8 +26,7 @@ export const getCardFullLoaded = async (cardId: string) => {
 };
 
 export const getCards = async () => {
-  const jsonValue = await AsyncStorage.getItem('@cards');
-  return (jsonValue) ? JSON.parse(jsonValue) : [];
+  return await getStorageItem('@cards') || [];
 };
 
 export const getCardsByIds = async (cardIds: String[]) => {
@@ -38,7 +37,7 @@ export const getCardsByIds = async (cardIds: String[]) => {
 
 export const getWaitingCardsReborned = async () => {
   await removePrevCardReborns();
-  const cardReborns: CardReborn[] = await getCardReborns();
+  const cardReborns: CardReborn[] = await getWaitingCardReborns();
   const cardIds = cardReborns.map(r => r.cardId);
   const cards = await getCardsByIds(cardIds);
   return decorateCardsFullLoaded(cards);
@@ -215,7 +214,7 @@ export const updateCard = async (cardId: string, attrs: any) => {
 
   // update @cardPlan
   // AsyncStorage.mergeItemは配列要素でうまくいかず、setItemで対応（そのために一度削除実施）
-  const currentCardPlan = await getCardPlan(planKey) || {};
+  const currentCardPlan = await getStorageItem(planKey) || {};
 
   if(currentCardPlan){
     await AsyncStorage.removeItem(planKey);
@@ -227,7 +226,7 @@ export const updateCard = async (cardId: string, attrs: any) => {
 
 export const updateNextShowTime = async (card: Card) => {
   const planKey = getPlanStoreKey(card.id);
-  const cardPlan = await getCardPlan(planKey) || {};
+  const cardPlan = await getStorageItem(planKey) || {};
   const nextShowTime = planNextShowTime(cardPlan, false);
   const nextShowTimeS = nextShowTime ? nextShowTime.toString() : '';
 
@@ -313,4 +312,113 @@ const decidePlanDateByDays = (baseDate: Date, days: Array<number>) : Array<Date>
 
 const decidePlanDateByDates = (baseDate: Date, dates: Array<number>) : Array<Date> => {
   return dates.map(date => getNextDateDate(baseDate, date));
+};
+
+const getStorageItem = async (key: string) => {
+  const jsonValue = await AsyncStorage.getItem(key);
+
+  return jsonValue ? JSON.parse(jsonValue) : null;
+};
+
+export const initCards = async () => {
+  // 初期化用
+  const keys = await AsyncStorage.getAllKeys();
+
+  // 全削除
+  keys
+  .filter((key) => {
+    return key.match(/cards/) ||
+      key.match(/cardContent/) ||
+      key.match(/cardPlan/) ||
+      key.match(/cardReborns/)
+  })
+  .forEach(async (key) => {
+    await AsyncStorage.removeItem(key);
+  });
+
+  // 初期データ投入
+  await createCard({
+    title: '健康',
+    body: '少し身体を動かしませんか？',
+    daily: true,
+    useDays: false,
+    days: [],
+    useDates: false,
+    dates: [],
+    startHour: 10,
+    startMinute: 0,
+    limitHour: 19,
+    limitMinute: 0,
+    reborn: true,
+    intervalMin: 60,
+    notification: false
+  });
+
+  await createCard({
+    title: 'セルフコーチング',
+    body: '最大限努力しましたか？',
+    daily: true,
+    useDays: false,
+    days: [],
+    useDates: false,
+    dates: [],
+    startHour: 22,
+    startMinute: 0,
+    limitHour: 23,
+    limitMinute: 55,
+    reborn: false,
+    intervalMin: 10,
+    notification: true
+  });
+
+  await createCard({
+    title: '仕事',
+    body: '進捗どうですか？',
+    daily: false,
+    useDays: true,
+    days: [1,2,3,4,5],
+    useDates: false,
+    dates: [],
+    startHour: 10,
+    startMinute: 0,
+    limitHour: 16,
+    limitMinute: 0,
+    reborn: true,
+    intervalMin: 30,
+    notification: true
+  });
+
+  await createCard({
+    title: '学び',
+    body: "今日新しく学んだことは何ですか？明日新しく学ぶことは何ですか？",
+    daily: true,
+    useDays: false,
+    days: [],
+    useDates: false,
+    dates: [],
+    startHour: 23,
+    startMinute: 0,
+    limitHour: 23,
+    limitMinute: 55,
+    reborn: false,
+    intervalMin: 10,
+    notification: true
+  });
+
+  await createCard({
+    title: '買い物',
+    body: '散財しましょう。期限切れするポイントはありませんか？',
+    daily: false,
+    useDays: false,
+    days: [],
+    useDates: true,
+    dates: [5,10,15,20,25],
+    startHour: 20,
+    startMinute: 0,
+    limitHour: 23,
+    limitMinute: 55,
+    reborn: false,
+    intervalMin: 10,
+    notification: true
+  });
 };

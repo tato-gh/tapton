@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { useState, useLayoutEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
-import { getCardsFullLoaded, deleteCard } from '@domains/tapboard/storage/cards';
+import { getCardsFullLoaded, deleteCard, initCards } from '@domains/tapboard/storage/cards';
 import type { CardFull } from '@domains/tapboard/types/card';
 import CardList from './CardList';
 import useConfirm from '@hooks/useConfirm';
@@ -32,6 +32,14 @@ const CardLister: FC = () => {
     });
   };
 
+  const onInit = () => {
+    const showInitConfirm = useConfirm('初期化しますか？');
+    showInitConfirm(async () => {
+      await initCards();
+      navigation.replace('Cards');
+    });
+  };
+
   useLayoutEffect(() => {
     (async () => {
       const cards = await getCardsFullLoaded();
@@ -46,6 +54,7 @@ const CardLister: FC = () => {
     onNew={onNew}
     onEdit={onEdit}
     onDelete={onDelete}
+    onInit={onInit}
   />
 };
 
