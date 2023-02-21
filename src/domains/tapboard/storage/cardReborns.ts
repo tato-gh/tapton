@@ -75,6 +75,15 @@ export const upsertCardReborns = async (card: CardFull) => {
   return 'ok';
 };
 
+export const removeCardRebornByCardId = async (cardId: string) => {
+  let reborns: CardReborn[] = await getCardReborns();
+
+  reborns = reborns.filter(reborn => reborn.cardId != cardId);
+  await AsyncStorage.setItem('@cardReborns', JSON.stringify(reborns));
+
+  return 'ok';
+};
+
 export const removePrevCardReborns = async () => {
   let reborns: CardReborn[] = await getCardReborns();
   const todayStartTime = getStartOfDate(getToday());

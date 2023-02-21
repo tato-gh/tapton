@@ -34,10 +34,12 @@ const CheckListQueue: FC = () => {
       if(cardsReborn.length != 0){
         // 再表示のためのタイマーセット
         const cTime = (new Date()).getTime();
-        const dictByCardId: Map<string, CardReborn> = await getDictByCardId();
+        const dictByCardId = await getDictByCardId();
 
         cardsReborn.forEach((card, ind) => {
-          const cardReborn = dictByCardId[card.id];
+          const cardReborn: CardReborn = dictByCardId[card.id];
+          if(!cardReborn) { return; }
+
           const showTime = new Date(cardReborn.nextReshowTime).getTime();
           const offtimeToShow = showTime - cTime;
           const no = (ind + numReborns + numCards);

@@ -7,7 +7,7 @@ import type { CardPlan } from './../types/cardPlan';
 import type { CardReborn } from './../types/cardReborn';
 import { getCardContent, getStoreKey as getContentStoreKey } from './cardContents';
 import { getCardPlan, getStoreKey as getPlanStoreKey } from './cardPlans';
-import { removePrevCardReborns, getWillCardReborns, getRebornedCardReborns } from './cardReborns';
+import { removePrevCardReborns, getWillCardReborns, getRebornedCardReborns, removeCardRebornByCardId } from './cardReborns';
 import { getIsToday, getToday, getYesterday, getEndOfDate, addDate, getNextDayDate, getNextDateDate } from '@utils/date';
 
 export const getCard = async (cardId: string) => {
@@ -219,6 +219,9 @@ export const updateCard = async (cardId: string, attrs: any) => {
   });
   AsyncStorage.setItem('@cards', JSON.stringify(cards));
 
+  // update @cardReborns
+  await removeCardRebornByCardId(cardId);
+
   // update @cardContent
   await AsyncStorage.mergeItem(contentKey, JSON.stringify(cardContent));
 
@@ -257,6 +260,7 @@ export const deleteCard = async (cardId: string) => {
   let cards: Card[] = await getCards();
   cards = cards.filter(h => h.id != cardId);
   await AsyncStorage.setItem('@cards', JSON.stringify(cards));
+  await removeCardRebornByCardId(cardId);
   await AsyncStorage.removeItem(contentKey);
   await AsyncStorage.removeItem(planKey);
 };
