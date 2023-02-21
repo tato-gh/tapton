@@ -6,7 +6,7 @@ import type { CardContent } from './../types/cardContent';
 import type { CardPlan } from './../types/cardPlan';
 import { getCardContent, getStoreKey as getContentStoreKey } from './cardContents';
 import { getCardPlan, getStoreKey as getPlanStoreKey } from './cardPlans';
-import { getIsToday, addDate, getNextDayDate, getNextDateDate } from '@utils/date';
+import { getIsToday, getToday, getYesterday, getEndOfDate, addDate, getNextDayDate, getNextDateDate } from '@utils/date';
 
 export const getCard = async (cardId: string) => {
   const jsonValue = await AsyncStorage.getItem('@cards');
@@ -30,6 +30,10 @@ export const getCards = async () => {
 
 export const getCardsFullLoaded = async () => {
   const cards: Card[] = await getCards();
+  return await decorateCardsFullLoaded(cards);
+};
+
+export const decorateCardsFullLoaded = async (cards: Card[]) => {
   const [contentKeys, planKeys] = cards.reduce(
     (keys: Array<Array<string>>, card) => {
       const [cKeys, pKeys] = keys;
@@ -49,7 +53,48 @@ export const getCardsFullLoaded = async () => {
   });
 
   return cardsFull;
-}
+};
+
+// ボードへの表示対象カードを返す
+// まず、前日までの指定カードは新しい表示日時に更新する
+// そのあとで、現在表示対象にあたるカードをみつける
+export const getWaitingCards = async () => {
+  await updateCardsWatingUntilToday();
+  const cards = await getWaitingCardsOnTime();
+  return decorateCardsFullLoaded(cards);
+};
+
+const updateCardsWatingUntilToday = async () => {
+  let cards: Card[] = await getCards();
+
+  const targets = filterNextShowTimePast(cards, getEndOfDate(getYesterday()));
+  const planKeys = targets.map(card => getPlanStoreKey(card.id));
+  const dictPlan = await buildDict<CardPlan>(planKeys);
+
+  cards = cards.map((card) => {
+    if(dictPlan[card.id]) {
+      const nextShowTime = planNextShowTime(dictPlan[card.id], true);
+      const nextShowTimeS = nextShowTime ? nextShowTime.toString() : '';
+      Object.assign(card, {nextShowTime: nextShowTimeS});
+    }
+    return card;
+  });
+  await AsyncStorage.setItem('@cards', JSON.stringify(cards));
+
+  return 'ok';
+};
+
+const getWaitingCardsOnTime = async () => {
+  const cards = await getCards();
+
+  return filterNextShowTimePast(cards, new Date());
+};
+
+const filterNextShowTimePast = (cards: Card[], date: Date) => {
+  return cards.filter((card) => {
+    return date.getTime() >= (new Date(card.nextShowTime)).getTime();
+  });
+};
 
 const buildDict = async <T>(keys: Array<string>) => {
   const responses = await AsyncStorage.multiGet(keys);
@@ -197,7 +242,7 @@ const planNextShowTime = (plan: CardPlan, includeToday = true): Date | null => {
   const isToday = getIsToday(nextShowTime);
 
   if(isToday) {
-    const today = new Date();
+    const today = getToday();
     const limitTime = new Date(
       today.getFullYear(),
       today.getMonth(),
@@ -215,7 +260,7 @@ const planNextShowTime = (plan: CardPlan, includeToday = true): Date | null => {
 };
 
 const decidePlanDate = (plan: CardPlan, includeToday: boolean) : Date => {
-  const today = new Date();
+  const today = getToday();
   const tomorrow = addDate(today, 1);
 
   // 毎日が設定されている

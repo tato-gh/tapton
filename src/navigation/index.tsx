@@ -21,10 +21,10 @@ const Stack = createNativeStackNavigator();
 function RootNavigator() {
   return (
     <Stack.Navigator>
+      <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Cards" component={CardsScreen} options={{ headerTitle: '管理ページ' }} />
       <Stack.Screen name="NewCard" component={NewCardScreen} options={{ headerTitle: '新規カード作成' }} />
       <Stack.Screen name="EditCard" component={EditCardScreen} options={{ headerTitle: 'カード編集' }} />
-      <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }

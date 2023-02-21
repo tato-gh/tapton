@@ -41,13 +41,13 @@ const CardList: FC<Props> = ({ cards, onNew, onEdit, onDelete }) => {
                     <Badge colorScheme='coolGray' variant='subtle'>毎日</Badge>
                   )}
                   {!item.daily && item.useDays && (
-                    <Badge colorScheme='coolGray'>{daysToS(item.days).join('')}</Badge>
+                    <Badge colorScheme='coolGray' variant='subtle'>{daysToS(item.days).join('')}</Badge>
                   )}
                   {!item.daily && item.useDates && (
-                    <Badge colorScheme='coolGray'>{sortByNumber(item.dates).join()}</Badge>
+                    <Badge colorScheme='coolGray' variant='subtle'>{sortByNumber(item.dates).join()}</Badge>
                   )}
                   {item.nextShowTime && (
-                    <Badge colorScheme='coolGray'>{`次回:${cutSec(item.nextShowTime)}`}</Badge>
+                    <Badge colorScheme='coolGray' variant='subtle'>{`次回:${cutSec(item.nextShowTime)}`}</Badge>
                   )}
                 </HStack>
               </VStack>

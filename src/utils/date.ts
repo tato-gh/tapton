@@ -4,6 +4,23 @@ export const cutSec = (time: string) => {
   return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
 };
 
+// 今日の日付を返す
+export const getToday = (): Date => ( new Date() );
+
+// 昨日の日付を返す
+export const getYesterday = (): Date => ( addDate(getToday(), 1) );
+
+// 日付の終了時刻(23:59)を返す
+export const getEndOfDate = (date: Date): Date => {
+  return new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    23,
+    59
+  );
+};
+
 // 本日かどうかの判定
 export const getIsToday = (date: Date): boolean => {
   const today = new Date();
