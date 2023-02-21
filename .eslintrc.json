@@ -2,7 +2,7 @@
   "env": {
     "browser": true,
     "es2022": true,
-    "jest/global": true
+    "jest/globals": true
   },
   "extends": [
     "eslint:recommended",
