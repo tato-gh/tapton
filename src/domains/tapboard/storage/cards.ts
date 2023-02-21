@@ -209,6 +209,22 @@ export const updateCard = async (cardId: string, attrs: any) => {
   return { cardId, cardContent, cardPlan };
 };
 
+export const updateNextShowTime = async (card: Card) => {
+  const planKey = getPlanStoreKey(card.id);
+  const cardPlan = await getCardPlan(planKey) || {};
+  const nextShowTime = planNextShowTime(cardPlan, false);
+  const nextShowTimeS = nextShowTime ? nextShowTime.toString() : '';
+
+  let cards: Card[] = await getCards();
+  cards = cards.map((c) => {
+    if(c.id == card.id) {
+      Object.assign(c, {nextShowTime: nextShowTimeS});
+    }
+    return c;
+  });
+  await AsyncStorage.setItem('@cards', JSON.stringify(cards));
+};
+
 export const deleteCard = async (cardId: string) => {
   const contentKey:string = getContentStoreKey(cardId);
   const planKey:string = getPlanStoreKey(cardId);

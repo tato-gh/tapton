@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { useState, useLayoutEffect } from 'react';
 
-import { getWaitingCards } from '@domains/tapboard/storage/cards';
+import { getWaitingCards, updateNextShowTime } from '@domains/tapboard/storage/cards';
 import type { QueueCard } from '../types/queueCard';
 import CheckList from './CheckList';
 import { randomPick } from '@utils/array';
@@ -24,8 +24,9 @@ const CheckListQueue: FC = () => {
     })();
   }, []);
 
-  const onPress = (queueCard: QueueCard) => {
+  const onPress = async (queueCard: QueueCard) => {
     setQueue(([_card, ...rest]) => rest);
+    await updateNextShowTime(queueCard);
     if(queueCard.reborn) {
       // TODO: 再表示用のキューに追加
     }
