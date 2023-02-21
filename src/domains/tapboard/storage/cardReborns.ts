@@ -9,16 +9,38 @@ export const getCardReborns = async () => {
   return (jsonValue) ? JSON.parse(jsonValue) : [];
 };
 
-export const getWaitingCardReborns = async () => {
+export const getWillCardReborns = async () => {
   const reborns: CardReborn[] = await getCardReborns();
   const cTime = (new Date().getTime());
 
   return reborns.filter((reborn) => {
-    const showTime = (new Date(reborn.nextShowTime)).getTime();
+    const showTime = (new Date(reborn.nextReshowTime)).getTime();
+
+    return cTime < showTime;
+  });
+};
+
+export const getRebornedCardReborns = async () => {
+  const reborns: CardReborn[] = await getCardReborns();
+  const cTime = (new Date().getTime());
+
+  return reborns.filter((reborn) => {
+    const showTime = (new Date(reborn.nextReshowTime)).getTime();
     const limitTime = (new Date(reborn.limitShowTime)).getTime();
 
     return cTime >= showTime && cTime <= limitTime;
   });
+};
+
+export const getDictByCardId = async () => {
+  const cardReborns: CardReborn[] = await getCardReborns();
+
+  return cardReborns.reduce(
+    (acc, reborn) => {
+      return Object.assign(acc, { [reborn.cardId]: reborn });
+    },
+    {}
+  );
 };
 
 export const upsertCardReborns = async (card: CardFull) => {
@@ -39,7 +61,7 @@ export const upsertCardReborns = async (card: CardFull) => {
   // なお、不要なものの削除は、getWaitingCardReborns()で行われる
   const attrs: CardReborn = {
     cardId: card.id,
-    nextShowTime: nextShowTime.toString(),
+    nextReshowTime: nextShowTime.toString(),
     limitShowTime: limitShowTime.toString()
   };
 
@@ -58,9 +80,9 @@ export const removePrevCardReborns = async () => {
   const todayStartTime = getStartOfDate(getToday());
 
   reborns = reborns.filter((reborn) => {
-    const nextShowTime = new Date(reborn.nextShowTime);
+    const nextReshowTime = new Date(reborn.nextReshowTime);
 
-    return nextShowTime.getTime() > todayStartTime.getTime();
+    return nextReshowTime.getTime() > todayStartTime.getTime();
   });
   await AsyncStorage.setItem('@cardReborns', JSON.stringify(reborns));
 

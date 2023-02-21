@@ -1,6 +1,6 @@
 export type CardReborn = {
   cardId: string,
-  nextShowTime: string,
+  nextReshowTime: string,
   limitShowTime: string
 };
 
@@ -9,7 +9,7 @@ export const isCardReborn = (arg: unknown): arg is CardReborn => {
 
   return (
     typeof c?.cardId === 'string' &&
-      typeof c?.nextShowTime === 'string' &&
+      typeof c?.nextReshowTime === 'string' &&
       typeof c?.limitShowTime === 'string'
   )
 };
