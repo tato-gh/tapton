@@ -4,8 +4,10 @@ import { UUID } from "uuidjs";
 import type { Card, CardFull } from './../types/card';
 import type { CardContent } from './../types/cardContent';
 import type { CardPlan } from './../types/cardPlan';
+import type { CardReborn } from './../types/cardReborn';
 import { getCardContent, getStoreKey as getContentStoreKey } from './cardContents';
 import { getCardPlan, getStoreKey as getPlanStoreKey } from './cardPlans';
+import { removePrevCardReborns, getCardReborns } from './cardReborns';
 import { getIsToday, getToday, getYesterday, getEndOfDate, addDate, getNextDayDate, getNextDateDate } from '@utils/date';
 
 export const getCard = async (cardId: string) => {
@@ -26,6 +28,20 @@ export const getCardFullLoaded = async (cardId: string) => {
 export const getCards = async () => {
   const jsonValue = await AsyncStorage.getItem('@cards');
   return (jsonValue) ? JSON.parse(jsonValue) : [];
+};
+
+export const getCardsByIds = async (cardIds: String[]) => {
+  const cards: Card[] = await getCards();
+
+  return cards.filter((card) => cardIds.includes(card.id));
+};
+
+export const getWaitingCardsReborned = async () => {
+  await removePrevCardReborns();
+  const cardReborns: CardReborn[] = await getCardReborns();
+  const cardIds = cardReborns.map(r => r.cardId);
+  const cards = await getCardsByIds(cardIds);
+  return decorateCardsFullLoaded(cards);
 };
 
 export const getCardsFullLoaded = async () => {

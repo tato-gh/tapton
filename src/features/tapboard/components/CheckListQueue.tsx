@@ -1,7 +1,8 @@
 import type { FC } from 'react';
 import { useState, useLayoutEffect } from 'react';
 
-import { getWaitingCards, updateNextShowTime } from '@domains/tapboard/storage/cards';
+import { getWaitingCards, updateNextShowTime, getWaitingCardsReborned } from '@domains/tapboard/storage/cards';
+import { upsertCardReborns } from '@domains/tapboard/storage/cardReborns';
 import type { QueueCard } from '../types/queueCard';
 import CheckList from './CheckList';
 import { randomPick } from '@utils/array';
@@ -12,23 +13,31 @@ const CheckListQueue: FC = () => {
   useLayoutEffect(() => {
     (async () => {
       const cards = await getWaitingCards();
-      if(cards) {
-        const numCards = cards.length;
-        setQueue(() => {
-          return (
-            randomPick(cards, numCards)
-              .map((queueCard, ind) => Object.assign(queueCard, {no: ind}))
-          );
-        })
-      }
+      const numCards = cards.length;
+      const cardsReborned = await getWaitingCardsReborned();
+      const numReborns = cardsReborned.length;
+
+      setQueue(() => {
+        const queueReborns = randomPick(cardsReborned, numReborns).map((queueCard, ind) => {
+          return Object.assign(queueCard, {no: ind, reborned: true});
+        });
+
+        const queueCards = randomPick(cards, numCards).map((queueCard, ind) => {
+          return Object.assign(queueCard, {no: ind + numReborns, reborned: false});
+        });
+
+        return [...queueReborns, ...queueCards];
+      })
     })();
   }, []);
 
   const onPress = async (queueCard: QueueCard) => {
     setQueue(([_card, ...rest]) => rest);
-    await updateNextShowTime(queueCard);
+    if(!queueCard.reborned) {
+      await updateNextShowTime(queueCard);
+    }
     if(queueCard.reborn) {
-      // TODO: 再表示用のキューに追加
+      await upsertCardReborns(queueCard);
     }
   };
 

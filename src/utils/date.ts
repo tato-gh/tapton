@@ -10,6 +10,17 @@ export const getToday = (): Date => ( new Date() );
 // 昨日の日付を返す
 export const getYesterday = (): Date => ( addDate(getToday(), 1) );
 
+// 日付の開始時刻(00:00)を返す
+export const getStartOfDate = (date: Date): Date => {
+  return new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    0,
+    0
+  );
+};
+
 // 日付の終了時刻(23:59)を返す
 export const getEndOfDate = (date: Date): Date => {
   return new Date(
@@ -33,6 +44,11 @@ export const getIsToday = (date: Date): boolean => {
 // 基準日に指定日数を加減したDateを返す
 export const addDate = (date: Date, offset: number): Date => {
   return new Date(date.getTime() + offset * 24 * 60 * 60 * 1000);
+};
+
+// 基準日に指定分を加減したDateを返す
+export const addMinute = (date: Date, offset: number): Date => {
+  return new Date(date.getTime() + offset * 60 * 1000);
 };
 
 // 基準日の次の指定曜日のDateを返す
