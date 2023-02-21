@@ -67,7 +67,17 @@ const CheckListQueue: FC = () => {
     }
   };
 
-  return <CheckList queue={queue} onPress={onPress} />
+  const onPressSkip = async (queueCard: QueueCard) => {
+    setQueue(([card, ...rest]) => [...rest, card]);
+  };
+
+  return (
+    <CheckList
+      queue={queue}
+      onPress={onPress}
+      onPressSkip={onPressSkip}
+    />
+  );
 };
 
 export default CheckListQueue;

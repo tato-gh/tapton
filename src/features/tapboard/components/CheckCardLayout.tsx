@@ -11,7 +11,8 @@ import CheckCardForm from './CheckCardForm';
 type Props = {
   queueCard: QueueCard,
   focus: boolean,
-  onPress: Function
+  onPress: Function,
+  onPressSkip: Function,
 };
 
 // maxHeight: 以下を考慮して決定
@@ -20,7 +21,7 @@ type Props = {
 const maxHeight = Dimensions.get('window').height - OPE_BOTTOM_POSITION - 0.85 * CARD_WIDTH;
 const maxWidth = Dimensions.get('window').width - CARD_WIDTH;
 
-const CheckCardLayout: FC<Props> = ({ queueCard, focus, onPress }) => {
+const CheckCardLayout: FC<Props> = ({ queueCard, focus, onPress, onPressSkip }) => {
   const position = useMemo(() => getPosition(maxHeight, maxWidth), []);
 
   return (
@@ -28,7 +29,7 @@ const CheckCardLayout: FC<Props> = ({ queueCard, focus, onPress }) => {
       <CheckCardView queueCard={queueCard} position={position} focus={focus} />
 
       {focus &&
-        <CheckCardForm onPress={onPress} />
+        <CheckCardForm onPress={onPress} onPressSkip={onPressSkip} />
       }
     </>
   )

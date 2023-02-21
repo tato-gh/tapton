@@ -5,11 +5,11 @@ import CheckCardLayout from './CheckCardLayout';
 
 type Props = {
   queue: QueueCard[],
-  onPress: Function
+  onPress: Function,
+  onPressSkip: Function
 };
 
-const CheckList: FC<Props> = ({ queue, onPress }) => {
-
+const CheckList: FC<Props> = ({ queue, onPress, onPressSkip }) => {
   return (
     <>
       {queue.map((queueCard, ind) => {
@@ -19,6 +19,7 @@ const CheckList: FC<Props> = ({ queue, onPress }) => {
             queueCard={queueCard}
             focus={ind == 0 ? true : false}
             onPress={() => onPress(queueCard)}
+            onPressSkip={() => onPressSkip(queueCard)}
           />
         );
       })}
