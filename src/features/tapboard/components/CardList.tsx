@@ -31,7 +31,7 @@ const CardList: FC<Props> = ({ cards, onNew, onEdit, onDelete, onInit }) => {
         renderItem={({ item }) =>
           <Box borderBottomWidth='1' borderColor='muted.300' pb='2' mb='2'>
             <HStack justifyContent='space-between'>
-              <VStack space={2}>
+              <VStack space={2} maxW='80%'>
                 <Text fontSize='xs' color='coolGray.800' bold mt='2'>
                   {item.title}
                 </Text>
