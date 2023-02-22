@@ -32,10 +32,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#fafafa"
-      }
+      },
+      "permissions": [],
+      "package": "com.tatowk.Tapton"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "be4e1a85-a345-4a58-8a6f-b9cea4a139b9"
+      }
     }
   }
 }
