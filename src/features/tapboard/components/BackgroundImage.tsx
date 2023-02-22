@@ -3,13 +3,15 @@ import { View, ImageBackground, StyleSheet } from 'react-native';
 
 import IconButton from '@molecules/IconButton';
 import { FLOAT_OP_Z_INDEX } from '@constants/layout';
+import type { ImageSource } from '../types/imageSource';
 
 type Props = PropsWithChildren & {
-  image: any,
+  image: ImageSource,
   pickImageAsync: Function
 };
 
 const BackgroundImage: FC<Props> = ({ image, pickImageAsync, children }) => {
+    // <ImageBackground source={{uri: image}} resizeMode="cover" style={styles.image}>
   return (
     <ImageBackground source={image} resizeMode="cover" style={styles.image}>
       { children }

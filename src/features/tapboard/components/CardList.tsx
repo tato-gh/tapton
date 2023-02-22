@@ -15,7 +15,7 @@ type Props = {
 
 const CardList: FC<Props> = ({ cards, onNew, onEdit, onDelete, onInit }) => {
   return (
-    <ScrollView>
+    <>
       <HStack mx='4' mt='6' mb='4' alignItems='center'>
         <Heading fontSize='md' fontWeight='bold'>
           カード一覧
@@ -57,7 +57,7 @@ const CardList: FC<Props> = ({ cards, onNew, onEdit, onDelete, onInit }) => {
           </Box>}
         keyExtractor={ item => item.id }
       />
-    </ScrollView>
+    </>
   )
 };
 

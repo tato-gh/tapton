@@ -4,32 +4,33 @@ import * as ImagePicker from 'expo-image-picker';
 
 import BackgroundImage from './BackgroundImage';
 import { storeImage, getImage } from '@domains/tapboard/storage/backgroundImage';
+import type { ImageSource } from '../types/imageSource';
 
 const BackgroundImager: FC<PropsWithChildren> = ({ children }) => {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const placeholderImageSource = require("@assets/sample_background.jpg");
+  const [selectedImage, setSelectedImage] = useState<ImageSource>(placeholderImageSource);
 
   useLayoutEffect(() => {
     (async () => {
-      const uri = await getImage();
-      if(uri) {
-        setSelectedImage(uri);
+      const base64 = await getImage();
+      if(base64) {
+        setSelectedImage({uri: `data:image;base64,${base64}`});
       }
     })();
   }, [selectedImage])
-
-  const placeholderImageSource = require("@assets/sample_background.jpg");
 
   const pickImageAsync = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       quality: 1,
+      base64: true
     });
 
     if (!result.canceled) {
-      const uri = result.assets[0]?.uri;
-      if(uri) {
-        setSelectedImage(uri);
-        storeImage(uri);
+      const base64 = result.assets[0]?.base64;
+      if(base64) {
+        setSelectedImage({uri: `data:image;base64,${base64}`});
+        storeImage(base64);
       }
     } else {
       alert('画像が選択されませんでした');
@@ -37,7 +38,7 @@ const BackgroundImager: FC<PropsWithChildren> = ({ children }) => {
   };
 
   return (
-    <BackgroundImage image={selectedImage || placeholderImageSource} pickImageAsync={pickImageAsync}>
+    <BackgroundImage image={selectedImage} pickImageAsync={pickImageAsync}>
       { children }
     </BackgroundImage>
   );
