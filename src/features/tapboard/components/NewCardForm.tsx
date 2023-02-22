@@ -29,7 +29,7 @@ const NewCardForm: FC<Props> = ({ control, handleSubmit, watch, errors, onSubmit
       <TitleControl control={control} errors={errors} />
       <BodyControl control={control} errors={errors} />
       <ShowPlanControl control={control} errors={errors} watchUseDays={watchUseDays} watchUseDates={watchUseDates} />
-      <ShowTimeControl control={control} errors={errors} />
+      <ShowTimeControl control={control} />
       <RebornControl control={control} watchReborn={watchReborn} />
       {false && <NotificationControl control={control} />}
 
