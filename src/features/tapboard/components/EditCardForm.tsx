@@ -27,7 +27,7 @@ const EditCardForm: FC<Props> = ({ control, handleSubmit, errors, onSubmit, onCa
       <ShowPlanControl control={control} errors={errors} />
       <ShowTimeControl control={control} errors={errors} />
       <RebornControl control={control} />
-      <NotificationControl control={control} />
+      {false && <NotificationControl control={control} />}
 
       <HStack space={2}>
         <Button onPress={onCancel} colorScheme='secondary'>

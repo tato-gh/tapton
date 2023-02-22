@@ -4,7 +4,6 @@ import { Box, ScrollView, Text, Badge, Spacer, Heading, FlatList, HStack, VStack
 import type { CardFull } from '@domains/tapboard/types/card';
 import IconFlat from '@molecules/IconFlat';
 import { daysToS, sortByNumber } from '@utils/array';
-import { cutSec } from '@utils/date';
 
 type Props = {
   cards: CardFull[],
@@ -22,7 +21,7 @@ const CardList: FC<Props> = ({ cards, onNew, onEdit, onDelete, onInit }) => {
           カード一覧
         </Heading>
         <Spacer />
-        <IconFlat theme='warning' icon='refresh' size={8} onPress={onInit} />
+        { false && <IconFlat theme='warning' icon='refresh' size={8} onPress={onInit} /> }
         <IconFlat theme='tertiary' icon='add' size={8} onPress={onNew} />
       </HStack>
       <FlatList
@@ -47,9 +46,6 @@ const CardList: FC<Props> = ({ cards, onNew, onEdit, onDelete, onInit }) => {
                   )}
                   {!item.daily && item.useDates && (
                     <Badge colorScheme='coolGray' variant='subtle'>{sortByNumber(item.dates).join()}</Badge>
-                  )}
-                  {item.nextShowTime && (
-                    <Badge colorScheme='coolGray' variant='subtle'>{`次回:${cutSec(item.nextShowTime)}`}</Badge>
                   )}
                 </HStack>
               </VStack>
