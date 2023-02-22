@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import TapboardBackgroundImager from '@features/tapboard/components/BackgroundImager';
 import TapboardCheckListQueue from '@features/tapboard/components/CheckListQueue';
 import IconButton from '@molecules/IconButton';
+import { FLOAT_OP_Z_INDEX } from '@constants/layout';
 
 const Home: FC = () => {
   const navigation = useNavigation();
@@ -31,6 +32,7 @@ const styles = StyleSheet.create({
   btnMenuCards: {
     position: 'absolute',
     bottom: 10,
-    right: 10
+    right: 10,
+    zIndex: FLOAT_OP_Z_INDEX
   }
 });

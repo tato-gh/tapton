@@ -17,7 +17,8 @@ const getRandomInt = (max: number): number => {
 };
 
 export const randTop = (max: number): number => {
-  return getRandomInt(max);
+  // スマホだとヘッダーに被ると押しにくいため、-20後に+20
+  return getRandomInt(max - 20) + 20;
 };
 
 export const randLeft = (max: number): number => {

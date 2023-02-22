@@ -32,7 +32,7 @@ const BackgroundImager: FC<PropsWithChildren> = ({ children }) => {
         storeImage(uri);
       }
     } else {
-      alert('You did not select any image.');
+      alert('画像が選択されませんでした');
     }
   };
 

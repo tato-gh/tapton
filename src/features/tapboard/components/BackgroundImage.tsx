@@ -2,6 +2,7 @@ import type { FC, PropsWithChildren } from 'react';
 import { View, ImageBackground, StyleSheet } from 'react-native';
 
 import IconButton from '@molecules/IconButton';
+import { FLOAT_OP_Z_INDEX } from '@constants/layout';
 
 type Props = PropsWithChildren & {
   image: any,
@@ -27,7 +28,8 @@ const styles = StyleSheet.create({
   btnPickImage: {
     position: 'absolute',
     bottom: 10,
-    left: 10
+    left: 10,
+    zIndex: FLOAT_OP_Z_INDEX
   },
 });
 

@@ -12,7 +12,7 @@ type Props = {
 const CheckCardForm: FC<Props> = ({ onPress, onPressSkip }) => {
   return (
     <View style={[styles.opeContainer, {zIndex: MAX_Z_INDEX}]}>
-      <View style={styles.opeRow}>
+      <View style={styles.main}>
         <CircleButton theme='primary' icon='check' onPress={onPress} />
       </View>
       <View style={styles.subLeft}>
@@ -26,19 +26,18 @@ export default CheckCardForm;
 
 const styles = StyleSheet.create({
   opeContainer: {
-    flex: 1,
     width: '100%',
     alignItems: 'center',
+    justifyContent: 'center',
     position: 'absolute',
     bottom: OPE_BOTTOM_POSITION,
   },
-  opeRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
+  main: {
+    position: 'relative',
   },
   subLeft: {
-    position: 'absolute',
-    bottom: 0,
-    marginRight: 200
+    position: 'relative',
+    right: 80,
+    marginTop: -50
   },
 });

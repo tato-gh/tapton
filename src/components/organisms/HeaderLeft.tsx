@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { useNavigation } from "@react-navigation/native";
-import { View } from 'react-native';
-import IconButton from "@molecules/IconButton";
+import { Box } from 'native-base';
+import IconFlat from "@molecules/IconFlat";
 
 type Props = {
   backTo?: string,
@@ -16,15 +16,14 @@ const HeaderLeft: FC<Props> = ({ backTo = null, options = {} }) => {
   };
 
   return (
-    <View style={{ marginLeft: 15 }}>
-      <IconButton
+    <Box mr={2} ml={2}>
+      <IconFlat
         theme='muted'
         icon='arrow-back'
-        label=''
         size={5}
         onPress={onPress}
       />
-    </View>
+    </Box>
   );
 };
 
