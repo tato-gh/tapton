@@ -21,11 +21,11 @@ const CheckListQueue: FC = () => {
 
       setQueue(() => {
         const queueReborns = randomPick(cardsReborned, numReborns).map((card, ind) => {
-          return Object.assign(card, {no: ind, reborned: true});
+          return Object.assign(card, {no: ind + 1, reborned: true});
         });
 
         const queueCards = randomPick(cards, numCards).map((card, ind) => {
-          return Object.assign(card, {no: ind + numReborns, reborned: false});
+          return Object.assign(card, {no: ind + 1 + numReborns, reborned: false});
         });
 
         return [...queueReborns, ...queueCards];
