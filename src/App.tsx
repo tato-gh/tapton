@@ -7,6 +7,9 @@ import { NativeBaseProvider } from 'native-base';
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
+import { enableFreeze } from "react-native-screens";
+
+enableFreeze(true);
 
 const App: FC = () => {
   const isLoadingComplete = useCachedResources();
