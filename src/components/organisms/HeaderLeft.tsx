@@ -20,7 +20,7 @@ const HeaderLeft: FC<Props> = ({ backTo = null, options = {} }) => {
       <IconFlat
         theme='muted'
         icon='arrow-back'
-        size={5}
+        size={6}
         onPress={onPress}
       />
     </Box>
