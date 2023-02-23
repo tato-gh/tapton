@@ -1,6 +1,7 @@
 import type { FC } from 'react';
-import { View } from 'react-native';
-import { Box, Heading, Text } from 'native-base';
+import { View, StyleSheet } from 'react-native';
+import { Box, Heading } from 'native-base';
+import Markdown from 'react-native-markdown-renderer';
 
 import type { Position } from '../utils/position';
 import { MAX_Z_INDEX } from '../constants';
@@ -29,14 +30,41 @@ const CheckCardView: FC<Props> = ({ queueCard, position, focus }) => {
         <Heading size="sm" ml="-1">
           {queueCard.title}
         </Heading>
-        <Text
-          fontSize='2xl'
-        >
+        <Markdown style={styles.markdown}>
           {queueCard.body}
-        </Text>
+        </Markdown>
       </Box>
     </View>
   );
 };
 
 export default CheckCardView;
+
+const styles = StyleSheet.create({
+  markdown: {
+    text: {
+      fontSize: 18,
+    },
+    code: {
+      fontSize: 14,
+    },
+    heading1: {
+      fontSize: 32,
+    },
+    heading2: {
+      fontSize: 24,
+    },
+    heading3: {
+      fontSize: 18,
+    },
+    heading4: {
+      fontSize: 16,
+    },
+    heading5: {
+      fontSize: 16,
+    },
+    heading6: {
+      fontSize: 16,
+    }
+  }
+});
