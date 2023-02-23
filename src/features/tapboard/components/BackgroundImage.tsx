@@ -11,7 +11,6 @@ type Props = PropsWithChildren & {
 };
 
 const BackgroundImage: FC<Props> = ({ image, pickImageAsync, children }) => {
-    // <ImageBackground source={{uri: image}} resizeMode="cover" style={styles.image}>
   return (
     <ImageBackground source={image} resizeMode="cover" style={styles.image}>
       { children }

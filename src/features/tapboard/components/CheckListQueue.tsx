@@ -1,7 +1,7 @@
 import type { FC } from 'react';
-import { useState, useEffect, useLayoutEffect } from 'react';
+import { useState, useLayoutEffect, useCallback } from 'react';
 import { AppState } from "react-native";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { UUID } from 'uuidjs';
 
 import { getWaitingCards, updateNextShowTime, getCardsReborned, getCardsWillReborn } from '@domains/tapboard/storage/cards';
@@ -20,10 +20,6 @@ const CheckListQueue: FC = () => {
       navigation.navigate('Home', {refreshKey: UUID.generate()});
     }
   };
-
-  useEffect(() => {
-    AppState.addEventListener("change", handleAppStateChange);
-  }, []);
 
   useLayoutEffect(() => {
     (async () => {
@@ -66,6 +62,15 @@ const CheckListQueue: FC = () => {
       }
     })();
   }, []);
+
+  useFocusEffect(
+    // NOTE: useEffect()ではnavigate()でアンマウントが実行されない
+    useCallback(() => {
+      const listener = AppState.addEventListener("change", handleAppStateChange);
+
+      return () => { listener.remove(); };
+    }, [])
+  );
 
   const onPress = async (queueCard: QueueCard) => {
     setQueue(([_card, ...rest]) => rest);

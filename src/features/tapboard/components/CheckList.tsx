@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 
-import type { QueueCard } from '../types/queue_card';
+import type { QueueCard } from '../types/queueCard';
 import CheckCardLayout from './CheckCardLayout';
 
 type Props = {
