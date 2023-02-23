@@ -404,7 +404,7 @@ export const initCards = async () => {
 
   await createCard({
     title: '学び',
-    body: "今日新しく学んだことは何ですか？\n明日新しく学ぶことは何ですか？",
+    body: "今日最も印象に残った学びは具体的に何ですか？",
     daily: true,
     useDays: false,
     days: [],
