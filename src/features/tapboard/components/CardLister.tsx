@@ -8,7 +8,7 @@ import CardList from './CardList';
 import useConfirm from '@hooks/useConfirm';
 
 const CardLister: FC = () => {
-  const [cards, setCards] = useState<CardFull[]>([]);
+  const [cards, setCards] = useState<CardFull[] | null>(null);
   const navigation = useNavigation();
   const showDeleteConfirm = useConfirm('削除しますか？');
 
@@ -48,13 +48,15 @@ const CardLister: FC = () => {
     })();
   }, []);
 
+  if(! cards) { return <></>; }
+
   return <CardList
     cards={cards}
     onNew={onNew}
     onEdit={onEdit}
     onDelete={onDelete}
     onInit={onInit}
-  />
+  />;
 };
 
 export default CardLister;
