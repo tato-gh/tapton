@@ -1,5 +1,8 @@
 import type { FC } from 'react';
-import { useState, useLayoutEffect } from 'react';
+import { useState, useEffect, useLayoutEffect } from 'react';
+import { AppState } from "react-native";
+import { useNavigation } from '@react-navigation/native';
+import { UUID } from 'uuidjs';
 
 import { getWaitingCards, updateNextShowTime, getCardsReborned, getCardsWillReborn } from '@domains/tapboard/storage/cards';
 import { upsertCardReborns, getDictByCardId } from '@domains/tapboard/storage/cardReborns';
@@ -10,6 +13,17 @@ import { randomPick } from '@utils/array';
 
 const CheckListQueue: FC = () => {
   const [queue, setQueue] = useState<QueueCard[]>([]);
+  const navigation = useNavigation();
+
+  const handleAppStateChange = (nextAppState: string) => {
+    if(nextAppState == 'active') {
+      navigation.navigate('Home', {refreshKey: UUID.generate()});
+    }
+  };
+
+  useEffect(() => {
+    AppState.addEventListener("change", handleAppStateChange);
+  }, []);
 
   useLayoutEffect(() => {
     (async () => {
