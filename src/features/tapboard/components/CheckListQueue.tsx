@@ -11,8 +11,6 @@ import type { QueueCard } from '../types/queueCard';
 import CheckList from './CheckList';
 import { randomPick } from '@utils/array';
 
-import { getNotifications } from '@domains/device/notifications/local';
-
 const CheckListQueue: FC = () => {
   const [queue, setQueue] = useState<QueueCard[]>([]);
   const navigation = useNavigation();
@@ -25,7 +23,6 @@ const CheckListQueue: FC = () => {
 
   useLayoutEffect(() => {
     (async () => {
-      console.log(await getNotifications());
       const cards = await getWaitingCards();
       const numCards = cards.length;
       const cardsReborned = await getCardsReborned();
