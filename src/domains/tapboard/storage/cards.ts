@@ -421,7 +421,7 @@ export const initCards = async () => {
 
   await createCard({
     title: '買い物',
-    body: '散財しましょう。期限が切れるポイントはありませんか？',
+    body: '期限が切れが近いポイントはありませんか？',
     daily: false,
     useDays: false,
     days: [],
@@ -437,7 +437,7 @@ export const initCards = async () => {
   });
 
   await createCard({
-    title: '定期点検',
+    title: '月次チェック',
     body: '使っていないサブスクはありませんか？',
     daily: false,
     useDays: false,

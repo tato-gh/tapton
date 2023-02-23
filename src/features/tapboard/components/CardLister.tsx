@@ -33,11 +33,10 @@ const CardLister: FC = () => {
   };
 
   const onInit = () => {
-    const showInitConfirm = useConfirm('初期化しますか？');
-    showInitConfirm(async () => {
+    (async () => {
       await initCards();
       navigation.replace('Cards');
-    });
+    })();
   };
 
   useLayoutEffect(() => {

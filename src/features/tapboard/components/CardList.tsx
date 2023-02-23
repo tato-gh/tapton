@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { Box, ScrollView, Text, Badge, Spacer, Heading, FlatList, HStack, VStack } from 'native-base';
+import { Box, Text, Badge, Button, Spacer, Heading, FlatList, HStack, VStack } from 'native-base';
 
 import type { CardFull } from '@domains/tapboard/types/card';
 import IconFlat from '@molecules/IconFlat';
@@ -21,9 +21,13 @@ const CardList: FC<Props> = ({ cards, onNew, onEdit, onDelete, onInit }) => {
           カード一覧
         </Heading>
         <Spacer />
-        { false && <IconFlat theme='warning' icon='refresh' size={8} onPress={onInit} /> }
         <IconFlat theme='tertiary' icon='add' size={8} onPress={onNew} />
       </HStack>
+      {cards.length == 0 && (
+        <Box flex={1} alignItems='center' mt={6}>
+          <Button onPress={onInit}>お試しカードを使う</Button>
+        </Box>
+      )}
       <FlatList
         data={cards}
         mx='4'
