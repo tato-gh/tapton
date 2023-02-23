@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import { useState, useLayoutEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { ActivityIndicator } from 'react-native';
 import { UUID } from 'uuidjs';
 
 import { getCardsFullLoaded, deleteCard, initCards } from '@domains/tapboard/storage/cards';
@@ -49,7 +50,7 @@ const CardLister: FC = () => {
     })();
   }, []);
 
-  if(! cards) { return <></>; }
+  if(! cards) { return <ActivityIndicator size='large' style={{margin: 20}} />; }
 
   return <CardList
     cards={cards}
