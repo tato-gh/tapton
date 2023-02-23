@@ -31,7 +31,7 @@ const NewCardForm: FC<Props> = ({ control, handleSubmit, watch, errors, onSubmit
       <ShowPlanControl control={control} errors={errors} watchUseDays={watchUseDays} watchUseDates={watchUseDates} />
       <ShowTimeControl control={control} />
       <RebornControl control={control} watchReborn={watchReborn} />
-      {false && <NotificationControl control={control} />}
+      <NotificationControl control={control} />
 
       <HStack space={2}>
         <Button onPress={onCancel} colorScheme='secondary'>

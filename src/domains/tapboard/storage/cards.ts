@@ -9,6 +9,7 @@ import { getCardContent, getStoreKey as getContentStoreKey } from './cardContent
 import { getCardPlan, getStoreKey as getPlanStoreKey } from './cardPlans';
 import { removePrevCardReborns, getWillCardReborns, getRebornedCardReborns, removeCardRebornByCardId } from './cardReborns';
 import { getIsToday, getToday, getYesterday, getEndOfDate, addDate, getNextDayDate, getNextDateDate } from '@utils/date';
+import { createNotification } from '@domains/device/notifications/local';
 
 export const getCard = async (cardId: string) => {
   const cards: Card[] = await getCards();
@@ -177,6 +178,18 @@ export const createCard = async (attrs: any) => {
   // new @cardPlan
   await AsyncStorage.setItem(planKey, JSON.stringify(cardPlan));
 
+  // new Notification
+  if(cardPlan.notification && nextShowTime) {
+    createNotification({
+      content: {
+        title: cardContent.title,
+        body: cardContent.body,
+        data: { cardId: cardId }
+      },
+      trigger: nextShowTime.getTime()
+    });
+  }
+
   return { card, cardContent, cardPlan };
 };
 
@@ -287,15 +300,15 @@ const planNextShowTime = (plan: CardPlan, includeToday = true): Date | null => {
   const isToday = getIsToday(nextShowTime);
 
   if(isToday) {
-    const today = getToday();
+    const nowDate = getToday();
     const limitTime = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate(),
+      nowDate.getFullYear(),
+      nowDate.getMonth(),
+      nowDate.getDate(),
       plan.limitHour,
       plan.limitMinute
     );
-    if(today > limitTime && includeToday) {
+    if(nowDate > limitTime && includeToday) {
       // 本日を除外して再決定する
       return planNextShowTime(plan, false);
     }
