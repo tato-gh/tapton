@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import { useState, useLayoutEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { UUID } from 'uuidjs';
 
 import { getCardsFullLoaded, deleteCard, initCards } from '@domains/tapboard/storage/cards';
 import type { CardFull } from '@domains/tapboard/types/card';
@@ -28,14 +29,14 @@ const CardLister: FC = () => {
   const onDelete = (cardId: string) => {
     showDeleteConfirm(async () => {
       await deleteCard(cardId);
-      navigation.replace('Cards');
+      navigation.navigate('Cards', {refreshKey: UUID.generate()})
     });
   };
 
   const onInit = () => {
     (async () => {
       await initCards();
-      navigation.replace('Cards');
+      navigation.navigate('Cards', {refreshKey: UUID.generate()})
     })();
   };
 

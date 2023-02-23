@@ -2,6 +2,7 @@ import type { FC } from 'react';
 import { useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native';
+import { UUID } from 'uuidjs';
 
 import useCardFormer from '../hooks/useCardFormer';
 import NewCardForm from './NewCardForm';
@@ -17,7 +18,7 @@ const NewCardFormer: FC = () => {
     await createCard(attrs);
     reset();
     ref.current?.scrollTo({ y: 0 })
-    navigation.replace('Cards');
+    navigation.navigate('Cards', {refreshKey: UUID.generate()})
   };
 
   const onCancel = () => {

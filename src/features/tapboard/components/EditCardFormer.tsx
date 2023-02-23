@@ -2,6 +2,7 @@ import type { FC } from 'react';
 import { useRef, useLayoutEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native';
+import { UUID } from 'uuidjs';
 
 import useCardFormer from '../hooks/useCardFormer';
 import { getCardFullLoaded } from '@domains/tapboard/storage/cards';
@@ -43,7 +44,7 @@ const EditCardFormer: FC<Props> = ({cardId}) => {
     const attrs = onSubmitBase(data);
     await updateCard(cardId, attrs);
     ref.current?.scrollTo({ y: 0 });
-    navigation.replace('Cards');
+    navigation.navigate('Cards', {refreshKey: UUID.generate()})
   };
 
   const onCancel = () => {
