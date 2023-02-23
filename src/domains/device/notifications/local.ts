@@ -38,6 +38,19 @@ export const createNotification = async ({ content, trigger }: Args) => {
   }
 };
 
+export const removeNotification = async (cardId: string) => {
+  const notifications = await Notifications.getAllScheduledNotificationsAsync();
+  const notification = notifications.find((n) => n.content.data.cardId == cardId);
+
+  if(notification) {
+    Notifications.cancelScheduledNotificationAsync(notification.identifier);
+  }
+};
+
+export const getNotifications = async () => {
+  return await Notifications.getAllScheduledNotificationsAsync();
+};
+
 const requestPermissionsAsync = async () => {
   const { status: existingStatus } = await Notifications.getPermissionsAsync();
   let finalStatus = existingStatus;

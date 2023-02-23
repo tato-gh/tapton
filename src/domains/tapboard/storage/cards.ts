@@ -9,7 +9,7 @@ import { getCardContent, getStoreKey as getContentStoreKey } from './cardContent
 import { getCardPlan, getStoreKey as getPlanStoreKey } from './cardPlans';
 import { removePrevCardReborns, getWillCardReborns, getRebornedCardReborns, removeCardRebornByCardId } from './cardReborns';
 import { getIsToday, getToday, getYesterday, getEndOfDate, addDate, getNextDayDate, getNextDateDate } from '@utils/date';
-import { createNotification } from '@domains/device/notifications/local';
+import { createNotification, removeNotification } from '@domains/device/notifications/local';
 
 export const getCard = async (cardId: string) => {
   const cards: Card[] = await getCards();
@@ -247,6 +247,19 @@ export const updateCard = async (cardId: string, attrs: any) => {
   }
   await AsyncStorage.setItem(planKey, JSON.stringify(Object.assign(cardPlan, cardPlan)));
 
+  // update Notification
+  removeNotification(cardId);
+  if(cardPlan.notification && nextShowTime) {
+    createNotification({
+      content: {
+        title: cardContent.title,
+        body: cardContent.body,
+        data: { cardId: cardId }
+      },
+      trigger: nextShowTime.getTime()
+    });
+  }
+
   return { cardId, cardContent, cardPlan };
 };
 
@@ -276,6 +289,7 @@ export const deleteCard = async (cardId: string) => {
   await removeCardRebornByCardId(cardId);
   await AsyncStorage.removeItem(contentKey);
   await AsyncStorage.removeItem(planKey);
+  await removeNotification(cardId);
 };
 
 const planNextShowTime = (plan: CardPlan, includeToday = true): Date | null => {
