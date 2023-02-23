@@ -1,6 +1,5 @@
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ColorSchemeName } from 'react-native';
 import HomeScreen from "@screens/HomeScreen";
 import CardsScreen from "@screens/CardsScreen";
 import NewCardScreen from "@screens/NewCardScreen";
@@ -9,10 +8,9 @@ import EditCardScreen from "@screens/EditCardScreen";
 import HeaderLeft from '@organisms/HeaderLeft';
 import { UUID } from 'uuidjs';
 
-export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+export default function Navigation() {
   return (
-    <NavigationContainer
-      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <NavigationContainer theme={DefaultTheme}>
       <RootNavigator />
     </NavigationContainer>
   );
