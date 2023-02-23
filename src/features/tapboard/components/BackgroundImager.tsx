@@ -8,7 +8,7 @@ import type { ImageSource } from '../types/imageSource';
 
 const BackgroundImager: FC<PropsWithChildren> = ({ children }) => {
   const placeholderImageSource = require("@assets/sample_background.jpg");
-  const [selectedImage, setSelectedImage] = useState<ImageSource>(placeholderImageSource);
+  const [selectedImage, setSelectedImage] = useState<ImageSource | null>(null);
 
   useLayoutEffect(() => {
     (async () => {
@@ -17,7 +17,7 @@ const BackgroundImager: FC<PropsWithChildren> = ({ children }) => {
         setSelectedImage({uri: `data:image;base64,${base64}`});
       }
     })();
-  }, [selectedImage])
+  }, [])
 
   const pickImageAsync = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -38,7 +38,7 @@ const BackgroundImager: FC<PropsWithChildren> = ({ children }) => {
   };
 
   return (
-    <BackgroundImage image={selectedImage} pickImageAsync={pickImageAsync}>
+    <BackgroundImage image={selectedImage || placeholderImageSource} pickImageAsync={pickImageAsync}>
       { children }
     </BackgroundImage>
   );
