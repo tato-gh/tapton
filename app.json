@@ -29,7 +29,6 @@
       "supportsTablet": true
     },
     "android": {
-      "permissions": [],
       "package": "com.tatowk.Tapton"
     },
     "web": {
