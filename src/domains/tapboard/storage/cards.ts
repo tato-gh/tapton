@@ -9,7 +9,7 @@ import { getCardContent, getStoreKey as getContentStoreKey } from './cardContent
 import { getCardPlan, getStoreKey as getPlanStoreKey } from './cardPlans';
 import { removePrevCardReborns, getWillCardReborns, getRebornedCardReborns, removeCardRebornByCardId } from './cardReborns';
 import { getIsToday, getToday, getYesterday, getEndOfDate, addDate, getNextDayDate, getNextDateDate } from '@utils/date';
-import { createNotification, removeNotification } from '@domains/device/notifications/local';
+import { createNotification, removeNotifications } from '@domains/device/notifications/local';
 
 export const getCard = async (cardId: string) => {
   const cards: Card[] = await getCards();
@@ -94,18 +94,40 @@ const updateCardsWatingUntilToday = async () => {
   let cards: Card[] = await getCards();
 
   const targets = filterNextShowTimePast(cards, getEndOfDate(getYesterday()));
-  const planKeys = targets.map(card => getPlanStoreKey(card.id));
+  const [contentKeys, planKeys] = targets.reduce(
+    (keys: Array<Array<string>>, card) => {
+      const [cKeys, pKeys] = keys;
+      const contentKey:string = getContentStoreKey(card.id);
+      const planKey:string = getPlanStoreKey(card.id);
+      return [[...cKeys, contentKey], [...pKeys, planKey]];
+    },
+    [[], []]
+  );
+  const dictContent = await buildDict<CardContent>(contentKeys);
   const dictPlan = await buildDict<CardPlan>(planKeys);
 
   cards = cards.map((card) => {
-    if(dictPlan[card.id]) {
-      const nextShowTime = planNextShowTime(dictPlan[card.id], true);
+    const plan = dictPlan[card.id];
+    if(plan) {
+      const nextShowTime = planNextShowTime(plan, true);
       const nextShowTimeS = nextShowTime ? nextShowTime.toString() : '';
       Object.assign(card, {nextShowTime: nextShowTimeS});
     }
     return card;
   });
   await AsyncStorage.setItem('@cards', JSON.stringify(cards));
+
+  // 通知設定
+  targets.forEach(async (card) => {
+    const content = dictContent[card.id];
+    const plan = dictPlan[card.id];
+    const nextShowTime = planNextShowTime(plan, true);
+
+    if(plan.notification) {
+      await removeNotifications(card.id);
+      await setNotification(content.title, content.body, card.id, nextShowTime);
+    }
+  });
 
   return 'ok';
 };
@@ -179,15 +201,8 @@ export const createCard = async (attrs: any) => {
   await AsyncStorage.setItem(planKey, JSON.stringify(cardPlan));
 
   // new Notification
-  if(cardPlan.notification && nextShowTime) {
-    createNotification({
-      content: {
-        title: cardContent.title,
-        body: cardContent.body,
-        data: { cardId: cardId }
-      },
-      trigger: nextShowTime.getTime()
-    });
+  if(cardPlan.notification) {
+    await setNotification(cardContent.title, cardContent.body, cardId, nextShowTime);
   }
 
   return { card, cardContent, cardPlan };
@@ -248,19 +263,25 @@ export const updateCard = async (cardId: string, attrs: any) => {
   await AsyncStorage.setItem(planKey, JSON.stringify(Object.assign(cardPlan, cardPlan)));
 
   // update Notification
-  removeNotification(cardId);
-  if(cardPlan.notification && nextShowTime) {
-    createNotification({
-      content: {
-        title: cardContent.title,
-        body: cardContent.body,
-        data: { cardId: cardId }
-      },
-      trigger: nextShowTime.getTime()
-    });
+  await removeNotifications(cardId);
+  if(cardPlan.notification) {
+    await setNotification(cardContent.title, cardContent.body, cardId, nextShowTime);
   }
 
   return { cardId, cardContent, cardPlan };
+};
+
+const setNotification = async (title: string, body: string, cardId: string, nextShowTime: Date | null) => {
+  if(!nextShowTime) { return; }
+
+  await createNotification({
+    content: {
+      title: title,
+      body: body,
+      data: { cardId: cardId }
+    },
+    trigger: nextShowTime.getTime()
+  });
 };
 
 export const updateNextShowTime = async (card: Card) => {
@@ -277,6 +298,14 @@ export const updateNextShowTime = async (card: Card) => {
     return c;
   });
   await AsyncStorage.setItem('@cards', JSON.stringify(cards));
+
+  if(cardPlan.notification) {
+    const contentKey = getContentStoreKey(card.id);
+    const cardContent = await getStorageItem(contentKey) || {};
+
+    await removeNotifications(card.id);
+    await setNotification(cardContent.title, cardContent.body, card.id, nextShowTime);
+  }
 };
 
 export const deleteCard = async (cardId: string) => {
@@ -289,7 +318,7 @@ export const deleteCard = async (cardId: string) => {
   await removeCardRebornByCardId(cardId);
   await AsyncStorage.removeItem(contentKey);
   await AsyncStorage.removeItem(planKey);
-  await removeNotification(cardId);
+  await removeNotifications(cardId);
 };
 
 const planNextShowTime = (plan: CardPlan, includeToday = true): Date | null => {

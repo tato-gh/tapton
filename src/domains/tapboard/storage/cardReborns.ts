@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { CardFull } from './../types/card';
 import type { CardReborn } from './../types/cardReborn';
 import { getToday, addMinute, getStartOfDate } from '@utils/date';
+import { createNotification } from '@domains/device/notifications/local';
 
 export const getCardReborns = async () => {
   const jsonValue = await AsyncStorage.getItem('@cardReborns');
@@ -56,9 +57,11 @@ export const upsertCardReborns = async (card: CardFull) => {
     card.limitMinute
   );
 
-  // NOTE
-  // この時点でlimitShowTimeを過ぎている可能性があるが、ここではそのまま入れることでストレージを更新する
-  // なお、不要なものの削除は、getWaitingCardReborns()で行われる
+  if(nextShowTime.getTime() > limitShowTime.getTime()) {
+    // 不要なものの削除は、getWaitingCardReborns()で行われる
+    return;
+  }
+
   const attrs: CardReborn = {
     cardId: card.id,
     nextReshowTime: nextShowTime.toString(),
@@ -71,6 +74,18 @@ export const upsertCardReborns = async (card: CardFull) => {
     [attrs]
   );
   await AsyncStorage.setItem('@cardReborns', JSON.stringify(reborns));
+
+  // 通知設定
+  if(card.notification) {
+    await createNotification({
+      content: {
+        title: card.title,
+        body: card.body,
+        data: { cardId: card.id }
+      },
+      trigger: nextShowTime.getTime()
+    });
+  }
 
   return 'ok';
 };

@@ -38,13 +38,13 @@ export const createNotification = async ({ content, trigger }: Args) => {
   }
 };
 
-export const removeNotification = async (cardId: string) => {
+export const removeNotifications = async (cardId: string) => {
   const notifications = await Notifications.getAllScheduledNotificationsAsync();
-  const notification = notifications.find((n) => n.content.data.cardId == cardId);
+  const targets = notifications.filter((n) => n.content.data.cardId == cardId);
 
-  if(notification) {
-    Notifications.cancelScheduledNotificationAsync(notification.identifier);
-  }
+  targets.forEach(async (notification) => {
+    await Notifications.cancelScheduledNotificationAsync(notification.identifier);
+  });
 };
 
 export const getNotifications = async () => {
