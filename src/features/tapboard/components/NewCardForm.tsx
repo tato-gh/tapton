@@ -13,24 +13,21 @@ type Props = {
 
 const NewCardForm: FC<Props> = ({ control, handleSubmit, watch, errors, onSubmit, onCancel }) => {
   const {
-    watchUseDays,
-    watchUseDates,
-    watchReborn,
     TitleControl,
     BodyControl,
     ShowPlanControl,
     ShowTimeControl,
     RebornControl,
     NotificationControl
-  } = useCardForm(watch);
+  } = useCardForm();
 
   return (
     <VStack w='100%' maxWidth='600px' p='12' space={2}>
       <TitleControl control={control} errors={errors} />
       <BodyControl control={control} errors={errors} />
-      <ShowPlanControl control={control} errors={errors} watchUseDays={watchUseDays} watchUseDates={watchUseDates} />
+      <ShowPlanControl control={control} errors={errors} />
       <ShowTimeControl control={control} />
-      <RebornControl control={control} watchReborn={watchReborn} />
+      <RebornControl control={control} />
       <NotificationControl control={control} />
 
       <HStack space={2}>
