@@ -244,7 +244,7 @@ const RebornControl: FC<FormProps> = ({control}) => {
                       }
                     }}
                     items={buildItemsSelf([10, 20, 30, 40, 50, 60, 90, 120, 180, 240, 300, 360])}
-                    value={value}
+                    value={`${value}`}
                     placeholder={{}}
                     useNativeAndroidPickerStyle={false}
                   />
