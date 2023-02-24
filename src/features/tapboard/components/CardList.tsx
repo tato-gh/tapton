@@ -25,7 +25,7 @@ const CardList: FC<Props> = ({ cards, onNew, onEdit, onDelete, onInit }) => {
       </HStack>
       {cards.length == 0 && (
         <Box flex={1} alignItems='center' mt={6}>
-          <Button onPress={onInit}>お試しカードを使う</Button>
+          <Button onPress={onInit}>サンプルを試す</Button>
         </Box>
       )}
       <FlatList

@@ -408,45 +408,11 @@ export const initCards = async () => {
 
   // 初期データ投入
   await createCard({
-    title: '健康',
-    body: 'ストレッチの時間です！',
-    daily: true,
-    useDays: false,
-    days: [],
-    useDates: false,
-    dates: [],
-    startHour: 10,
-    startMinute: 0,
-    limitHour: 19,
-    limitMinute: 0,
-    reborn: true,
-    intervalMin: 60,
-    notification: false
-  });
-
-  await createCard({
-    title: 'セルフコーチング',
-    body: '最大限努力しましたか？',
-    daily: true,
-    useDays: false,
-    days: [],
-    useDates: false,
-    dates: [],
-    startHour: 22,
-    startMinute: 0,
-    limitHour: 23,
-    limitMinute: 55,
-    reborn: false,
-    intervalMin: 10,
-    notification: true
-  });
-
-  await createCard({
-    title: '仕事',
+    title: 'ワーク',
     body: '進捗どうですか？',
     daily: false,
     useDays: true,
-    days: [1,2,3,4,5],
+    days: ['1','2','3','4','5'],
     useDates: false,
     dates: [],
     startHour: 10,
@@ -460,7 +426,7 @@ export const initCards = async () => {
 
   await createCard({
     title: '学び',
-    body: "今日最も印象に残った学びは具体的に何ですか？",
+    body: "今日最も印象に残ったことは何ですか？",
     daily: true,
     useDays: false,
     days: [],
@@ -471,7 +437,7 @@ export const initCards = async () => {
     limitHour: 23,
     limitMinute: 55,
     reborn: false,
-    intervalMin: 10,
+    intervalMin: 60,
     notification: true
   });
 
@@ -482,14 +448,14 @@ export const initCards = async () => {
     useDays: false,
     days: [],
     useDates: true,
-    dates: [5,10,15,20,25],
+    dates: ['5','10','15','20','25'],
     startHour: 20,
     startMinute: 0,
     limitHour: 23,
     limitMinute: 55,
     reborn: false,
-    intervalMin: 10,
-    notification: true
+    intervalMin: 60,
+    notification: false
   });
 
   await createCard({
@@ -499,13 +465,13 @@ export const initCards = async () => {
     useDays: false,
     days: [],
     useDates: true,
-    dates: [15],
+    dates: ['15'],
     startHour: 10,
     startMinute: 0,
     limitHour: 23,
     limitMinute: 55,
     reborn: false,
-    intervalMin: 10,
+    intervalMin: 60,
     notification: true
   });
 };
