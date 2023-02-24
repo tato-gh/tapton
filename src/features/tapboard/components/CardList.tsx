@@ -3,6 +3,7 @@ import { Box, Text, Badge, Button, Spacer, Heading, FlatList, HStack, VStack } f
 
 import type { CardFull } from '@domains/tapboard/types/card';
 import IconFlat from '@molecules/IconFlat';
+import IconBadge from '@molecules/IconFlat';
 import { daysToS, sortByNumber } from '@utils/array';
 
 type Props = {
@@ -50,6 +51,12 @@ const CardList: FC<Props> = ({ cards, onNew, onEdit, onDelete, onInit }) => {
                   )}
                   {!item.daily && item.useDates && (
                     <Badge colorScheme='coolGray' variant='subtle'>{sortByNumber(item.dates).join()}</Badge>
+                  )}
+                  {item.reborn && (
+                    <Badge colorScheme='coolGray' variant='subtle'><IconBadge theme='muted' icon='history' size={4} /></Badge>
+                  )}
+                  {item.notification && (
+                    <Badge colorScheme='coolGray' variant='subtle'><IconBadge theme='muted' icon='alarm' size={4} /></Badge>
                   )}
                 </HStack>
               </VStack>

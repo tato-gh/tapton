@@ -11,7 +11,7 @@ type Props = {
   size?: number
 };
 
-const IconButton: FC<Props> = ({ theme, icon, onPress, size = 10 }) => {
+const IconFlat: FC<Props> = ({ theme, icon, onPress, size = 10 }) => {
   return (
     <Pressable
       justifyContent='center'
@@ -29,4 +29,4 @@ const IconButton: FC<Props> = ({ theme, icon, onPress, size = 10 }) => {
   );
 };
 
-export default IconButton;
+export default IconFlat;
