@@ -24,6 +24,8 @@ type Args = {
 };
 
 export const createNotification = async ({ content, trigger }: Args) => {
+  if(Platform.OS == 'web') { return; }
+
   const status = await requestPermissionsAsync();
 
   if(status == 'granted' && trigger >= Date.now()) {
@@ -39,6 +41,8 @@ export const createNotification = async ({ content, trigger }: Args) => {
 };
 
 export const removeNotifications = async (cardId: string) => {
+  if(Platform.OS == 'web') { return; }
+
   const notifications = await Notifications.getAllScheduledNotificationsAsync();
   const targets = notifications.filter((n) => n.content.data.cardId == cardId);
 
