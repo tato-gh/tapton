@@ -24,6 +24,8 @@ const EditCardFormer: FC<Props> = ({cardId}) => {
       if(card) {
         setValue('title', card.title);
         setValue('body', card.body);
+        setValue('attachment', card.attachment);
+        setValue('attachments', [card.attachmentLabel, card.attachmentBody]);
         setValue('daily', boolToCheckValues(card.daily));
         setValue('useDays', boolToCheckValues(card.useDays));
         setValue('days', card.days);

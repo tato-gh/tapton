@@ -20,9 +20,10 @@
     "plugins": [
       [
         "expo-image-picker",
-        {
-          "photosPermission": "The app accesses your photos to let you use them with background images."
-        }
+        {"photosPermission": "The app accesses your photos to let you use them with background images."}
+      ],
+      [
+        "expo-document-picker"
       ]
     ],
     "ios": {

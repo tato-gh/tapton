@@ -14,6 +14,7 @@ const EditCardForm: FC<Props> = ({ control, handleSubmit, errors, onSubmit, onCa
   const {
     TitleControl,
     BodyControl,
+    AttachmentControl,
     ShowPlanControl,
     ShowTimeControl,
     RebornControl,
@@ -24,6 +25,7 @@ const EditCardForm: FC<Props> = ({ control, handleSubmit, errors, onSubmit, onCa
     <VStack w='100%' maxWidth='600px' p='12' space={2}>
       <TitleControl control={control} errors={errors} />
       <BodyControl control={control} errors={errors} />
+      <AttachmentControl control={control} errors={errors} />
       <ShowPlanControl control={control} errors={errors} />
       <ShowTimeControl control={control} errors={errors} />
       <RebornControl control={control} />

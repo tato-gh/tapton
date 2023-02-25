@@ -15,6 +15,7 @@ const NewCardForm: FC<Props> = ({ control, handleSubmit, watch, errors, onSubmit
   const {
     TitleControl,
     BodyControl,
+    AttachmentControl,
     ShowPlanControl,
     ShowTimeControl,
     RebornControl,
@@ -25,6 +26,7 @@ const NewCardForm: FC<Props> = ({ control, handleSubmit, watch, errors, onSubmit
     <VStack w='100%' maxWidth='600px' p='12' space={2}>
       <TitleControl control={control} errors={errors} />
       <BodyControl control={control} errors={errors} />
+      <AttachmentControl control={control} errors={errors} />
       <ShowPlanControl control={control} errors={errors} />
       <ShowTimeControl control={control} />
       <RebornControl control={control} />

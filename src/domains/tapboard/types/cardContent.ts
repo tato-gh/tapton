@@ -1,7 +1,10 @@
 export type CardContent = {
   cardId: string,
   title: string,
-  body: string
+  body: string,
+  attachment?: 'none' | 'web' | 'audio' | 'youtube',
+  attachmentLabel?: string,
+  attachmentBody?: string
 };
 
 export const isCardContent = (arg: unknown): arg is CardContent => {

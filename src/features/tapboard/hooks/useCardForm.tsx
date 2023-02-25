@@ -1,8 +1,9 @@
 import type { FC } from 'react';
 import { Controller, useWatch } from 'react-hook-form';
-import { View } from 'react-native';
-import { Input, TextArea, Text, Checkbox, Stack, HStack, VStack, FormControl } from 'native-base';
+import { View, Button, Platform } from 'react-native';
+import { Input, TextArea, Text, Checkbox, Radio, Stack, HStack, VStack, FormControl } from 'native-base';
 import RNPickerSelect from 'react-native-picker-select';
+import * as DocumentPicker from 'expo-document-picker';
 
 import HourMinuteSelect from '@molecules/HourMinuteSelect';
 import { buildItems, buildItemsSelf } from '@utils/array';
@@ -11,6 +12,7 @@ const useCardForm = () => {
   return {
     TitleControl,
     BodyControl,
+    AttachmentControl,
     ShowPlanControl,
     ShowTimeControl,
     RebornControl,
@@ -78,6 +80,92 @@ const BodyControl: FC<FormProps> = ({control, errors}) => {
       </Stack>
     </FormControl>
   );
+};
+
+const AttachmentControl: FC<FormProps> = ({control, errors}) => {
+  const watchAttachment = useWatch({control, name: 'attachment'});
+
+  return (
+    <FormControl isInvalid={errors.attachments} mb='2'>
+      <Stack space={1}>
+        <FormControl.Label>添付</FormControl.Label>
+        <FormControl.ErrorMessage>
+          {errors.attachments?.message}
+        </FormControl.ErrorMessage>
+        <Controller
+          control={control}
+          render={({field: { onChange, value }}) => (
+            <Radio.Group onChange={(val) => onChange(val)} value={value} accessibilityLabel="choose" name='attachment'>
+              <Stack
+                direction={{base: "column", md: "row"}}
+                alignItems={{ base: "flex-start", md: "center" }}
+                space={1}
+              >
+                <Radio value="none" size="md" mx={1}>なし</Radio>
+                <Radio value="web" size="md" mx={1}>Webリンク</Radio>
+                {Platform.OS != 'web' && <Radio value="audio" size="md" mx={1}>オーディオファイル</Radio>}
+                <Radio value="youtube" size="md" mx={1}>Youtubeリンク</Radio>
+              </Stack>
+            </Radio.Group>
+          )}
+          name='attachment'
+        />
+
+        <View style={{marginTop: 4}}>
+          {watchAttachment == 'web' && (
+            <Controller
+              control={control}
+              render={({field: { onChange, value }}) => (
+                <Input
+                  p={2}
+                  placeholder='URL'
+                  onChangeText={(val) => onChange(['', val])}
+                  value={value[1]}
+                  backgroundColor={errors.attachments?.message ? 'error.300' : 'white'}
+                />
+              )}
+              name='attachments'
+            />
+          )}
+
+          {watchAttachment == 'audio' && (
+            <Controller
+              control={control}
+              render={({field: { onChange, value }}) => (
+                <>
+                  <Text>{value[0]}</Text>
+                  <Button
+                    title="ファイルを指定"
+                    onPress={async () => {
+                      const { type, uri, name } = await DocumentPicker.getDocumentAsync({type: 'audio/mpeg', multiple: false});
+                      type === 'success' ? onChange([name, uri]) : alert('選択されませんでした');
+                    }}
+                  />
+                </>
+              )}
+              name='attachments'
+            />
+          )}
+
+          {watchAttachment == 'youtube' && (
+            <Controller
+              control={control}
+              render={({field: { onChange, value }}) => (
+                <Input
+                  p={2}
+                  placeholder='Youtube動画のURL、あるいは動画ID'
+                  onChangeText={(val) => onChange(['', val])}
+                  value={value[1]}
+                  backgroundColor={errors.attachment?.message ? 'error.300' : 'white'}
+                />
+              )}
+              name='attachments'
+            />
+          )}
+        </View>
+      </Stack>
+    </FormControl>
+  )
 };
 
 const ShowPlanControl: FC<FormProps> = ({control}) => {
@@ -269,7 +357,7 @@ const NotificationControl: FC<FormProps> = ({control}) => {
           <Controller
             control={control}
             render={({field: { onChange, value }}) => (
-              <Checkbox.Group onChange={(val) => onChange(val)} value={value} accessibilityLabel="choose">
+              <Checkbox.Group onChange={onChange} value={value} accessibilityLabel="choose">
                 <Checkbox size='sm' value={'true'}>有効</Checkbox>
               </Checkbox.Group>
             )}

@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form'
+import 'react-native-url-polyfill/auto';
 
 import * as yup from 'yup';
 import type { InferType } from 'yup';
@@ -8,6 +9,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 const CardFormSchema = yup.object({
   title: yup.string().required('必須項目です'),
   body: yup.string().required('必須項目です'),
+  attachment: yup.string(),
+  attachments: yup.array(),
   daily: yup.array(),
   useDays: yup.array(),
   days: yup.array(),
@@ -27,6 +30,8 @@ const useCardFormer = () => {
     defaultValues: {
       title: '',
       body: '',
+      attachment: 'none',
+      attachments: ['', ''],
       daily: ['true'],
       useDays: [],
       days: [],
@@ -42,9 +47,20 @@ const useCardFormer = () => {
   });
 
   const onSubmitBase: SubmitHandler<CardFormSchema> = (data: any) => {
+    let aBody = data.attachments[1];
+    if(data.attachment == 'youtube'){
+      try {
+        const url = new URL(aBody);
+        aBody = url.searchParams.get("v");
+      } catch {}
+    }
+
     return ({
       title: data.title,
       body: data.body,
+      attachment: data.attachment,
+      attachmentLabel: data.attachments[0],
+      attachmentBody: aBody,
       daily: !!data.daily[0],
       useDays: !!data.useDays[0],
       days: [...new Set(data.days)].sort(),

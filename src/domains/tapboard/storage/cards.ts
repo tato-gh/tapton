@@ -164,7 +164,10 @@ export const createCard = async (attrs: any) => {
   const cardContent: CardContent = {
     cardId: cardId,
     title: attrs.title,
-    body: attrs.body
+    body: attrs.body,
+    attachment: attrs.attachment,
+    attachmentLabel: attrs.attachmentLabel,
+    attachmentBody: attrs.attachmentBody
   };
 
   const cardPlan: CardPlan = {
@@ -215,7 +218,10 @@ export const updateCard = async (cardId: string, attrs: any) => {
   const cardContent: CardContent = {
     cardId: cardId,
     title: attrs.title,
-    body: attrs.body
+    body: attrs.body,
+    attachment: attrs.attachment,
+    attachmentLabel: attrs.attachmentLabel,
+    attachmentBody: attrs.attachmentBody
   };
 
   const cardPlan: CardPlan = {
