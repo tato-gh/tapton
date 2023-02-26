@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import { useRef, useState } from 'react';
-import { View } from 'react-native';
+import { View, TouchableOpacity, Dimensions } from 'react-native';
 import { Box, Heading, Text, Button } from 'native-base';
 import { A } from '@expo/html-elements';
 import { Video } from 'expo-av';
@@ -14,17 +14,23 @@ import type { QueueCard } from '../types/queueCard';
 type Props = {
   queueCard: QueueCard,
   position: Position,
-  focus: boolean
+  focus: boolean,
+  onTouch?: Function,
+  central?: boolean
 };
 
-const CheckCardView: FC<Props> = ({ queueCard, position, focus }) => {
+const maxWidth = Dimensions.get('window').width;
+const maxHeight = maxWidth / 16 * 9;
+
+const CheckCardView: FC<Props> = ({ queueCard, position, focus, onTouch, central }) => {
   const av = useRef(null);
   const [avStatus, setAvStatus] = useState<AVPlaybackStatus | null>(null);
   const [playing, setPlaying] = useState(false);
+  const width = central ? '99%' : 'auto';
 
   return (
     <View
-      style={{ position: 'absolute', top: position.top, left: position.left, zIndex: (focus ? MAX_Z_INDEX : MAX_Z_INDEX - queueCard.no), transform: [{rotate: `${position.rotate}deg`}]}}
+      style={{ position: 'absolute', top: position.top, left: position.left, width: width, zIndex: (focus ? MAX_Z_INDEX : MAX_Z_INDEX - queueCard.no), transform: [{rotate: `${position.rotate}deg`}]}}
     >
       <Box
         bg={focus ? '#FEFEFE' : '#888'}
@@ -33,14 +39,17 @@ const CheckCardView: FC<Props> = ({ queueCard, position, focus }) => {
         borderWidth={focus ? '4' : '0'}
         borderColor={focus ? 'blue.500' : ''}
         py='4'
-        px='5'
+        px='3'
+        mx='1'
       >
-        <Heading size="sm" ml="-1">
-          {queueCard.title}
-        </Heading>
-        <Text fontSize='2xl'>
-          {queueCard.body}
-        </Text>
+        <TouchableOpacity onPress={onTouch}>
+          <Heading size="sm" ml="-1">
+            {queueCard.title}
+          </Heading>
+          <Text fontSize='2xl'>
+            {queueCard.body}
+          </Text>
+        </TouchableOpacity>
 
         {queueCard.attachment == 'web' && (
           <Text fontSize='xl' color='blue.500'>
@@ -76,8 +85,8 @@ const CheckCardView: FC<Props> = ({ queueCard, position, focus }) => {
           <View>
             <YoutubePlayer
               ref={av}
-              height={135}
-              width={240}
+              height={central ? maxHeight : 135}
+              width={central ? '100%' : 240}
               play={playing}
               videoId={queueCard.attachmentBody}
               onChangeState={state => state == "ended" ? setPlaying(false) : ""}

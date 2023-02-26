@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Dimensions } from 'react-native';
 
 import { getPosition } from '../utils/position';
@@ -22,11 +22,13 @@ const maxHeight = Dimensions.get('window').height - OPE_BOTTOM_POSITION - 0.85 *
 const maxWidth = Dimensions.get('window').width - CARD_WIDTH;
 
 const CheckCardLayout: FC<Props> = ({ queueCard, focus, onPress, onPressSkip }) => {
-  const position = useMemo(() => getPosition(maxHeight, maxWidth), []);
+  const [central, setCentral] = useState(false);
+  const position = useMemo(() => getPosition(maxHeight, maxWidth, central), [central]);
+  const onTouch = () => { setCentral(true) };
 
   return (
     <>
-      <CheckCardView queueCard={queueCard} position={position} focus={focus} />
+      <CheckCardView queueCard={queueCard} position={position} focus={focus} onTouch={onTouch} central={central} />
 
       {focus &&
         <CheckCardForm onPress={onPress} onPressSkip={onPressSkip} />
