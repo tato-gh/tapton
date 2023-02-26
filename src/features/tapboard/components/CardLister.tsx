@@ -50,7 +50,7 @@ const CardLister: FC = () => {
     })();
   }, []);
 
-  if(! cards) { return <ActivityIndicator size='large' style={{margin: 20}} />; }
+  if(!cards) { return <ActivityIndicator size='large' style={{margin: 20}} />; }
 
   return <CardList
     cards={cards}

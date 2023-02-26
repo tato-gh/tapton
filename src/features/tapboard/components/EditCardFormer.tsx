@@ -1,7 +1,7 @@
 import type { FC } from 'react';
-import { useRef, useLayoutEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { ScrollView } from 'react-native';
+import { ScrollView, ActivityIndicator } from 'react-native';
 import { UUID } from 'uuidjs';
 
 import useCardFormer from '../hooks/useCardFormer';
@@ -17,8 +17,9 @@ const EditCardFormer: FC<Props> = ({cardId}) => {
   const { control, handleSubmit, formState: { errors }, setValue, onSubmitBase } = useCardFormer();
   const navigation = useNavigation();
   const ref = useRef(null);
+  const [loaded, setLoaded] = useState(false);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     (async () => {
       const card = await getCardFullLoaded(cardId);
       if(card) {
@@ -37,6 +38,7 @@ const EditCardFormer: FC<Props> = ({cardId}) => {
         setValue('intervalMin', card.intervalMin);
         setValue('notification', boolToCheckValues(card.notification));
       }
+      setLoaded(true);
     })();
   }, [cardId])
 
@@ -53,6 +55,8 @@ const EditCardFormer: FC<Props> = ({cardId}) => {
     ref.current?.scrollTo({ y: 0 });
     navigation.navigate('Cards');
   };
+
+  if(!loaded) { return <ActivityIndicator size='large' style={{margin: 20}} />; }
 
   return (
     <ScrollView ref={ref}>
