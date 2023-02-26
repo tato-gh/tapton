@@ -51,7 +51,8 @@ const useCardFormer = () => {
     if(data.attachment == 'youtube'){
       try {
         const url = new URL(aBody);
-        aBody = url.searchParams.get("v");
+        console.log(url);
+        aBody = url.searchParams.get("v") || url.pathname.slice(1);
       } catch {}
     }
 
