@@ -5,6 +5,10 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "notification": {
+      "color": "#fafafa",
+      "icon": "./assets/notification-icon.png"
+    },
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -28,7 +32,8 @@
       [
         "expo-notifications",
         {
-           "icon": "./assets/notification-icon.png"
+          "icon": "./assets/notification-icon.png",
+          "color": "#fafafa"
         }
       ]
     ],
