@@ -15,7 +15,7 @@ const Home: FC = () => {
       <TapboardBackgroundImager>
         <TapboardCheckListQueue />
         <View style={styles.btnMenuCards}>
-          <IconButton theme='muted' icon='notes' label='' onPress={() => { navigation.navigate('Cards', {}) }} />
+          <IconButton theme='muted' icon='notes' label='' onPress={() => { navigation.replace('Cards', {}) }} />
         </View>
       </TapboardBackgroundImager>
     </View>

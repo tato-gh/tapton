@@ -48,12 +48,13 @@ const EditCardFormer: FC<Props> = ({cardId}) => {
     const attrs = onSubmitBase(data);
     await updateCard(cardId, attrs);
     ref.current?.scrollTo({ y: 0 });
-    navigation.navigate('Cards', {refreshKey: UUID.generate()})
+    navigation.goBack();
+    navigation.replace('Cards', {refreshKey: UUID.generate()});
   };
 
   const onCancel = () => {
     ref.current?.scrollTo({ y: 0 });
-    navigation.navigate('Cards');
+    navigation.goBack();
   };
 
   if(!loaded) { return <ActivityIndicator size='large' style={{margin: 20}} />; }

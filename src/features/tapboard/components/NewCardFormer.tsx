@@ -18,13 +18,14 @@ const NewCardFormer: FC = () => {
     await createCard(attrs);
     reset();
     ref.current?.scrollTo({ y: 0 })
-    navigation.navigate('Cards', {refreshKey: UUID.generate()})
+    navigation.goBack();
+    navigation.replace('Cards', {refreshKey: UUID.generate()});
   };
 
   const onCancel = () => {
     reset();
     ref.current?.scrollTo({ y: 0 })
-    navigation.navigate('Cards', {})
+    navigation.goBack();
   };
 
   return (

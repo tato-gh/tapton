@@ -12,7 +12,7 @@ const HeaderLeft: FC<Props> = ({ backTo = null, options = {} }) => {
   const navigation = useNavigation();
 
   const onPress = () => {
-    backTo ? navigation.navigate(backTo, options) : navigation.goBack();
+    backTo ? navigation.replace(backTo, options) : navigation.goBack();
   };
 
   return (

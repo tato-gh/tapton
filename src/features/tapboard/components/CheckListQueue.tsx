@@ -17,7 +17,7 @@ const CheckListQueue: FC = () => {
 
   const handleAppStateChange = (nextAppState: string) => {
     if(nextAppState == 'active') {
-      navigation.navigate('Home', {refreshKey: UUID.generate()});
+      navigation.replace('Home', {refreshKey: UUID.generate()});
     }
   };
 
@@ -72,7 +72,7 @@ const CheckListQueue: FC = () => {
   }, []);
 
   useFocusEffect(
-    // NOTE: useEffect()ではnavigate()でアンマウントが実行されない
+    // NOTE: useEffect()ではnavigate()でアンマウントが実行されない（slackが残るため）
     useCallback(() => {
       const listener = AppState.addEventListener("change", handleAppStateChange);
 

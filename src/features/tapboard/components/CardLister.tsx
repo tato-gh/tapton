@@ -30,14 +30,14 @@ const CardLister: FC = () => {
   const onDelete = (cardId: string) => {
     showDeleteConfirm(async () => {
       await deleteCard(cardId);
-      navigation.navigate('Cards', {refreshKey: UUID.generate()})
+      navigation.replace('Cards', {refreshKey: UUID.generate()})
     });
   };
 
   const onInit = () => {
     (async () => {
       await initCards();
-      navigation.navigate('Cards', {refreshKey: UUID.generate()})
+      navigation.replace('Cards', {refreshKey: UUID.generate()})
     })();
   };
 
