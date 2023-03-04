@@ -266,7 +266,7 @@ export const updateCard = async (cardId: string, attrs: any) => {
   if(currentCardPlan){
     await AsyncStorage.removeItem(planKey);
   }
-  await AsyncStorage.setItem(planKey, JSON.stringify(Object.assign(cardPlan, cardPlan)));
+  await AsyncStorage.setItem(planKey, JSON.stringify(Object.assign(currentCardPlan, cardPlan)));
 
   // update Notification
   await removeNotifications(cardId);
