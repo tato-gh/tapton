@@ -24,21 +24,29 @@ const CheckListQueue: FC = () => {
   useLayoutEffect(() => {
     (async () => {
       const cards = await getWaitingCards();
-      const numCards = cards.length;
+      const notifiedCards = cards.filter(c => c.notification);
+      const nonNotifiedCards = cards.filter(c => !c.notification);
       const cardsReborned = await getCardsReborned();
+      const numCards = cards.length;
+      const numNotifiedCards = notifiedCards.length;
+      const numNonNotifiedCards = nonNotifiedCards.length;
       const numReborns = cardsReborned.length;
       const cardsReborn = await getCardsWillReborn();
 
       setQueue(() => {
-        const queueReborns = randomPick(cardsReborned, numReborns).map((card, ind) => {
+        const queueReborns = randomPick(cardsReborned, cardsReborned.length).map((card, ind) => {
           return Object.assign(card, {no: ind + 1, reborned: true});
         });
 
-        const queueCards = randomPick(cards, numCards).map((card, ind) => {
+        const queueNotifiedCards = randomPick(notifiedCards, numNotifiedCards).map((card, ind) => {
           return Object.assign(card, {no: ind + 1 + numReborns, reborned: false});
         });
 
-        return [...queueReborns, ...queueCards];
+        const queueNonNotifiedCards = randomPick(nonNotifiedCards, numNonNotifiedCards).map((card, ind) => {
+          return Object.assign(card, {no: ind + 1 + numReborns + numNotifiedCards, reborned: false});
+        });
+
+        return [...queueNotifiedCards, ...queueReborns, ...queueNonNotifiedCards];
       })
 
       if(cardsReborn.length != 0){
