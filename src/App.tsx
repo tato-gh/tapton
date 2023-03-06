@@ -1,13 +1,13 @@
-import { registerRootComponent } from "expo";
 import type { FC } from 'react';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { registerRootComponent } from 'expo';
 import { StatusBar } from 'expo-status-bar';
 import { NativeBaseProvider } from 'native-base';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { enableFreeze } from 'react-native-screens';
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
-import { enableFreeze } from "react-native-screens";
 
 enableFreeze(true);
 
@@ -18,14 +18,14 @@ const App: FC = () => {
   if (!isLoadingComplete) {
     return null;
   } else {
-    return(
+    return (
       <SafeAreaProvider>
         <NativeBaseProvider>
           <Navigation colorScheme={colorScheme} />
           <StatusBar />
         </NativeBaseProvider>
       </SafeAreaProvider>
-    )
+    );
   }
 };
 

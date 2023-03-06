@@ -1,22 +1,26 @@
 export type Position = {
-  top: number,
-  left: number,
-  rotate: number
+  top: number;
+  left: number;
+  rotate: number;
 };
 
-export const getPosition = (maxHeight: number, maxWidth: number, central: boolean): Position => {
-  if(central) {
+export const getPosition = (
+  maxHeight: number,
+  maxWidth: number,
+  central: boolean
+): Position => {
+  if (central) {
     return {
       top: maxHeight / 3,
       left: 0,
-      rotate: 0
-    }
+      rotate: 0,
+    };
   } else {
     return {
       top: randTop(maxHeight),
       left: randTop(maxWidth),
-      rotate: randRotate()
-    }
+      rotate: randRotate(),
+    };
   }
 };
 

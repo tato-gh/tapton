@@ -1,21 +1,22 @@
+import { createNotification } from '@domains/device/notifications/local';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { getToday, addMinute, getStartOfDate } from '@utils/date';
 import type { CardFull } from './../types/card';
 import type { CardReborn } from './../types/cardReborn';
-import { getToday, addMinute, getStartOfDate } from '@utils/date';
-import { createNotification } from '@domains/device/notifications/local';
 
 export const getCardReborns = async () => {
   const jsonValue = await AsyncStorage.getItem('@cardReborns');
-  return (jsonValue) ? JSON.parse(jsonValue) : [];
+
+  return jsonValue ? JSON.parse(jsonValue) : [];
 };
 
 export const getWillCardReborns = async () => {
   const reborns: CardReborn[] = await getCardReborns();
-  const cTime = (new Date().getTime());
+  const cTime = new Date().getTime();
 
   return reborns.filter((reborn) => {
-    const showTime = (new Date(reborn.nextReshowTime)).getTime();
+    const showTime = new Date(reborn.nextReshowTime).getTime();
 
     return cTime < showTime;
   });
@@ -23,11 +24,11 @@ export const getWillCardReborns = async () => {
 
 export const getRebornedCardReborns = async () => {
   const reborns: CardReborn[] = await getCardReborns();
-  const cTime = (new Date().getTime());
+  const cTime = new Date().getTime();
 
   return reborns.filter((reborn) => {
-    const showTime = (new Date(reborn.nextReshowTime)).getTime();
-    const limitTime = (new Date(reborn.limitShowTime)).getTime();
+    const showTime = new Date(reborn.nextReshowTime).getTime();
+    const limitTime = new Date(reborn.limitShowTime).getTime();
 
     return cTime >= showTime && cTime <= limitTime;
   });
@@ -36,16 +37,15 @@ export const getRebornedCardReborns = async () => {
 export const getDictByCardId = async () => {
   const cardReborns: CardReborn[] = await getCardReborns();
 
-  return cardReborns.reduce(
-    (acc, reborn) => {
-      return Object.assign(acc, { [reborn.cardId]: reborn });
-    },
-    {}
-  );
+  return cardReborns.reduce((acc, reborn) => {
+    return Object.assign(acc, { [reborn.cardId]: reborn });
+  }, {});
 };
 
 export const upsertCardReborns = async (card: CardFull) => {
-  if(!card.reborn || !card.intervalMin) { return null; }
+  if (!card.reborn || !card.intervalMin) {
+    return null;
+  }
 
   const today = getToday();
   const nextShowTime = addMinute(today, card.intervalMin);
@@ -57,7 +57,7 @@ export const upsertCardReborns = async (card: CardFull) => {
     card.limitMinute
   );
 
-  if(nextShowTime.getTime() > limitShowTime.getTime()) {
+  if (nextShowTime.getTime() > limitShowTime.getTime()) {
     // 不要なものの削除は、getWaitingCardReborns()で行われる
     return;
   }
@@ -65,25 +65,27 @@ export const upsertCardReborns = async (card: CardFull) => {
   const attrs: CardReborn = {
     cardId: card.id,
     nextReshowTime: nextShowTime.toString(),
-    limitShowTime: limitShowTime.toString()
+    limitShowTime: limitShowTime.toString(),
   };
 
   let reborns: CardReborn[] = await getCardReborns();
   reborns = reborns.reduce(
-    (acc, reborn) => { return (reborn.cardId == card.id ? acc : [reborn, ...acc]) },
+    (acc, reborn) => {
+      return reborn.cardId == card.id ? acc : [reborn, ...acc];
+    },
     [attrs]
   );
   await AsyncStorage.setItem('@cardReborns', JSON.stringify(reborns));
 
   // 通知設定
-  if(card.notification) {
+  if (card.notification) {
     await createNotification({
       content: {
         title: card.title,
         body: card.body,
-        data: { cardId: card.id }
+        data: { cardId: card.id },
       },
-      trigger: nextShowTime.getTime()
+      trigger: nextShowTime.getTime(),
     });
   }
 
@@ -93,7 +95,7 @@ export const upsertCardReborns = async (card: CardFull) => {
 export const removeCardRebornByCardId = async (cardId: string) => {
   let reborns: CardReborn[] = await getCardReborns();
 
-  reborns = reborns.filter(reborn => reborn.cardId != cardId);
+  reborns = reborns.filter((reborn) => reborn.cardId != cardId);
   await AsyncStorage.setItem('@cardReborns', JSON.stringify(reborns));
 
   return 'ok';

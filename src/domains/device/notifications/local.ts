@@ -24,15 +24,17 @@ type Args = {
 };
 
 export const createNotification = async ({ content, trigger }: Args) => {
-  if(Platform.OS == 'web') { return; }
+  if (Platform.OS == 'web') {
+    return;
+  }
 
   const status = await requestPermissionsAsync();
 
-  if(status == 'granted' && trigger >= Date.now()) {
-    if(Platform.OS == 'android') {
+  if (status == 'granted' && trigger >= Date.now()) {
+    if (Platform.OS == 'android') {
       await Notifications.setNotificationChannelAsync('default', {
         name: 'default',
-        importance: Notifications.AndroidImportance.MAX
+        importance: Notifications.AndroidImportance.MAX,
       });
     }
 
@@ -41,13 +43,17 @@ export const createNotification = async ({ content, trigger }: Args) => {
 };
 
 export const removeNotifications = async (cardId: string) => {
-  if(Platform.OS == 'web') { return; }
+  if (Platform.OS == 'web') {
+    return;
+  }
 
   const notifications = await Notifications.getAllScheduledNotificationsAsync();
   const targets = notifications.filter((n) => n.content.data.cardId == cardId);
 
   targets.forEach(async (notification) => {
-    await Notifications.cancelScheduledNotificationAsync(notification.identifier);
+    await Notifications.cancelScheduledNotificationAsync(
+      notification.identifier
+    );
   });
 };
 

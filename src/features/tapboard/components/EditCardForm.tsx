@@ -3,14 +3,20 @@ import { Button, HStack, VStack } from 'native-base';
 import useCardForm from '../hooks/useCardForm';
 
 type Props = {
-  control: any,
-  handleSubmit: Function,
-  errors: any,
-  onSubmit: Function,
-  onCancel: Function
-}
+  control: any;
+  handleSubmit: Function;
+  errors: any;
+  onSubmit: Function;
+  onCancel: Function;
+};
 
-const EditCardForm: FC<Props> = ({ control, handleSubmit, errors, onSubmit, onCancel }) => {
+const EditCardForm: FC<Props> = ({
+  control,
+  handleSubmit,
+  errors,
+  onSubmit,
+  onCancel,
+}) => {
   const {
     TitleControl,
     BodyControl,
@@ -18,11 +24,11 @@ const EditCardForm: FC<Props> = ({ control, handleSubmit, errors, onSubmit, onCa
     ShowPlanControl,
     ShowTimeControl,
     RebornControl,
-    NotificationControl
+    NotificationControl,
   } = useCardForm();
 
   return (
-    <VStack w='100%' maxWidth='600px' p='12' space={2}>
+    <VStack w="100%" maxWidth="600px" p="12" space={2}>
       <TitleControl control={control} errors={errors} />
       <BodyControl control={control} errors={errors} />
       <AttachmentControl control={control} errors={errors} />
@@ -32,10 +38,10 @@ const EditCardForm: FC<Props> = ({ control, handleSubmit, errors, onSubmit, onCa
       <NotificationControl control={control} />
 
       <HStack space={2}>
-        <Button onPress={onCancel} colorScheme='secondary'>
+        <Button onPress={onCancel} colorScheme="secondary">
           キャンセル
         </Button>
-        <Button onPress={handleSubmit(onSubmit)} colorScheme='primary'>
+        <Button onPress={handleSubmit(onSubmit)} colorScheme="primary">
           更新
         </Button>
       </HStack>

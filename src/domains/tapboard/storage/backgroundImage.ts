@@ -6,5 +6,6 @@ export const storeImage = async (base64: string) => {
 
 export const getImage = async () => {
   const uri = await AsyncStorage.getItem('@backgroundImage');
+
   return uri;
 };

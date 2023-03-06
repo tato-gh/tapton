@@ -4,7 +4,7 @@ import { View, StyleSheet } from 'react-native';
 import TapboardEditCardFormer from '@features/tapboard/components/EditCardFormer';
 
 type Props = {
-  cardId: string
+  cardId: string;
 };
 
 const EditCard: FC<Props> = ({ cardId }) => {
@@ -20,6 +20,6 @@ export default EditCard;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    overflow: 'hidden'
-  }
+    overflow: 'hidden',
+  },
 });

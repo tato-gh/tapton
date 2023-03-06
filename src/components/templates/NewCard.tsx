@@ -16,6 +16,6 @@ export default NewCard;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    overflow: 'hidden'
-  }
+    overflow: 'hidden',
+  },
 });

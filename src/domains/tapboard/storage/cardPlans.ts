@@ -7,5 +7,6 @@ export const getStoreKey = (cardId: string) => {
 export const getCardPlan = async (cardId: string) => {
   const key = getStoreKey(cardId);
   const jsonValue = await AsyncStorage.getItem(key);
-  return (jsonValue) ? JSON.parse(jsonValue) : null;
+
+  return jsonValue ? JSON.parse(jsonValue) : null;
 };

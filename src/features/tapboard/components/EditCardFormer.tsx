@@ -1,20 +1,25 @@
 import type { FC } from 'react';
 import { useRef, useState, useEffect } from 'react';
+import { getCardFullLoaded , updateCard } from '@domains/tapboard/storage/cards';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView, ActivityIndicator } from 'react-native';
 import { UUID } from 'uuidjs';
 
 import useCardFormer from '../hooks/useCardFormer';
-import { getCardFullLoaded } from '@domains/tapboard/storage/cards';
 import EditCardForm from './EditCardForm';
-import { updateCard } from '@domains/tapboard/storage/cards';
 
 type Props = {
-  cardId: string
+  cardId: string;
 };
 
-const EditCardFormer: FC<Props> = ({cardId}) => {
-  const { control, handleSubmit, formState: { errors }, setValue, onSubmitBase } = useCardFormer();
+const EditCardFormer: FC<Props> = ({ cardId }) => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    onSubmitBase,
+  } = useCardFormer();
   const navigation = useNavigation();
   const ref = useRef(null);
   const [loaded, setLoaded] = useState(false);
@@ -22,7 +27,7 @@ const EditCardFormer: FC<Props> = ({cardId}) => {
   useEffect(() => {
     (async () => {
       const card = await getCardFullLoaded(cardId);
-      if(card) {
+      if (card) {
         setValue('title', card.title);
         setValue('body', card.body);
         setValue('attachment', card.attachment);
@@ -40,16 +45,16 @@ const EditCardFormer: FC<Props> = ({cardId}) => {
       }
       setLoaded(true);
     })();
-  }, [cardId])
+  }, [cardId]);
 
-  const boolToCheckValues = (tf: boolean | undefined) => ( tf ? ['true'] : [] );
+  const boolToCheckValues = (tf: boolean | undefined) => (tf ? ['true'] : []);
 
   const onSubmit: typeof onSubmitBase = async (data: any) => {
     const attrs = onSubmitBase(data);
     await updateCard(cardId, attrs);
     ref.current?.scrollTo({ y: 0 });
     navigation.goBack();
-    navigation.replace('Cards', {refreshKey: UUID.generate()});
+    navigation.replace('Cards', { refreshKey: UUID.generate() });
   };
 
   const onCancel = () => {
@@ -57,7 +62,9 @@ const EditCardFormer: FC<Props> = ({cardId}) => {
     navigation.goBack();
   };
 
-  if(!loaded) { return <ActivityIndicator size='large' style={{margin: 20}} />; }
+  if (!loaded) {
+    return <ActivityIndicator size="large" style={{ margin: 20 }} />;
+  }
 
   return (
     <ScrollView ref={ref}>
@@ -69,7 +76,7 @@ const EditCardFormer: FC<Props> = ({cardId}) => {
         onCancel={onCancel}
       />
     </ScrollView>
-  )
+  );
 };
 
 export default EditCardFormer;

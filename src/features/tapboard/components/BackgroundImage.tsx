@@ -1,21 +1,26 @@
 import type { FC, PropsWithChildren } from 'react';
+import { FLOAT_OP_Z_INDEX } from '@constants/layout';
 import { View, ImageBackground, StyleSheet } from 'react-native';
 
 import IconButton from '@molecules/IconButton';
-import { FLOAT_OP_Z_INDEX } from '@constants/layout';
 import type { ImageSource } from '../types/imageSource';
 
 type Props = PropsWithChildren & {
-  image: ImageSource,
-  pickImageAsync: Function
+  image: ImageSource;
+  pickImageAsync: Function;
 };
 
 const BackgroundImage: FC<Props> = ({ image, pickImageAsync, children }) => {
   return (
     <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-      { children }
+      {children}
       <View style={styles.btnPickImage}>
-        <IconButton theme='muted' icon='image' label='' onPress={pickImageAsync} />
+        <IconButton
+          theme="muted"
+          icon="image"
+          label=""
+          onPress={pickImageAsync}
+        />
       </View>
     </ImageBackground>
   );
@@ -30,7 +35,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 10,
     left: 10,
-    zIndex: FLOAT_OP_Z_INDEX
+    zIndex: FLOAT_OP_Z_INDEX,
   },
 });
 

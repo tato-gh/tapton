@@ -1,25 +1,28 @@
 import type { FC, PropsWithChildren } from 'react';
 import { useState, useLayoutEffect } from 'react';
+import { getLibraryImage } from '@domains/device/images/mediaLibrary';
+import {
+  storeImage,
+  getImage,
+} from '@domains/tapboard/storage/backgroundImage';
 import { useNavigation } from '@react-navigation/native';
 
-import BackgroundImage from './BackgroundImage';
-import { storeImage, getImage } from '@domains/tapboard/storage/backgroundImage';
-import { getLibraryImage } from '@domains/device/images/mediaLibrary';
 import type { ImageSource } from '../types/imageSource';
+import BackgroundImage from './BackgroundImage';
 
 const BackgroundImager: FC<PropsWithChildren> = ({ children }) => {
-  const placeholderImageSource = require("@assets/sample_background.jpg");
+  const placeholderImageSource = require('@assets/sample_background.jpg');
   const [selectedImage, setSelectedImage] = useState<ImageSource | null>(null);
   const navigation = useNavigation();
 
   useLayoutEffect(() => {
     (async () => {
       const base64 = await getImage();
-      if(base64) {
-        setSelectedImage({uri: `data:image;base64,${base64}`});
+      if (base64) {
+        setSelectedImage({ uri: `data:image;base64,${base64}` });
       }
     })();
-  }, [])
+  }, []);
 
   const pickImageAsync = async () => {
     const base64 = await getLibraryImage();
@@ -37,8 +40,11 @@ const BackgroundImager: FC<PropsWithChildren> = ({ children }) => {
   };
 
   return (
-    <BackgroundImage image={selectedImage || placeholderImageSource} pickImageAsync={pickImageAsync}>
-      { children }
+    <BackgroundImage
+      image={selectedImage || placeholderImageSource}
+      pickImageAsync={pickImageAsync}
+    >
+      {children}
     </BackgroundImage>
   );
 };

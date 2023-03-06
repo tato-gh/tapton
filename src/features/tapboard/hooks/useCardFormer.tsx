@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import type { SubmitHandler } from 'react-hook-form'
+import type { SubmitHandler } from 'react-hook-form';
 import 'react-native-url-polyfill/auto';
 
 import * as yup from 'yup';
@@ -20,43 +20,44 @@ const CardFormSchema = yup.object({
   limitHM: yup.array(),
   reborn: yup.array(),
   intervalMin: yup.number(),
-  notification: yup.array()
+  notification: yup.array(),
 });
 
 type CardFormSchema = InferType<typeof CardFormSchema>;
 
 const useCardFormer = () => {
-  const { control, handleSubmit, watch, reset, formState, setValue } = useForm<CardFormSchema>({
-    defaultValues: {
-      title: '',
-      body: '',
-      attachment: 'none',
-      attachments: ['', ''],
-      daily: ['true'],
-      useDays: [],
-      days: [],
-      useDates: [],
-      dates: [],
-      startHM: [0, 0],
-      limitHM: [23, 55],
-      reborn: [],
-      intervalMin: 60,
-      notification: []
-    },
-    resolver: yupResolver(CardFormSchema)
-  });
+  const { control, handleSubmit, watch, reset, formState, setValue } =
+    useForm<CardFormSchema>({
+      defaultValues: {
+        title: '',
+        body: '',
+        attachment: 'none',
+        attachments: ['', ''],
+        daily: ['true'],
+        useDays: [],
+        days: [],
+        useDates: [],
+        dates: [],
+        startHM: [0, 0],
+        limitHM: [23, 55],
+        reborn: [],
+        intervalMin: 60,
+        notification: [],
+      },
+      resolver: yupResolver(CardFormSchema),
+    });
 
   const onSubmitBase: SubmitHandler<CardFormSchema> = (data: any) => {
     let aBody = data.attachments[1];
-    if(data.attachment == 'youtube'){
+    if (data.attachment == 'youtube') {
       try {
         const url = new URL(aBody);
         console.log(url);
-        aBody = url.searchParams.get("v") || url.pathname.slice(1);
+        aBody = url.searchParams.get('v') || url.pathname.slice(1);
       } catch {}
     }
 
-    return ({
+    return {
       title: data.title,
       body: data.body,
       attachment: data.attachment,
@@ -73,11 +74,19 @@ const useCardFormer = () => {
       limitMinute: data.limitHM[1],
       reborn: !!data.reborn[0],
       intervalMin: data.intervalMin,
-      notification: !!data.notification[0]
-    });
+      notification: !!data.notification[0],
+    };
   };
 
-  return { control, handleSubmit, watch, reset, formState, setValue, onSubmitBase };
+  return {
+    control,
+    handleSubmit,
+    watch,
+    reset,
+    formState,
+    setValue,
+    onSubmitBase,
+  };
 };
 
 export default useCardFormer;

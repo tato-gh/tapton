@@ -1,9 +1,9 @@
 type Colors = {
-  primary: { [key: string]: string },
-  secondary: { [key: string]: string },
-  tertiary: { [key: string]: string },
-  muted: { [key: string]: string }
-  warning: { [key: string]: string },
+  primary: Record<string, string>;
+  secondary: Record<string, string>;
+  tertiary: Record<string, string>;
+  muted: Record<string, string>;
+  warning: Record<string, string>;
 };
 
 export type ThemeName = keyof Colors;
@@ -43,7 +43,7 @@ const colors: Colors = {
     icon: 'warning.500',
     iconBackground: 'warning.50',
     iconLabel: 'warning.500',
-  }
+  },
 };
 
 export default colors;

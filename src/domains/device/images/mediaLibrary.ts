@@ -2,12 +2,14 @@ import * as ImagePicker from 'expo-image-picker';
 
 export const getLibraryImage = async () => {
   const status = await requestPermissionsAsync();
-  if(status != 'granted') { return null; }
+  if (status != 'granted') {
+    return null;
+  }
 
   const result = await ImagePicker.launchImageLibraryAsync({
     allowsEditing: true,
     quality: 0.4,
-    base64: true
+    base64: true,
   });
 
   if (!result.canceled) {
@@ -18,7 +20,8 @@ export const getLibraryImage = async () => {
 };
 
 const requestPermissionsAsync = async () => {
-  const { status: existingStatus } = await ImagePicker.getMediaLibraryPermissionsAsync();
+  const { status: existingStatus } =
+    await ImagePicker.getMediaLibraryPermissionsAsync();
   let finalStatus = existingStatus;
 
   if (existingStatus !== 'granted') {
