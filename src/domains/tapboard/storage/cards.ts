@@ -217,13 +217,14 @@ export const createCard = async (attrs: any) => {
   // update @cards
   let cards: Card[] = await getCards();
   cards.push(card);
-  await AsyncStorage.setItem('@cards', JSON.stringify(cards));
 
-  // new @cardContent
-  await AsyncStorage.setItem(contentKey, JSON.stringify(cardContent));
-
-  // new @cardPlan
-  await AsyncStorage.setItem(planKey, JSON.stringify(cardPlan));
+  Promise.all([
+    AsyncStorage.setItem('@cards', JSON.stringify(cards)),
+    // new @cardContent
+    AsyncStorage.setItem(contentKey, JSON.stringify(cardContent)),
+    // new @cardPlan
+    AsyncStorage.setItem(planKey, JSON.stringify(cardPlan))
+  ]);
 
   // new Notification
   if(cardPlan.notification) {
@@ -342,11 +343,14 @@ export const deleteCard = async (cardId: string) => {
 
   let cards: Card[] = await getCards();
   cards = cards.filter(h => h.id != cardId);
-  await AsyncStorage.setItem('@cards', JSON.stringify(cards));
-  await removeCardRebornByCardId(cardId);
-  await AsyncStorage.removeItem(contentKey);
-  await AsyncStorage.removeItem(planKey);
-  await removeNotifications(cardId);
+
+  Promise.all([
+    AsyncStorage.setItem('@cards', JSON.stringify(cards)),
+    removeCardRebornByCardId(cardId),
+    AsyncStorage.removeItem(contentKey),
+    AsyncStorage.removeItem(planKey),
+    removeNotifications(cardId)
+  ]);
 };
 
 const planNextShowTime = (plan: CardPlan, includeToday = true): Date | null => {
@@ -423,16 +427,16 @@ export const initCards = async () => {
   const keys = await AsyncStorage.getAllKeys();
 
   // 全削除
-  keys
-  .filter((key) => {
-    return key.match(/cards/) ||
-      key.match(/cardContent/) ||
-      key.match(/cardPlan/) ||
-      key.match(/cardReborns/)
-  })
-  .forEach(async (key) => {
-    await AsyncStorage.removeItem(key);
-  });
+  await Promise.all(
+    keys
+    .filter((key) => {
+      return key.match(/cards/) ||
+        key.match(/cardContent/) ||
+        key.match(/cardPlan/) ||
+        key.match(/cardReborns/)
+    })
+    .map(key => AsyncStorage.removeItem(key))
+  );
 
   // 初期データ投入
   await createCard({
