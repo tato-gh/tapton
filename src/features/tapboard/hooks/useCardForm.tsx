@@ -327,12 +327,13 @@ const RebornControl: FC<FormProps> = ({control}) => {
                 render={({field: { onChange, value }}) => (
                   <RNPickerSelect
                     onValueChange={(newValue) => {
-                      if(newValue != value) {
-                        onChange(value);
+                      const nValue = parseInt(newValue);
+                      if(nValue != value) {
+                        onChange(nValue);
                       }
                     }}
                     items={buildItemsSelf([10, 20, 30, 40, 50, 60, 90, 120, 180, 240, 300, 360])}
-                    value={`${value}`}
+                    value={value}
                     placeholder={{}}
                     useNativeAndroidPickerStyle={false}
                   />
