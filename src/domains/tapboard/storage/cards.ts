@@ -85,15 +85,18 @@ export const decorateCardsFullLoaded = async (cards: Card[]) => {
 // まず、前日までの指定カードは新しい表示日時に更新する
 // そのあとで、現在表示対象にあたるカードをみつける
 export const getWaitingCards = async () => {
-  await updateCardsWatingUntilToday();
+  await updateOldCardsWating();
   const cards = await getWaitingCardsOnTime();
+
   return decorateCardsFullLoaded(cards);
 };
 
-const updateCardsWatingUntilToday = async () => {
+const updateOldCardsWating = async () => {
   let cards: Card[] = await getCards();
+  const onTime = new Date();
+  const endOfYesterday = getEndOfDate(getYesterday());
 
-  const targets = filterNextShowTimePast(cards, getEndOfDate(getYesterday()));
+  const targets = filterNextShowTimePast(cards, onTime);
   const [contentKeys, planKeys] = targets.reduce(
     (keys: Array<Array<string>>, card) => {
       const [cKeys, pKeys] = keys;
@@ -108,11 +111,30 @@ const updateCardsWatingUntilToday = async () => {
 
   cards = cards.map((card) => {
     const plan = dictPlan[card.id];
-    if(plan) {
+
+    // ガード すでに未来に次回表示日時が設定されているものは処理不要
+    if(!plan) { return card; }
+
+    const limitShowTimeToday = new Date(
+      onTime.getFullYear(),
+      onTime.getMonth(),
+      onTime.getDate(),
+      plan.limitHour,
+      plan.limitMinute
+    );
+
+    if(onTime.getTime() > limitShowTimeToday.getTime()) {
+      // 本日現在を仮定して、既に表示終了時刻が過ぎているなら、翌日以降になる
+      const nextShowTime = planNextShowTime(plan, false);
+      const nextShowTimeS = nextShowTime ? nextShowTime.toString() : '';
+      Object.assign(card, {nextShowTime: nextShowTimeS});
+    } else if(endOfYesterday.getTime() >= (new Date(card.nextShowTime)).getTime()) {
+      // 本日も表示する可能性があるもの。本日以降になる
       const nextShowTime = planNextShowTime(plan, true);
       const nextShowTimeS = nextShowTime ? nextShowTime.toString() : '';
       Object.assign(card, {nextShowTime: nextShowTimeS});
     }
+
     return card;
   });
   await AsyncStorage.setItem('@cards', JSON.stringify(cards));
