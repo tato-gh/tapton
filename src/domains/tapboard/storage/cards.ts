@@ -158,6 +158,8 @@ const updateOldCardsWating = async () => {
       // 本日現在を仮定して、既に表示終了時刻が過ぎているなら、翌日以降になる
       const nextShowTime = planNextShowTime(plan, false);
       const nextShowTimeS = nextShowTime ? nextShowTime.toString() : '';
+
+      resetNotification(card, plan, dictContent[card.id], nextShowTime);
       Object.assign(card, { nextShowTime: nextShowTimeS });
     } else if (
       endOfYesterday.getTime() >= new Date(card.nextShowTime).getTime()
@@ -165,24 +167,14 @@ const updateOldCardsWating = async () => {
       // 本日も表示する可能性があるもの。本日以降になる
       const nextShowTime = planNextShowTime(plan, true);
       const nextShowTimeS = nextShowTime ? nextShowTime.toString() : '';
+
+      resetNotification(card, plan, dictContent[card.id], nextShowTime);
       Object.assign(card, { nextShowTime: nextShowTimeS });
     }
 
     return card;
   });
   await AsyncStorage.setItem('@cards', JSON.stringify(cards));
-
-  // 通知設定
-  targets.forEach(async (card) => {
-    const content = dictContent[card.id];
-    const plan = dictPlan[card.id];
-    const nextShowTime = planNextShowTime(plan, true);
-
-    if (plan.notification) {
-      await removeNotifications(card.id);
-      await setNotification(content.title, content.body, card.id, nextShowTime);
-    }
-  });
 
   return 'ok';
 };
@@ -344,6 +336,13 @@ export const updateCard = async (cardId: string, attrs: any) => {
   }
 
   return { cardId, cardContent, cardPlan };
+};
+
+const resetNotification = async (card: Card, plan: CardPlan, content: CardContent, nextShowTime: Date | null) => {
+  if (plan.notification) {
+    await removeNotifications(card.id);
+    await setNotification(content.title, content.body, card.id, nextShowTime);
+  }
 };
 
 const setNotification = async (
