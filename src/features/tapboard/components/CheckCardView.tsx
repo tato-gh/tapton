@@ -4,7 +4,7 @@ import { A } from '@expo/html-elements';
 import { Video } from 'expo-av';
 import type { AVPlaybackStatus } from 'expo-av';
 import { Box, Heading, Text, Button } from 'native-base';
-import { View, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Dimensions } from 'react-native';
 import YoutubePlayer from 'react-native-youtube-iframe';
 
 import { MAX_Z_INDEX } from '../constants';
@@ -15,7 +15,6 @@ type Props = {
   queueCard: QueueCard;
   position: Position;
   focus: boolean;
-  onTouch?: Function;
   central?: boolean;
 };
 
@@ -26,7 +25,6 @@ const CheckCardView: FC<Props> = ({
   queueCard,
   position,
   focus,
-  onTouch,
   central,
 }) => {
   const av = useRef(null);
@@ -55,12 +53,10 @@ const CheckCardView: FC<Props> = ({
         px="3"
         mx="1"
       >
-        <TouchableOpacity onPress={onTouch}>
-          <Heading size="sm" ml="-1">
-            {queueCard.title}
-          </Heading>
-          <Text fontSize="2xl">{queueCard.body}</Text>
-        </TouchableOpacity>
+        <Heading size="sm" ml="-1">
+          {queueCard.title}
+        </Heading>
+        <Text fontSize="2xl">{queueCard.body}</Text>
 
         {queueCard.attachment == 'web' && (
           <Text fontSize="xl" color="blue.500">

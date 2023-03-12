@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useLayoutEffect } from 'react';
 import { Dimensions } from 'react-native';
 
 import { OPE_BOTTOM_POSITION, CARD_WIDTH } from '../constants';
@@ -28,14 +28,16 @@ const CheckCardLayout: FC<Props> = ({
   onPress,
   onPressSkip,
 }) => {
-  const [central, setCentral] = useState(false);
+  const [central, setCentral] = useState(focus);
+
+  useLayoutEffect(() => {
+    setCentral(focus)
+  }, [focus])
+
   const position = useMemo(
     () => getPosition(maxHeight, maxWidth, central),
     [central]
   );
-  const onTouch = () => {
-    setCentral(true);
-  };
 
   return (
     <>
@@ -43,7 +45,6 @@ const CheckCardLayout: FC<Props> = ({
         queueCard={queueCard}
         position={position}
         focus={focus}
-        onTouch={onTouch}
         central={central}
       />
 
