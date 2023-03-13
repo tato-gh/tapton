@@ -31,3 +31,9 @@ src/
 ├── screens
 └── utils
 ```
+
+
+## Build Android APK
+
+`eas build -p android --profile preview --local`
+
