@@ -45,7 +45,8 @@
     "react-native-webview": "11.23.1",
     "react-native-youtube-iframe": "^2.2.2",
     "uuidjs": "^5.0.0",
-    "yup": "^1.0.0"
+    "yup": "^1.0.0",
+    "expo-linking": "~3.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",
